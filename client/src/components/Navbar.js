@@ -1,14 +1,37 @@
 import React from 'react';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Icon, IconButton } from '@chakra-ui/react';
 import { GiHamburgerMenu } from 'react-icons/gi';
+import { BiLogOut } from 'react-icons/bi';
+import { useGlobalContext } from '../context/contextProvider';
+
 const Navbar = () => {
+  const { toggleSidebar } = useGlobalContext();
   return (
-    <Flex height="100px" position="sticky" >
-      <Box justifySelf='flex-end'>
-        <GiHamburgerMenu />
+    <Flex
+      height="100px"
+      alignItems="center"
+      position="sticky"
+      justifyContent="space-between"
+      p={4}
+      borderBottomWidth={1}
+      boxShadow="lg"
+    >
+      <Box justifySelf="flex-end">
+        <Icon
+          as={GiHamburgerMenu}
+          fontSize="30px"
+          cursor="pointer"
+          display={['content', 'none']}
+          onClick={toggleSidebar}
+        />
       </Box>
-      <Text>Navbar</Text>
+        <IconButton
+          display={['inline-flex', 'none']}
+          fontSize={23}
+          aria-label="Search database"
+          icon={<BiLogOut />}
+        />
       <ColorModeSwitcher />
     </Flex>
   );

@@ -1,12 +1,15 @@
 // @ts-nocheck
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import {
   CLEAN_ERROR,
   DISPLAY_ERROR,
+  GET_WINDOW_WIDTH,
   HANDLE_CHANGE,
   SETUP_USER_BEGIN,
   SETUP_USER_ERROR,
   SETUP_USER_SUCCESS,
+  TOGGLE_SIDEBAR,
+  IS_ON_MOBILE
 } from './action';
 import reducer from './reducer';
 
@@ -18,6 +21,9 @@ export const ContextProvider = ({ children }) => {
     showAlert: false,
     alertText: '',
     alertType: '',
+    showSidebar: false,
+    onMobile: undefined,
+    windowWidth: undefined,
     //TRANSFERT FROM VALUE
     amountOfMoneyInEuro: '',
     cityOptions: ['Conakry', 'Kindia', 'Boke', 'Collab'],
@@ -69,8 +75,32 @@ export const ContextProvider = ({ children }) => {
 
   const cleanError = () => dispatch({ type: CLEAN_ERROR });
 
+  const toggleSidebar = () => dispatch({ type: TOGGLE_SIDEBAR });
+
   const handleChange = ({ name, value, type, checked }) =>
     dispatch({ type: HANDLE_CHANGE, payload: { name, value, type, checked } });
+
+  
+
+  const handleResize = () => {
+    window.addEventListener('resize', () => {
+      dispatch({ type: GET_WINDOW_WIDTH, payload: window.innerWidth });
+    });
+
+    return () =>
+      window.removeEventListener('resize', () => {
+        dispatch({ type: GET_WINDOW_WIDTH, payload: window.innerWidth });
+      });
+  };
+
+  const onMobile = () => dispatch({type:IS_ON_MOBILE})
+
+  useEffect(() => {
+    handleResize();
+  }, []);
+  useEffect(()=>{
+    onMobile();
+  },[state.windowWidth])
   return (
     <stateContext.Provider
       value={{
@@ -79,6 +109,7 @@ export const ContextProvider = ({ children }) => {
         handleLogin,
         cleanError,
         handleChange,
+        toggleSidebar,
       }}
     >
       {children}

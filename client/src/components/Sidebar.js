@@ -2,7 +2,7 @@ import { Avatar, Divider, Flex, Heading, Text, Box } from '@chakra-ui/react';
 import { BiLogOut } from 'react-icons/bi';
 import { IconButton } from '@chakra-ui/react';
 import NavItem from './NavItem';
-import { data } from '../dataList.js/adminSidebar';
+import { data } from '../dataList/adminSidebar';
 
 const Sidebar = () => {
   return (
@@ -15,6 +15,7 @@ const Sidebar = () => {
       ml='0'
       borderRightWidth={1}
       boxShadow='lg'
+      display={['none','none','flex']}
     >
       <Box mt="6rem">
         {data.map((link, index) => {

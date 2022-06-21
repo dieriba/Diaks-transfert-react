@@ -70,11 +70,11 @@ const TransfertForm = () => {
     <Flex minHeight="100vh" width="100%" justifyContent = 'center'>
       <Box
         w={[300, 400, 500]}
-        height={showAlert ? '600px' : '510px'}
+        height={showAlert ? '610px' : '510px'}
         borderWidth={1}
         flexDirection="column"
         p={4}
-        mt='5rem'
+        mt='3rem'
         boxShadow="lg"
       >
         <form onSubmit={onSubmit}>
@@ -85,7 +85,7 @@ const TransfertForm = () => {
             {showAlert && (
               <Alert
                 status="error"
-                fontSize="0.9rem"
+                fontSize="0.8rem"
                 height="auto"
                 borderRadius="15px"
                 marginBottom="0.5rem"
@@ -200,7 +200,10 @@ const TransfertForm = () => {
                 </Radio>
               </Stack>
             </RadioGroup>
-            <Button w="100%"  isLoading={isLoading} type="submit">
+            <Button w="100%"  
+            _hover={{backgroundColor : 'teal' , color : 'white'}}
+            isLoading={isLoading} 
+            type="submit">
               Ajouter Transfert
             </Button>
           </VStack>

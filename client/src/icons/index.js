@@ -1,0 +1,13 @@
+export { default as ChangePasswordIcon } from './ChangePasswordIcon';
+export { default as CalculatorIcon } from './CalculatorIcon';
+export { default as ExchangeIcon } from './ExchangeIcon';
+export { default as FileAddIcon } from './FileAddIcon';
+export { default as UserAddIcon } from './UserAddIcon';
+export { default as UserGroupIcon } from './UserGroupIcon';
+export { default as EuroIcon } from './EuroIcon';
+export { default as TransferIcon } from './TransferIcon';
+export { default as PdfIcon } from './PdfIcon';
+export { default as HamburgerIcon } from './HamburgerIcon';
+export { default as CloseIcon } from './CloseIcon';
+export { default as EditIcon } from './EditIcon';
+export { default as DeleteIcon } from './DeleteIcon';
