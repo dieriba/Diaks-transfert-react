@@ -1,12 +1,18 @@
 import React from 'react';
 import { SignInForm } from '../../components';
-import { Box , Grid } from '@chakra-ui/react';
+import { Box, Grid, Flex } from '@chakra-ui/react';
+import { ColorModeSwitcher } from '../../ColorModeSwitcher';
 
 const Login = () => {
   return (
-      <Box w={[300, 400, 500]} height="500px" justifySelf="center">
-        <SignInForm />
-      </Box>
+    <Flex
+      minH='100vh'
+      width = '100%'
+      justifyContent = 'center'
+      alignItems='center'
+    >
+      <SignInForm />
+    </Flex>
   );
 };
 

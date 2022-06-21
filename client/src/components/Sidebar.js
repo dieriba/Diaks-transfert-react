@@ -6,8 +6,17 @@ import { data } from '../dataList.js/adminSidebar';
 
 const Sidebar = () => {
   return (
-    <Flex position="sticky" w="300px" h="100vh" flexDir="column">
-      <Box mt='6rem'>
+    <Flex
+      position="sticky"
+      w="300px"
+      h="100vh"
+      flexDir="column"
+      p={4}
+      ml='0'
+      borderRightWidth={1}
+      boxShadow='lg'
+    >
+      <Box mt="6rem">
         {data.map((link, index) => {
           return (
             <NavItem

@@ -10,9 +10,10 @@ import {
   Alert,
   AlertIcon,
   CloseButton,
+  Flex
 } from '@chakra-ui/react';
 import { useGlobalContext } from '../context/contextProvider';
-
+import { ColorModeSwitcher } from '../ColorModeSwitcher';
 const SignInForm = () => {
   const [show, setShow] = useState(false);
 
@@ -49,8 +50,20 @@ const SignInForm = () => {
     });
   };
   return (
-    <Box maxWidth="450px" justifySelf="center">
-      <Text textAlign="center" fontSize="3xl" fontStyle="italic">
+    <Flex
+      width="full"
+      p={4}
+      w={[350, 400]}
+      height={showAlert ? '420px' : '370px'}
+      borderWidth={1}
+      flexDirection="column"
+      px={4}
+      boxShadow="lg"
+    >
+      <Box py={3} alignSelf="flex-end">
+        <ColorModeSwitcher />
+      </Box>
+      <Text textAlign="center" fontSize={['xl', '2xl']} fontStyle="italic">
         Se Connecter
       </Text>
 
@@ -104,7 +117,7 @@ const SignInForm = () => {
           Connection
         </Button>
       </form>
-    </Box>
+    </Flex>
   );
 };
 

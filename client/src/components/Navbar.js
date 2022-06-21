@@ -1,12 +1,16 @@
 import React from 'react';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
-import { Box, SimpleGrid, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
+import { GiHamburgerMenu } from 'react-icons/gi';
 const Navbar = () => {
   return (
-    <SimpleGrid height="50px" position="sticky">
+    <Flex height="100px" position="sticky" >
+      <Box justifySelf='flex-end'>
+        <GiHamburgerMenu />
+      </Box>
       <Text>Navbar</Text>
       <ColorModeSwitcher />
-    </SimpleGrid>
+    </Flex>
   );
 };
 
