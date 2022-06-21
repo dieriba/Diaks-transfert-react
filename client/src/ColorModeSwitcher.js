@@ -18,6 +18,7 @@ export const ColorModeSwitcher = props => {
       onClick={toggleColorMode}
       icon={<SwitchIcon />}
       {...props}
+      justifySelf = 'flex-end'
     />
   );
 };

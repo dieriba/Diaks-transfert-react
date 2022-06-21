@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { useGlobalContext } from '../context/contextProvider';
 
-const SignInForm = () => {
+const AddUserForm = () => {
   const [show, setShow] = useState(false);
 
   const {
@@ -53,7 +53,7 @@ const SignInForm = () => {
       <Text textAlign="center" fontSize="3xl" fontStyle="italic">
         Se Connecter
       </Text>
-
+    
       {showAlert && (
         <Alert
           status="error"
@@ -108,4 +108,4 @@ const SignInForm = () => {
   );
 };
 
-export default SignInForm;
+export default AddUserForm;

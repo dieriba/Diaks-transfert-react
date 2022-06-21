@@ -1,61 +1,84 @@
 // @ts-nocheck
 import React, { createContext, useContext, useReducer } from 'react';
-import reducer from '../reducer/reducer';
+import {
+  CLEAN_ERROR,
+  DISPLAY_ERROR,
+  HANDLE_CHANGE,
+  SETUP_USER_BEGIN,
+  SETUP_USER_ERROR,
+  SETUP_USER_SUCCESS,
+} from './action';
+import reducer from './reducer';
 
 const stateContext = createContext();
 
 export const ContextProvider = ({ children }) => {
-  const signUpForm = {
-    pseudo: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    condition: false,
-    isErrors: {
-      stateError : false,
-      pseudo: false,
-      password: false,
-      confirmPassword: false,
-      condition: false,
-      email: false,
-    },
-  };
-
-  const loginForm = {
-    pseudo: '',
-    password: '',
-    isErrors: {
-      isTrue: false,
-      pseudo: false,
-      password: false,
-    },
-  };
-
   const initialState = {
-    signUpForm,
-    loginForm,
-    signIn: true,
-    signUp: false,
+    isLoading: false,
+    showAlert: false,
+    alertText: '',
+    alertType: '',
+    //TRANSFERT FROM VALUE
+    amountOfMoneyInEuro: '',
+    cityOptions: ['Conakry', 'Kindia', 'Boke', 'Collab'],
+    moneyTypesOptions: ['Liquide', 'Orange Money'],
+    hasPaid: false,
+    city: '',
+    moneyTypes: 'Liquide',
+    clientName: '',
+    phoneNumber: '',
+    senderName: '',
+    hasTakeMoney: '',
+    date: '',
+    updatedDate: '',
+    fees: '',
+    hasBeenModified: '',
+    code: '',
+    hasReceiveMoney: '',
+    contactNumber: '',
+    payoutDay: '',
+    isEditing: false,
+    phoneNumberState: false,
+    //USER
+    username: '',
+    password: '',
+    admin: '',
+    isHighAdmin: '',
+    isMediumAdmin: '',
+    isAgent: '',
+    isMoneyGiver: '',
+    senderNameUser: '',
+    transfertCounts: '',
+    senderCode: '',
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
-
+  console.log(state);
   //HANDLE LOGIN
-  const handleLogin = e => dispatch({ type: 'LOGIN', e });
-  const handleLoginForm = e => dispatch({ type: 'LOGIN_FORM_INPUT', e });
+  const handleLogin = async () => {
+    dispatch({ type: SETUP_USER_BEGIN });
+    try {
+      dispatch({ type: SETUP_USER_SUCCESS });
+    } catch (error) {
+      dispatch({ type: SETUP_USER_ERROR });
+    }
+  };
 
-  //HANDLE SIGNUP
-  const handleSignUp = e => dispatch({ type: 'SEND_SIGNUP_DATA', e });
-  const handleSignUpForm = e => dispatch({ type: 'SIGNUP_FORM_INPUT', e });
+  const displayError = alertText =>
+    dispatch({ type: DISPLAY_ERROR, payload: { alertText } });
 
+  const cleanError = () => dispatch({ type: CLEAN_ERROR });
+
+  const handleChange = ({ name, value, type, checked }) =>
+    dispatch({ type: HANDLE_CHANGE, payload: { name, value, type, checked } });
   return (
     <stateContext.Provider
       value={{
         ...state,
+        displayError,
         handleLogin,
-        handleLoginForm,
-        handleSignUp,
-        handleSignUpForm,
+        cleanError,
+        handleChange,
       }}
     >
       {children}

@@ -1,26 +1,82 @@
 import React from 'react';
 import { ChakraProvider, Box, Grid, theme } from '@chakra-ui/react';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Home, Auth, Profil, Trending } from './pages';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {
+  Login,
+  Error,
+  AddTransfert,
+  Calcul,
+  Converter,
+  AddAgent,
+  AddUser,
+  ListAgent,
+  ListUser,
+  ChangePassword,
+  Dashboard,
+  SharedLayout,
+} from './pages';
+import { TransfertForm } from './components';
 function App() {
   return (
-    <BrowserRouter>
-      <ChakraProvider theme={theme}>
-        <Box fontSize="xl">
-          <Grid minH="100vh" p={3}>
-            <ColorModeSwitcher justifySelf="flex-end" />
+    <ChakraProvider theme={theme}>
+      <Box fontSize="xl">
+        <Grid minH="100vh" p={3}>
+          <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/profil" element={<Profil />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/trending" element={<Trending />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="/admin"  element={<SharedLayout />}>
+                <Route path='dashboard' element={<Dashboard />} />
+                <Route path="agents" element={<ListAgent />} />
+                <Route path="add-agent" element={<AddAgent />} />
+                <Route path="users" element={<ListUser />} />
+                <Route path="add-user" element={<AddUser />} />
+                <Route path="calcul" element={<Calcul />} />
+              </Route>
+              {/* <Route
+                  path="/admin"
+                  element={
+              
+                  }
+                >
+                  <Route index element={<Stat />} />
+                  <Route path="add-job" element={<AddJob />} />
+                  <Route path="all-job" element={<AllJobs />} />
+                  <Route path="profile" element={<Profile />} />
+                </Route> */}
+              {/* <Route
+                  path="/admin"
+                  element={
+              
+                  }
+                >
+                  <Route index element={<Stat />} />
+                  <Route path="add-job" element={<AddJob />} />
+                  <Route path="all-job" element={<AllJobs />} />
+                  <Route path="profile" element={<Profile />} />
+                </Route> */}
+              {/* <Route
+                  path="/admin"
+                  element={
+              
+                  }
+                >
+                  <Route index element={<Stat />} />
+                  <Route path="add-job" element={<AddJob />} />
+                  <Route path="all-job" element={<AllJobs />} />
+                  <Route path="profile" element={<Profile />} />
+                </Route> */}
+              <Route path="/shared" element={<SharedLayout />}>
+                <Route path="add-transfert" element={<TransfertForm />} />
+                <Route path="converter" element={<Converter />} />
+                <Route path="change-password" element={<ChangePassword />} />
+                {/* <Route path="profile" element={<Profile />} /> */}
+              </Route>
+              <Route path="/user/login" element={<Login />} />
+              <Route path="*" element={<Error />} />
             </Routes>
-          </Grid>
-        </Box>
-      </ChakraProvider>
-    </BrowserRouter>
+          </BrowserRouter>
+        </Grid>
+      </Box>
+    </ChakraProvider>
   );
 }
 

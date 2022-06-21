@@ -69,6 +69,10 @@ const transfertSchema = new mongoose.Schema({
 	payoutDay: {
 		type: Date,
 	},
+	createdBy : {
+		type : mongoose.ObjectId,
+		required : true
+	}
 });
 
 transfertSchema.pre('save', async function () {
