@@ -1,74 +1,76 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable linebreak-style */
-require('dotenv').config({ path: './config/.env' });
+import dotenv from 'dotenv';
+dotenv.config({ path: './config/.env' });
 //MONGOOSE DB
-const connectDB = require('./db/connectDB');
+import connectDB from './db/connectDB.js';
 
-const adminDashboardRoutes = require('./src/routes/transfert');
-const adminUserManagmentRoutes = require('./src/routes/user');
-const adminAgentManagmentRoutes = require('./src/routes/agent');
+import adminDashboardRoutes from './src/routes/transfert.js';
+import adminUserManagmentRoutes from './src/routes/user.js';
+import adminAgentManagmentRoutes from './src/routes/agent.js';
 
-const mediumAdminRoutes = require('./src/routes/moneyTaker');
+import mediumAdminRoutes from './src/routes/moneyTaker.js';
 
-const agentsRoutes = require('./src/routes/userAgent');
+import agentsRoutes from './src/routes/userAgent.js';
 
-const moneyGiverRoutes = require('./src/routes/moneyGiver');
+import moneyGiverRoutes from './src/routes/moneyGiver.js';
 
-const sharedRoutes = require('./src/routes/shared');
+import sharedRoutes from './src/routes/shared.js';
 
-const authRoutes = require('./src/routes/auth');
+import authRoutes from './src/routes/auth.js';
+
+import authenticateUser from './src/middleware/authMidlleware.js';
 
 //SECURITY SETUP
-const helmet = require('helmet');
-const xss = require('xss-clean');
-const rateLimit = require('express-rate-limit');
-const corsOptions = require('./src/middleware/corsOptions');
-const hpp = require('hpp');
+import helmet from 'helmet';
+import xss from 'xss-clean';
+import rateLimit from 'express-rate-limit';
+import corsOptions from './src/middleware/corsOptions.js';
+import hpp from 'hpp';
 
 // ERRORS middleware
-const notFoundMiddleware = require('./src/middleware/not-found');
-const errorHandlerMiddleware = require('./src/middleware/error-handler');
-
+import notFoundMiddleware from './src/middleware/not-found.js';
+import errorHandlerMiddleware from './src/middleware/error-handler.js';
 
 //SET EXPRESS FRAMEWORK
-const express = require('express');
+import express from 'express';
 const app = express();
 
 //BODY PARSER
-const bodyParser = require('body-parser');
+import bodyParser from 'body-parser';
 
 app.set('trust proxy', 1);
 
 // SECURITY MIDDLEWARE
-app.use(rateLimit({
-	windowMs : 15 * 60 * 1000,
-	max : 400
-}));
 app.use(
-	helmet({
-		contentSecurityPolicy: {
-			useDefaults: true,
-			directives: {
-				'script-src': [
-					// eslint-disable-next-line quotes
-					"'self'",
-					'https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js',
-				],
-				'img-src': [
-					// eslint-disable-next-line quotes
-					"'self'",
-					'https://www.gstatic.com/images/branding/product/2x/translate_24dp.png',
-				],
-			},
-		},
-	})
+    rateLimit({
+        windowMs: 15 * 60 * 1000,
+        max: 400,
+    })
+);
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            useDefaults: true,
+            directives: {
+                'script-src': [
+                    // eslint-disable-next-line quotes
+                    "'self'",
+                    'https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js',
+                ],
+                'img-src': [
+                    // eslint-disable-next-line quotes
+                    "'self'",
+                    'https://www.gstatic.com/images/branding/product/2x/translate_24dp.png',
+                ],
+            },
+        },
+    })
 );
 app.use(hpp());
 app.options('*', corsOptions);
 app.use(corsOptions);
 app.use(xss());
-
-
 
 //PORT VARIABLES
 const port = process.env.PORT || 1000;
@@ -84,9 +86,6 @@ app.use(express.json({ limit: '1kb' }));
 
 //SET COOKIE PARSER, SESSIONS AND FLASH
 
-
-
-
 //SESSION STOREE
 
 //RENDER ERROR LIMTED MESSAGE THEN REDIRECT
@@ -97,26 +96,23 @@ app.use(express.json({ limit: '1kb' }));
 app.set('views', 'views');
 app.set('view engine', 'ejs');
 
-app.get('/', (req,res) => {
-	res.redirect('/user/login');
-});
 
 //ADMIN ROUTES
-app.use('/admin',  adminDashboardRoutes);
-app.use('/admin', adminUserManagmentRoutes);
-app.use('/admin',  adminAgentManagmentRoutes);
+app.use('/admin', authenticateUser, adminDashboardRoutes);
+app.use('/admin', authenticateUser, adminUserManagmentRoutes);
+app.use('/admin', authenticateUser, adminAgentManagmentRoutes);
 
 //MED ADMIN ROUTES
-app.use('/med-admin', mediumAdminRoutes);
+app.use('/med-admin', authenticateUser, mediumAdminRoutes);
 
 //AGENT ROUTES
-app.use('/agent',  agentsRoutes);
+app.use('/agent', authenticateUser, agentsRoutes);
 
 //MONEY GIVER ROUTES
-app.use('/money',  moneyGiverRoutes);
+app.use('/money', authenticateUser, moneyGiverRoutes);
 
 //SHARED ROUTES
-app.use('/shared',  sharedRoutes);
+app.use('/shared', authenticateUser, sharedRoutes);
 
 //AUTH ROUTES
 app.use('/user', authRoutes);
@@ -125,14 +121,14 @@ app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
 const start = async (req, res) => {
-	try {
-		connectDB(process.env.MONGO_LINK);
-		app.listen(port, () =>
-			console.log(`Server is listening on port : ${port}`)
-		);
-	} catch (error) {
-		console.log(error);
-	}
+    try {
+        connectDB(process.env.MONGO_LINK);
+        app.listen(port, () =>
+            console.log(`Server is listening on port : ${port}`)
+        );
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 start();

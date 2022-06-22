@@ -28,7 +28,7 @@ const TableCompMobile = ({
     <TableContainer
       width="90%"
       boxShadow="lg"
-      mt={4}
+      
       borderWidth={1}
       borderRadius={7}
     >

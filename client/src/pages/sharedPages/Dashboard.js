@@ -1,22 +1,22 @@
+import { useEffect } from 'react';
 import { useGlobalContext } from '../../context/contextProvider';
-import { Loading, TableCompMobile,TableComp } from '../../components';
-import { Flex } from '@chakra-ui/react';
+import { Loading, TableCompMobile, TableComp } from '../../components';
+import { Flex , VStack} from '@chakra-ui/react';
 const Dashboard = () => {
-  const { isLoading , onMobile } = useGlobalContext();
+  const { isLoading, isOnMobile, useHandleResize } = useGlobalContext();
   
+  useHandleResize();
   if (isLoading) {
     return <Loading />;
   }
-  if(onMobile){
+  if (isOnMobile) {
     return (
-      <Flex
-        width="100%"
-        flexDir="column"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <VStack spacing={4} mt={4} mb={4}>
         <TableCompMobile />
-      </Flex>
+        <TableCompMobile />
+        <TableCompMobile />
+        <TableCompMobile />
+      </VStack>
     );
   }
   return (
@@ -27,7 +27,6 @@ const Dashboard = () => {
       justifyContent="center"
     >
       <TableComp />
- 
     </Flex>
   );
 };

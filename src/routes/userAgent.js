@@ -1,12 +1,13 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
-const {
-	getUserAgentTransfert,
-	totalAgentTransfert,
-} = require('../controllers/userAgent');
+import {
+    getUserAgentTransfert,
+    totalAgentTransfert,
+} from '../controllers/userAgent.js';
 
 //RENDERS AGENT PAGE
 router.route('/dashboard').get(getUserAgentTransfert);
 router.route('/calcul').get(totalAgentTransfert);
-module.exports = router;
+
+export default router;

@@ -1,15 +1,10 @@
-const express = require('express');
+import express from 'express';
+
 const router = express.Router();
 
-const { auth, loginPage, logout } = require('../controllers/auth');
+import { auth } from '../controllers/auth.js';
 
-
-//RENDER LOGIN PAGE
 router.route('/login').post(auth);
-//Redirect TO USER PAGE IF USER EXIST
-router.route('/login').get(loginPage);
 
-//LOGOUT FROM WEBSITE
-router.route('/logout').get(logout);
 
-module.exports = router;
+export default router;

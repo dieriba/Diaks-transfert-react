@@ -1,14 +1,11 @@
 /* eslint-disable linebreak-style */
-const express = require('express');
+import express from 'express';
+
 const router = express.Router();
 
-const {
-	getAllTransferts,
-} = require('../controllers/transfert');
+import { getAllTransferts } from '../controllers/transfert.js';
 
 //RENDERS ALL TRANSFERTS FROM DATABASE ONLY ACCESSIBLE FOR MED ADMIN AND HIGH LEVEL ADMIN
 router.route('/dashboard').get(getAllTransferts);
 
-
-
-module.exports = router;
+export default router;

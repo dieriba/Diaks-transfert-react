@@ -1,17 +1,17 @@
 /* eslint-disable linebreak-style */
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const rateSchema = new mongoose.Schema({
-	rate: {
-		type: Number,
-	},
-	startDate: {
-		type: Date,
-		default: new Date(),
-	},
-	endDate: {
-		type: Date,
-	},
+    rate: {
+        type: Number,
+    },
+    startDate: {
+        type: Date,
+        default: new Date(),
+    },
+    endDate: {
+        type: Date,
+    },
 });
 
-module.exports = mongoose.model('Rate', rateSchema);
+export default mongoose.model('Rate', rateSchema);

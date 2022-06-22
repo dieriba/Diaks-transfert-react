@@ -3,11 +3,11 @@ import {
   DISPLAY_ERROR,
   GET_WINDOW_WIDTH,
   HANDLE_CHANGE,
-  IS_ON_MOBILE,
   SETUP_USER_BEGIN,
   SETUP_USER_ERROR,
   SETUP_USER_SUCCESS,
   TOGGLE_SIDEBAR,
+  SET_EDIT_TRANSFERT,
 } from './action';
 
 const reducer = (state, action) => {
@@ -46,15 +46,43 @@ const reducer = (state, action) => {
   if (type === TOGGLE_SIDEBAR)
     return { ...state, showSidebar: !state.showSidebar };
 
-  if (type === GET_WINDOW_WIDTH)
-    return { ...state, windowWidth: action.payload };
+  if (type === GET_WINDOW_WIDTH) {
+    if (action.payload < 1000)
+      return { ...state, windowWidth: action.payload, isOnMobile: true };
 
-  if (type === IS_ON_MOBILE) {
-    const { windowWidth } = state;
+    return { ...state, windowWidth: action.payload, isOnMobile: false };
+  }
 
-    if (windowWidth < 1000) return { ...state, onMobile: true };
-
-    return { ...state, onMobile: false };
+  if (action.type === SET_EDIT_TRANSFERT) {
+    const transfert = state.transferts.find(
+      transfert => transfert._id === action.payload.id
+    );
+    const {
+      _id,
+      clientName,
+      city,
+      senderName,
+      amountOfMoneyInEuro,
+      hasTakeMoney,
+      phoneNumber,
+      moneyTypes,
+      hasPaid,
+      contactNumber,
+    } = transfert;
+    return {
+      ...state,
+      isEditing: true,
+      editJobId: _id,
+      clientName,
+      city,
+      senderName,
+      amountOfMoneyInEuro,
+      hasTakeMoney,
+      phoneNumber,
+      moneyTypes,
+      hasPaid,
+      contactNumber,
+    };
   }
 };
 

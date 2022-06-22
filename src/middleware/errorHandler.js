@@ -1,4 +1,5 @@
-const errorHandlerMiddleware = (err, req, res, next) => {
+/* eslint-disable prettier/prettier */
+const errorHandler = (err, req, res, next) => {
     let customError = {
         // set default
         statusCode: err.statusCode || 500,
@@ -15,7 +16,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     if (err.code && err.code === 11000) {
         customError.msg = `La valeur pour le/les ${Object.keys(
             err.keyValue
-        )} est/sont déjà prises, Veuillez choisir un autre nom`;
+        )} est/sont déjà prises, Veuillez en choisir des autres`;
         customError.statusCode = 400;
     }
     if (err.name === 'CastError') {
@@ -26,4 +27,4 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     return res.status(customError.statusCode).json({ msg: customError.msg });
 };
 
-export default errorHandlerMiddleware;
+export default errorHandler;

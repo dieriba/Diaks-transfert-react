@@ -2,7 +2,6 @@ import React from 'react';
 import { ChakraProvider, Box, Grid, theme } from '@chakra-ui/react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-
 import {
   Login,
   Error,
@@ -67,7 +66,6 @@ function App() {
             <Route path="add-transfert" element={<TransfertForm />} />
             <Route path="converter" element={<Converter />} />
             <Route path="change-password" element={<ChangePassword />} />
-            {/* <Route path="profile" element={<Profile />} /> */}
           </Route>
           <Route path="/" element={<Navigate to="/user/login" replace />} />
           <Route path="/user/login" element={<Login />} />

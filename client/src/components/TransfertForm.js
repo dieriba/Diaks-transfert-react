@@ -67,7 +67,7 @@ const TransfertForm = () => {
   };
 
   return (
-    <Flex minHeight="100vh" width="100%" justifyContent = 'center'>
+    <Flex minHeight="90vh" width="100%" justifyContent = 'center'>
       <Box
         w={[300, 400, 500]}
         height={showAlert ? '610px' : '510px'}
