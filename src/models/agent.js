@@ -24,6 +24,10 @@ const agentSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    LinkedToUserId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+    },
 });
 
 export default mongoose.model('Agent', agentSchema);

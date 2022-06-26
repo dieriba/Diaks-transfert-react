@@ -7,7 +7,7 @@ import {
 } from '../controllers/userAgent.js';
 
 //RENDERS AGENT PAGE
-router.route('/dashboard').get(getUserAgentTransfert);
+router.route('/transferts').get(getUserAgentTransfert);
 router.route('/calcul').get(totalAgentTransfert);
 
 export default router;

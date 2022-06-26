@@ -5,23 +5,17 @@ import { NotFoundError } from '../../errors/index.js';
 //Render LIST OF MONEY TAKERS
 const getAllMoneyTakers = async (req, res, next) => {
     try {
-        const user = req.session.user;
-
         let { page, size, hasTakeMoney, name } = req.query;
 
         let queryObj = {};
 
-        if (hasTakeMoney) {
+        if (hasTakeMoney)
             queryObj.hasTakeMoney = hasTakeMoney === 'true' ? true : false;
-            qObj.hasTakeMoney = hasTakeMoney === 'true' ? true : false;
-        }
 
-        if (name) {
-            queryObj.name = { $regex: name, $options: 'i' };
-        }
+        if (name) queryObj.name = { $regex: name, $options: 'i' };
 
         page = page ? Number(page) : 1;
-        size = size ? Number(size) : 18;
+        size = size ? Number(size) : 11;
 
         //TRANSFORM QUERY INTO URI ENCODE STRING TO BE ABLE TO QUERY NEXT PAGE WITHOUT GETTING RESET
 
@@ -41,14 +35,12 @@ const getAllMoneyTakers = async (req, res, next) => {
                 ? iterator + 9
                 : page + (totalPages - page);
 
-        res.status(200).render('users/med-admin/list-money-takers', {
-            title: "Diak's Project - Récupérateurs",
+        res.status(200).json({
             moneyTaker,
             totalPages,
             currentPage: page,
             iterator,
             endingLink,
-            user,
         });
     } catch (error) {
         next(error);

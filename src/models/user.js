@@ -6,25 +6,22 @@ import jwt from 'jsonwebtoken';
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true,
+        required: [true, "veuillez fournir un nom d'utilisateur"],
         unique: true,
     },
     password: {
         type: String,
-        required: true,
+        required: [true, 'Veuillez fournir un mot de passe'],
         minlength: 8,
-    },
-    admin: {
-        type: Boolean,
-        default: false,
     },
     role: {
         type: String,
+        value: ['highAdmin', 'admin', 'mediumAdmin', 'agent', 'moneyGiver'],
         required: [true, 'Définir un rôle'],
     },
     isBanned: {
         type: Boolean,
-		default : false
+        default: false,
     },
     senderName: {
         type: String,
@@ -35,7 +32,10 @@ const userSchema = new mongoose.Schema({
     },
     senderCode: {
         type: String,
-        unique: true,
+    },
+    LinkedToAgentId: {
+        type: mongoose.Types.ObjectId,
+        rfe: 'Agent',
     },
 });
 

@@ -3,7 +3,7 @@ import Transfert from '../models/transfert.js';
 import Agent from '../models/agent.js';
 import Rate from '../models/rates.js';
 import User from '../models/user.js';
-import calculFees from '../../utils/rate.js';
+import calculFees from '../../utils/calculFees.js';
 import { NotFoundError, BadRequestError } from '../../errors/index.js';
 import bcrypt from 'bcryptjs';
 import checkPermissions from '../../utils/checkPermissions.js';
@@ -18,21 +18,13 @@ const totalAmountTransfert = async (req, res, next) => {
         // THE SECOND ONE IS HERE TO PAGINATION SYSTEM AND SEND QUERY STRING TO LINK BUT WITHOUT THE PAGE QUERY TO AVOID BUGS
 
         let queryObj = {};
-        let qObj = {};
 
-        if (city) {
-            qObj.city = city;
-            queryObj.city = city;
-        }
+        if (city) queryObj.city = city;
 
-        if (senderName) {
+        if (senderName)
             queryObj.senderName = { $regex: senderName, $options: 'i' };
-            qObj.senderName = senderName;
-        }
-        if (moneyTypes) {
-            queryObj.moneyTypes = moneyTypes;
-            qObj.moneyTypes = moneyTypes;
-        }
+
+        if (moneyTypes) queryObj.moneyTypes = moneyTypes;
 
         if (start && end) {
             const endYear = Number(end.split('-')[0]);
@@ -46,15 +38,12 @@ const totalAmountTransfert = async (req, res, next) => {
                 $gte: date.start,
                 $lte: date.end,
             };
-            qObj.start = start;
-            qObj.end = end;
         }
 
         page = page ? Number(page) : 1;
         size = size ? Number(size) : 18;
 
         //TRANSFORM QUERY INTO URI ENCODE STRING TO BE ABLE TO QUERY NEXT PAGE WITHOUT GETTING RESET
-        const q = serializeObject(qObj);
 
         const limit = size;
         const skip = (page - 1) * size;
@@ -87,9 +76,7 @@ const totalAmountTransfert = async (req, res, next) => {
             currentPage: page,
             iterator,
             endingLink,
-            q,
             sum,
-            qObj,
             agents,
         });
     } catch (error) {
@@ -128,16 +115,19 @@ const Convert = async (req, res, next) => {
 //CREATE A NEW TRANSFERT INTO DB ONLY HIGH LEVEL USER AND LOW LEVEL USER CAN CREATE A NEW TRANSFERT
 const createTransfert = async (req, res, next) => {
     try {
-        const { userId } = req.user;
-
-        req.body.createdBy = userId;
-
+        const { userAgentId, userId } = req.user;
         const { senderName } = req.body;
+        const agent = await Agent.findOne({ senderName });
+        if (!agent) return next(new BadRequestError('Agent non identifié'));
+
+        if (userAgentId === null) req.body.createdBy = agent._id;
+        if (userAgentId) req.body.createdBy = userAgentId;
 
         const transfert = await Transfert.create(req.body);
         // const { code } = transfert;
         res.status(201).json({
             transfert,
+            message: 'Transfert ajouté avec succès',
             success: true,
         });
     } catch (error) {
@@ -147,7 +137,9 @@ const createTransfert = async (req, res, next) => {
 
 const editPassword = async (req, res, next) => {
     try {
-        const user = await User.findOne({ username: userLogged.username });
+        const { userId } = req.user;
+
+        const user = await User.findById(userId);
         const { actualPassword, newPassword, confirmNewPassword } = req.body;
 
         const isSamePassword = await user.comparePassword(actualPassword);
@@ -173,8 +165,8 @@ const editPassword = async (req, res, next) => {
         const salt = await bcrypt.genSalt(10);
         const password = await bcrypt.hash(newPassword, salt);
 
-        await User.findOneAndUpdate(
-            { username: userLogged.username },
+        await User.findByIdAndUpdate(
+            userId,
             { password },
             {
                 new: true,
@@ -215,7 +207,7 @@ const editTransfert = async (req, res, next) => {
             }
         );
         res.status(200).json({
-            message: 'Transfert succesfully modified',
+            message: 'Transfert modifié avec succès',
             status: 'sucess',
             newTransfert,
         });

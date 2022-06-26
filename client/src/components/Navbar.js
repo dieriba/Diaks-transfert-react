@@ -6,7 +6,7 @@ import { BiLogOut } from 'react-icons/bi';
 import { useGlobalContext } from '../context/contextProvider';
 
 const Navbar = () => {
-  const { toggleSidebar } = useGlobalContext();
+  const { toggleSidebar, logoutUser } = useGlobalContext();
   return (
     <Flex
       height="100px"
@@ -22,16 +22,17 @@ const Navbar = () => {
           as={GiHamburgerMenu}
           fontSize="30px"
           cursor="pointer"
-          display={['content', 'none']}
+          display={['content', 'content', 'content', 'none']}
           onClick={toggleSidebar}
         />
       </Box>
-        <IconButton
-          display={['inline-flex', 'none']}
-          fontSize={23}
-          aria-label="Search database"
-          icon={<BiLogOut />}
-        />
+      <IconButton
+        display={['inline-flex', 'inline-flex', 'inline-flex', 'none']}
+        fontSize={23}
+        aria-label="Search database"
+        icon={<BiLogOut />}
+        onClick={logoutUser}
+      />
       <ColorModeSwitcher />
     </Flex>
   );

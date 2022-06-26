@@ -10,7 +10,7 @@ import { rate } from '../controllers/converter.js';
 router.route('/new-rate').patch(rate);
 
 //RENDER MEDIUM ADMIN PAGE
-router.route('/dashboard').get(getAllTransferts);
+router.route('/transferts').get(getAllTransferts);
 
 //RENDER MED ADMIN PAGE TO RENDER MONEY TAKER CREATE FORM
 //POST NEW MONEY TAKER AND CREATE NEW ONE INTO DATABASE

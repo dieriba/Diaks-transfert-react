@@ -1,6 +1,8 @@
+import AddUserForm from "../../components/AddUserForm"
+
 const AddUser = () => {
   return (
-    <div>AddUser</div>
+    <AddUserForm/>
   )
 }
 export default AddUser

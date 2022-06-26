@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
-  FormLabel,
   Input,
+  Select,
   InputGroup,
   InputRightElement,
   Button,
@@ -10,101 +10,205 @@ import {
   Alert,
   AlertIcon,
   CloseButton,
+  Flex,
+  VStack,
 } from '@chakra-ui/react';
 import { useGlobalContext } from '../context/contextProvider';
 
 const AddUserForm = () => {
   const [show, setShow] = useState(false);
-
+  const [showConfirm, setShowConfirm] = useState(false);
   const {
-    handleLogin,
     showAlert,
     alertText,
     displayError,
     cleanError,
     isLoading,
+    handleChange,
+    errorStatus,
+    username,
+    password,
+    role,
+    confirmPassword,
+    roleOptions,
+    senderCode,
+    senderNameUser,
+    phoneNumberAgent,
+    createUser,
   } = useGlobalContext();
-  const handleClick = () => {
-    setShow(!show);
+
+  const [showFormAgent, setShowFormAgent] = useState(
+    role === 'agent' ? true : false
+  );
+  const handleClick = id => {
+    if (id === 1) return setShow(!show);
+    return setShowConfirm(!showConfirm);
   };
 
-  const loginFormValue = {
-    pseudo: '',
-    password: '',
+  const handleInput = e => {
+    const name = e.target.name;
+    const value = e.target.value;
+    if (name === 'role' && value !== 'agent') setShowFormAgent(false);
+    if (name === 'role' && value === 'agent') setShowFormAgent(true);
+    handleChange({ name, value });
   };
-
-  const [value, setValues] = useState(loginFormValue);
 
   const onSubmit = e => {
-    const { pseudo, password } = value;
     e.preventDefault();
-    if (!pseudo) return displayError('Pseudo Requis');
-    if (!password) return displayError('Mot de Passe Requis');
-    handleLogin();
+    if (!username || !password)
+      return displayError('Veuillez remplir tous les champs');
+    if (showFormAgent && (!senderNameUser || !senderCode))
+      return displayError('Veuillez remplir tous les champs');
+    createUser();
   };
 
-  const handleLoginForm = e => {
-    setValues(prevObj => {
-      return { ...prevObj, [e.target.name]: e.target.value };
-    });
-  };
   return (
-    <Box maxWidth="450px" justifySelf="center">
-      <Text textAlign="center" fontSize="3xl" fontStyle="italic">
-        Se Connecter
-      </Text>
-    
-      {showAlert && (
-        <Alert
-          status="error"
-          fontSize="1rem"
-          height="auto"
-          borderRadius="15px"
-          marginBottom="0.5rem"
-          marginTop="0.5rem"
-          position="relative"
+    <Flex direction="column" minHeight="90vh" width="100%" alignItems="center">
+      <Box
+        w={[300, 400, 500]}
+        height={showAlert ? '750px' : '650px'}
+        borderWidth={1}
+        flexDirection="column"
+        p={4}
+        mt="2rem"
+        boxShadow="lg"
+      >
+        {showAlert && (
+          <Alert
+            status={errorStatus || 'error'}
+            fontSize="0.8rem"
+            height="auto"
+            borderRadius="15px"
+            marginBottom="0.5rem"
+            marginTop="0.5rem"
+            position="relative"
+          >
+            <AlertIcon />
+            {alertText}
+            <CloseButton
+              position="absolute"
+              right="0.3rem"
+              onClick={cleanError}
+            />
+          </Alert>
+        )}
+        <Text
+          borderBottomWidth={1}
+          textAlign="center"
+          fontSize="2xl"
+          mb="1rem"
+          fontStyle="italic"
         >
-          <AlertIcon />
-          {alertText}
-          <CloseButton position="absolute" right="1rem" onClick={cleanError} />
-        </Alert>
-      )}
+          Ajouter Utilisateur
+        </Text>
 
-      <form onSubmit={onSubmit}>
-        <Box>
-          <FormLabel htmlFor="pseudo">Pseudo</FormLabel>
-          <Input
-            variant="filled"
-            placeholder="Pseudo"
-            id="pseudo"
-            type="pseudo"
-            onChange={handleLoginForm}
-            name="pseudo"
-          />
-        </Box>
-        <Box marginTop="15px">
-          <FormLabel htmlFor="email">Mot de Passe</FormLabel>
-          <InputGroup>
+        <form onSubmit={onSubmit}>
+          <VStack spacing={6}>
             <Input
               variant="filled"
-              placeholder="Mot de passe"
-              id="password"
-              type={show ? 'text' : 'password'}
-              onChange={handleLoginForm}
-              name="password"
+              placeholder="Nom d'utilisateur"
+              id="username"
+              onChange={handleInput}
+              name="username"
+              value={username}
             />
-            <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
-                {show ? 'Hide' : 'Show'}
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-        </Box>
-        <Button w="100%" isLoading={isLoading} marginTop="20px" type="submit">
-          Connection
-        </Button>
-      </form>
-    </Box>
+            <Select
+              onChange={handleInput}
+              name="role"
+              variant="filled"
+              cursor="pointer"
+              value={role}
+            >
+              {roleOptions?.map((role, index) => {
+                return (
+                  <option key={index} value={role}>
+                    {role}
+                  </option>
+                );
+              })}
+            </Select>
+            <InputGroup>
+              <Input
+                variant="filled"
+                placeholder="Mot de passe"
+                id="password"
+                type={show ? 'text' : 'password'}
+                onChange={handleInput}
+                name="password"
+                value={password}
+              />
+
+              <InputRightElement width="4.5rem">
+                <Button h="1.75rem" size="sm" onClick={() => handleClick(1)}>
+                  {show ? 'Hide' : 'Show'}
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+            <InputGroup>
+              <Input
+                variant="filled"
+                placeholder="Confirmez Mot de passe"
+                id="confirmPassword"
+                type={showConfirm ? 'text' : 'password'}
+                onChange={handleInput}
+                name="confirmPassword"
+                value={confirmPassword}
+              />
+              <InputRightElement width="4.5rem">
+                <Button h="1.75rem" size="sm" onClick={handleClick}>
+                  {showConfirm ? 'Hide' : 'Show'}
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+            {showFormAgent && (
+              <>
+                <Text
+                  borderBottomWidth={1}
+                  textAlign="center"
+                  fontSize="2xl"
+                  mb="1rem"
+                  fontStyle="italic"
+                >
+                  Info Agent
+                </Text>
+                <Input
+                  variant="filled"
+                  placeholder="Nom Agent"
+                  id="senderNameAgent"
+                  onChange={handleInput}
+                  name="senderNameUser"
+                  value={senderNameUser}
+                />
+                <Input
+                  variant="filled"
+                  placeholder="Numéro Ex: XX-XX-XX-XX-XX"
+                  id="phoneNumberAgent"
+                  onChange={handleInput}
+                  name="phoneNumberAgent"
+                  value={phoneNumberAgent}
+                />
+                <Input
+                  variant="filled"
+                  placeholder="Code"
+                  id="senderCode"
+                  onChange={handleInput}
+                  name="senderCode"
+                  value={senderCode}
+                />
+              </>
+            )}
+            <Button
+              w="100%"
+              isLoading={isLoading}
+              marginTop="20px"
+              type="submit"
+            >
+              Créer un utilisateur
+            </Button>
+          </VStack>
+        </form>
+      </Box>
+    </Flex>
   );
 };
 

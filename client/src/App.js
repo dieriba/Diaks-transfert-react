@@ -1,7 +1,12 @@
 import React from 'react';
 import { ChakraProvider, Box, Grid, theme } from '@chakra-ui/react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-
+import {
+  ProtectAdminRoutes,
+  ProtectedMoneyGiverRoutes,
+  ProtectAgentRoutes,
+  ProtectMediumAdminRoutes,
+} from './context/protectedUserRoutes';
 import {
   Login,
   Error,
@@ -21,7 +26,14 @@ function App() {
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/admin" element={<SharedLayout />}>
+          <Route
+            path="/admin"
+            element={
+              <ProtectAdminRoutes>
+                <SharedLayout />
+              </ProtectAdminRoutes>
+            }
+          >
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="agents" element={<ListAgent />} />
             <Route path="add-agent" element={<AddAgent />} />

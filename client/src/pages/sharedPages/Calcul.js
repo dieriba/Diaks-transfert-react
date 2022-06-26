@@ -1,6 +1,10 @@
+import AlertDialogPop from "../../components/AlertDialog"
+
 const Calcul = () => {
   return (
-    <div>Calcul</div>
+    <>
+    <AlertDialogPop />
+    </>
   )
 }
 export default Calcul

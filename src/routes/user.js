@@ -4,7 +4,6 @@ const router = express.Router();
 
 import {
     addUser,
-    deleteFormUser,
     deleteUser,
     editUser,
     getAllUsers,
@@ -13,8 +12,6 @@ import {
 //CREATE USER IN THE DATABASE
 router.route('/add-user').post(addUser);
 
-//GET DELETE FORM THAT WILL DELETE TRANSFERT TO DATABASE
-router.route('/delete-user').get(deleteFormUser);
 //DELETE A GIVEN USER INTO DATABASE ONLY ACCRESSIBLE TO HIGH LEVEL ADMIN
 router.route('/delete-user/:id').delete(deleteUser);
 

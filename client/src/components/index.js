@@ -6,7 +6,7 @@ export { default as TransfertForm } from './TransfertForm';
 export { default as SignUpForm } from './SignUpForm';
 export { default as SidebarList } from './Sidebar';
 export { default as QueryForm } from './QueryForm';
-export { default as TableCompMobile } from './TableCompMobile';
+export { default as TableCompMobile } from './TableCompMobileTransfertsMobile';
 export { default as Sidebar } from './Sidebar';
 export { default as NavItemMobile } from './NavItemMobile';
 export { default as Loading } from './Loading';

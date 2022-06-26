@@ -10,7 +10,8 @@ const auth = async (req, res, next) => {
     const token = authHeaders.split(' ')[1];
     try {
         const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        const user = await User.findById(id);
+        
+        const user = await User.findById(payload.userId);
         if(!user || user.isBanned) return next(new UnauthorizedError('Authentication Invalid'))
         req.user = payload;
     } catch (error) {

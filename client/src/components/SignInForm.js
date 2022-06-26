@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import {
   FormLabel,
   Input,
@@ -10,13 +10,15 @@ import {
   Alert,
   AlertIcon,
   CloseButton,
-  Flex
+  Flex,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '../context/contextProvider';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
 const SignInForm = () => {
   const [show, setShow] = useState(false);
 
+  const navigate = useNavigate();
   const {
     handleLogin,
     showAlert,
@@ -24,24 +26,31 @@ const SignInForm = () => {
     displayError,
     cleanError,
     isLoading,
+    user,
   } = useGlobalContext();
   const handleClick = () => {
     setShow(!show);
   };
 
+  useEffect(() => {
+    if (user) {
+      navigate('/admin/dashboard');
+    }
+  }, [user, navigate]);
+
   const loginFormValue = {
-    pseudo: '',
+    username: '',
     password: '',
   };
 
   const [value, setValues] = useState(loginFormValue);
 
   const onSubmit = e => {
-    const { pseudo, password } = value;
+    const { username, password } = value;
     e.preventDefault();
-    if (!pseudo) return displayError('Pseudo Requis');
+    if (!username) return displayError('Pseudo Requis');
     if (!password) return displayError('Mot de Passe Requis');
-    handleLogin();
+    handleLogin({ username, password });
   };
 
   const handleLoginForm = e => {
@@ -85,18 +94,17 @@ const SignInForm = () => {
 
       <form onSubmit={onSubmit}>
         <Box>
-          <FormLabel htmlFor="pseudo">Pseudo</FormLabel>
+          <FormLabel htmlFor="username">Nom d'utilisateur</FormLabel>
           <Input
             variant="filled"
-            placeholder="Pseudo"
-            id="pseudo"
-            type="pseudo"
+            placeholder="Nom d'utilisateur"
+            id="username"
             onChange={handleLoginForm}
-            name="pseudo"
+            name="username"
           />
         </Box>
         <Box marginTop="15px">
-          <FormLabel htmlFor="email">Mot de Passe</FormLabel>
+          <FormLabel htmlFor="password">Mot de Passe</FormLabel>
           <InputGroup>
             <Input
               variant="filled"

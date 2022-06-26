@@ -6,45 +6,25 @@ import { BadRequestError, NotFoundError } from '../../errors/index.js';
 const validateTransfertPage = async (req, res, next) => {
     try {
         const { code } = req.body;
-        const user = req.session.user;
+        const { moneyGiverCity } = req.user;
         const transfert = await Transfert.findOne({ code });
-        let errors = undefined;
         if (!transfert) {
-            errors = {
-                // eslint-disable-next-line no-useless-escape
-                message: `Le transfert avec le code : ${code} n\'existe pas`,
-            };
-            return res.status(200).render('users/regular-user/search-clients', {
-                title: "Diak's Project - Details",
-                transfert,
-                errors,
-            });
+            return next(new NotFoundError('Aucun transfert trouvé'));
         }
 
         if (transfert.hasTakeMoney) {
-            errors = {
-                message: `Le transfert Recherché a déjà été validé à la date du ${transfert.payoutDay}`,
-            };
-            return res.status(200).render('users/regular-user/search-clients', {
-                title: "Diak's Project - Details",
-                transfert,
-                errors,
-            });
+            return next(
+                new BadRequestError(
+                    '`Le transfert Recherché a déjà été validé à la date du ${transfert.payoutDay}`'
+                )
+            );
         }
-        if (transfert.city != user.username) {
-            errors = {
-                message: "Vous N'êtes pas autorisés à valider ce transfert",
-            };
-            return res.status(200).render('users/regular-user/search-clients', {
-                title: "Diak's Project - Details",
-                transfert,
-                errors,
-            });
+        if (transfert.city != moneyGiverCity) {
+            return next(
+                new BadRequestError('Vous ne pouvez pas gérer ce transfert')
+            );
         }
-        res.status(200).render('users/regular-user/details-transfert', {
-            title: "Diak's Project - Details",
-            transfert,
-        });
+        res.status(200).json({ success: true });
     } catch (error) {
         next(error);
     }
@@ -52,28 +32,20 @@ const validateTransfertPage = async (req, res, next) => {
 
 const moneyTaken = async (req, res, next) => {
     try {
-        const user = req.session.user;
+        const { moneyGiverCity } = req.user;
 
         let { page, size, clientName, senderName, start, end, moneyTypes } =
             req.query;
 
         let queryObj = {};
-        let qObj = {};
 
-        if (clientName) {
+        if (clientName)
             queryObj.clientName = { $regex: clientName, $options: 'i' };
-            qObj.clientName = clientName;
-        }
 
-        if (senderName) {
+        if (senderName)
             queryObj.senderName = { $regex: senderName, $options: 'i' };
-            qObj.senderName = senderName;
-        }
 
-        if (moneyTypes) {
-            queryObj.moneyTypes = moneyTypes;
-            qObj.moneyTypes = moneyTypes;
-        }
+        if (moneyTypes) queryObj.moneyTypes = moneyTypes;
 
         if (start && end) {
             const endYear = Number(end.split('-')[0]);
@@ -87,8 +59,6 @@ const moneyTaken = async (req, res, next) => {
                 $gte: date.start,
                 $lte: date.end,
             };
-            qObj.start = start;
-            qObj.end = end;
         }
 
         page = page ? Number(page) : 1;
@@ -100,7 +70,7 @@ const moneyTaken = async (req, res, next) => {
             {
                 $match: {
                     ...queryObj,
-                    city: user.username,
+                    city: moneyGiverCity,
                     hasTakeMoney: true,
                 },
             },
@@ -113,7 +83,7 @@ const moneyTaken = async (req, res, next) => {
         const limit = size;
         const skip = (page - 1) * size;
         const transferts = await Transfert.find({
-            city: user.username,
+            city: moneyGiverCity,
             hasTakeMoney: true,
             ...queryObj,
         })
@@ -121,7 +91,7 @@ const moneyTaken = async (req, res, next) => {
             .limit(limit)
             .skip(skip);
         const count = await Transfert.count({
-            city: user.username,
+            city: moneyGiverCity,
             hasTakeMoney: true,
             ...queryObj,
         });
@@ -133,17 +103,13 @@ const moneyTaken = async (req, res, next) => {
                 ? iterator + 9
                 : page + (totalPages - page);
 
-        res.status(200).render('users/regular-user/list-money-taken', {
-            title: "Diak's Project - Argent récupéré",
+        res.status(200).jsonr({
             transferts,
             totalPages,
             currentPage: page,
             iterator,
             endingLink,
-            q,
-            user,
             sum,
-            qObj,
         });
     } catch (error) {
         next(error);

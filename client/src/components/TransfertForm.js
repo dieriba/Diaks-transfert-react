@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-  FormLabel,
   Input,
   Button,
   Box,
@@ -31,10 +30,15 @@ const TransfertForm = () => {
     clientName,
     phoneNumber,
     amountOfMoneyInEuro,
-    addTransfert,
     handleChange,
     hasPaid,
     isEditing,
+    getAllAgents,
+    agents,
+    createTransfert,
+    errorStatus,
+    isOnMobile,
+    editTransfert,
   } = useGlobalContext();
 
   const handleInput = e => {
@@ -43,11 +47,14 @@ const TransfertForm = () => {
 
     handleChange({ name, value });
   };
-
   const [phoneNumberState, setPhoneNumberState] = useState(true);
 
   useEffect(() => {
-    if (moneyTypes === 'Liquide') {
+    getAllAgents();
+  }, []);
+
+  useEffect(() => {
+    if (moneyTypes === 'LIQUIDE') {
       setPhoneNumberState(true);
     } else {
       setPhoneNumberState(false);
@@ -63,28 +70,34 @@ const TransfertForm = () => {
     if (moneyTypes === 'Orange Money' && !phoneNumber)
       return displayError('Numéro Requis');
 
-    addTransfert();
+    if (isEditing) return editTransfert();
+
+    createTransfert();
   };
 
   return (
-    <Flex minHeight="90vh" width="100%" justifyContent = 'center'>
+    <Flex
+      minHeight={isOnMobile ? '100vh' : '90vh'}
+      width="100%"
+      justifyContent="center"
+    >
       <Box
         w={[300, 400, 500]}
-        height={showAlert ? '610px' : '510px'}
+        height={showAlert ? '720px' : '580px'}
         borderWidth={1}
         flexDirection="column"
         p={4}
-        mt='3rem'
+        mt="2rem"
         boxShadow="lg"
       >
         <form onSubmit={onSubmit}>
-          <VStack spacing={4}>
+          <VStack spacing={6}>
             <Text textAlign="left" fontSize="2xl" fontStyle="italic">
               {isEditing ? 'Modifier Transfert' : 'Ajouter Transfert'}
             </Text>
             {showAlert && (
               <Alert
-                status="error"
+                status={errorStatus || 'error'}
                 fontSize="0.8rem"
                 height="auto"
                 borderRadius="15px"
@@ -106,8 +119,9 @@ const TransfertForm = () => {
               onChange={handleInput}
               variant="filled"
               cursor="pointer"
+              value={moneyTypes}
             >
-              {moneyTypesOptions.map((type, index) => {
+              {moneyTypesOptions?.map((type, index) => {
                 return (
                   <option key={index} value={type}>
                     {type}
@@ -121,10 +135,11 @@ const TransfertForm = () => {
               variant="filled"
               cursor="pointer"
             >
-              {cityOptions.map((city, index) => {
+              {agents?.map(agent => {
+                const { _id, senderName } = agent;
                 return (
-                  <option key={index} value={city}>
-                    {city}
+                  <option key={_id} value={senderName}>
+                    {senderName}
                   </option>
                 );
               })}
@@ -135,7 +150,7 @@ const TransfertForm = () => {
               variant="filled"
               cursor="pointer"
             >
-              {cityOptions.map((senderName, index) => {
+              {cityOptions?.map((senderName, index) => {
                 return (
                   <option key={index} value={senderName}>
                     {senderName}
@@ -168,7 +183,7 @@ const TransfertForm = () => {
             <Input
               variant="filled"
               placeholder="Numéro Ex : XXX-XX-XX-XX"
-              id="amountOfMoneyInEuro"
+              id="phoneNumber"
               value={phoneNumber}
               onChange={handleInput}
               isDisabled={phoneNumberState}
@@ -200,11 +215,13 @@ const TransfertForm = () => {
                 </Radio>
               </Stack>
             </RadioGroup>
-            <Button w="100%"  
-            _hover={{backgroundColor : 'teal' , color : 'white'}}
-            isLoading={isLoading} 
-            type="submit">
-              Ajouter Transfert
+            <Button
+              w="100%"
+              _hover={{ backgroundColor: 'teal', color: 'white' }}
+              isLoading={isLoading}
+              type="submit"
+            >
+              {isEditing ? 'Modifier Transfert' : 'Ajouter Transfert'}
             </Button>
           </VStack>
         </form>

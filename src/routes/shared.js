@@ -40,7 +40,7 @@ router.route('/calcul').get(totalAmountTransfert);
 router.route('/change-password').patch(editPassword);
 
 //TRANSFERT WILL ONLY BE DELETED IF MIDDLEARE CHECKIFHASTAKEMONEY HAS BEEN PASSED
-router.route('/delete-form/:id').delete(deleteTransfert);
+router.route('/delete-transfert/:id').delete(deleteTransfert);
 
 //GET EDIT FORM THAT WILL MODIFY TRANSFERT TO DATABASE
 router.route('/edit-transfert/:id').patch(editTransfert);

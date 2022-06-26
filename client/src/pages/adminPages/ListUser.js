@@ -1,28 +1,38 @@
 import { useEffect } from 'react';
 import { useGlobalContext } from '../../context/contextProvider';
-import { TableCompMobile, TableComp } from '../../components';
-import { VStack } from '@chakra-ui/react';
-
+import { Flex, VStack } from '@chakra-ui/react';
+import Pagination from '../../components/Pagination';
+import TableCompMobileUser from '../../components/TableCompMobileUser';
+import TableCompUser from '../../components/TableCompUser';
 const ListUser = () => {
-  const { windowWidth, useHandleResize, isOnMobile } = useGlobalContext();
+  const { isOnMobile, useHandleResize, getAllUsers, users, currentPage } =
+    useGlobalContext();
+
+  useEffect(() => {
+    getAllUsers();
+  }, [currentPage]);
 
   useHandleResize();
 
   if (isOnMobile) {
     return (
-      <VStack spacing={4} mt={4} mb={4}>
-        <TableCompMobile />
-        <TableCompMobile />
-        <TableCompMobile />
-        <TableCompMobile />
+      <VStack display="flex" w="100%" spacing={4} mt={4} mb={4}>
+        {users.map(user => {
+          return <TableCompMobileUser key={user._id} {...user} />;
+        })}
       </VStack>
     );
   }
-
   return (
-    <>
-      <TableComp />
-    </>
+    <Flex
+      width="100%"
+      flexDir="column"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <TableCompUser />
+    </Flex>
   );
 };
+
 export default ListUser;

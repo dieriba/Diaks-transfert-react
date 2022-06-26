@@ -3,61 +3,64 @@ import { BiLogOut } from 'react-icons/bi';
 import { IconButton } from '@chakra-ui/react';
 import NavItem from './NavItem';
 import { data } from '../dataList/adminSidebar';
-import { ScaleFade } from '@chakra-ui/react';
 import { useGlobalContext } from '../context/contextProvider';
 
 const Sidebar = () => {
-  const { showSidebar } = useGlobalContext();
+  const { logoutUser } = useGlobalContext();
   return (
     // <ScaleFade initialScale={0.9} in={showSidebar}>
+    <Flex
+      position="sticky"
+      w="300px"
+      h="100vh"
+      flexDir="column"
+      p={4}
+      ml="0"
+      left={0}
+      borderRightWidth={1}
+      boxShadow="lg"
+      display={['none', 'none', 'none', 'flex']}
+    >
+      <Box mt="6rem">
+        {data.map((link, index) => {
+          return (
+            <NavItem
+              key={index}
+              title={link.title}
+              icon={link.icon}
+              index={index}
+              path={link.path}
+            />
+          );
+        })}
+      </Box>
       <Flex
-        position="sticky"
-        w="300px"
-        h="100vh"
+        p="5%"
         flexDir="column"
-        p={4}
-        ml="0"
-        left={0}
-        borderRightWidth={1}
-        boxShadow="lg"
-        display={['none', 'none', 'none', 'flex']}
+        w="100%"
+        alignItems="flex-start"
+        position="absolute"
+        bottom="1%"
       >
-        <Box mt="6rem">
-          {data.map((link, index) => {
-            return (
-              <NavItem
-                key={index}
-                title={link.title}
-                icon={link.icon}
-                index={index}
-                path={link.path}
-              />
-            );
-          })}
-        </Box>
-        <Flex
-          p="5%"
-          flexDir="column"
-          w="100%"
-          alignItems="flex-start"
-          position="absolute"
-          bottom="1%"
-        >
-          <Divider />
-          <Flex mt={4} align="center">
-            <Avatar size="sm" />
-            <Flex ml={4} justifyContent="space-between" w="170px">
-              <Box>
-                <Heading as="h3" size="sm">
-                  Dieriba
-                </Heading>
-                <Text fontSize="1rem">Admin</Text>
-              </Box>
-              <IconButton aria-label="Search database" icon={<BiLogOut />} />
-            </Flex>
+        <Divider />
+        <Flex mt={4} align="center">
+          <Avatar size="sm" />
+          <Flex ml={4} justifyContent="space-between" w="170px">
+            <Box>
+              <Heading as="h3" size="sm">
+                Dieriba
+              </Heading>
+              <Text fontSize="1rem">Admin</Text>
+            </Box>
+            <IconButton
+              onClick={logoutUser}
+              aria-label="Search database"
+              icon={<BiLogOut />}
+            />
           </Flex>
         </Flex>
       </Flex>
+    </Flex>
     // </ScaleFade>
   );
 };

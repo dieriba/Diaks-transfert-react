@@ -8,6 +8,19 @@ import {
   SETUP_USER_SUCCESS,
   TOGGLE_SIDEBAR,
   SET_EDIT_TRANSFERT,
+  LOGOUT_USER,
+  GET_ALL_AGENTS,
+  CREATE_TRANSFERT_BEGIN,
+  CREATE_TRANSFERT_SUCCESS,
+  CREATE_TRANSFERT_ERROR,
+  GET_ALL_TRANSFERTS_BEGIN,
+  GET_ALL_TRANSFERTS_SUCCESS,
+  GET_ALL_TRANSFERTS_ERROR,
+  TOGGLE_QUERY_FORM,
+  RESET_FORM,
+  CHANGE_PAGE,
+  RESET_PAGE,
+  GET_ALL_USERS,
 } from './action';
 
 const reducer = (state, action) => {
@@ -18,11 +31,26 @@ const reducer = (state, action) => {
   }
 
   if (type === SETUP_USER_SUCCESS) {
-    return { ...state, isLoading: false };
+    const { token, user, role } = action.payload;
+    return {
+      ...state,
+      isLoading: false,
+      user,
+      token,
+      role,
+      showAlert: false,
+      alertText: '',
+    };
   }
 
   if (type === SETUP_USER_ERROR) {
-    return { ...state, isLoading: false };
+    return {
+      ...state,
+      alertText: action.payload,
+      isLoading: false,
+      showAlert: true,
+      errorStatus: 'error',
+    };
   }
 
   if (type === DISPLAY_ERROR)
@@ -30,6 +58,7 @@ const reducer = (state, action) => {
       ...state,
       alertText: action.payload.alertText,
       showAlert: true,
+      errorStatus: 'error',
     };
 
   if (type === CLEAN_ERROR)
@@ -37,8 +66,10 @@ const reducer = (state, action) => {
 
   if (type === HANDLE_CHANGE) {
     const { name, value } = action.payload;
+
     return {
       ...state,
+      currentPage: 1,
       [name]: value,
     };
   }
@@ -53,9 +84,9 @@ const reducer = (state, action) => {
     return { ...state, windowWidth: action.payload, isOnMobile: false };
   }
 
-  if (action.type === SET_EDIT_TRANSFERT) {
+  if (type === SET_EDIT_TRANSFERT) {
     const transfert = state.transferts.find(
-      transfert => transfert._id === action.payload.id
+      transfert => transfert._id === action.payload
     );
     const {
       _id,
@@ -72,7 +103,7 @@ const reducer = (state, action) => {
     return {
       ...state,
       isEditing: true,
-      editJobId: _id,
+      editTransfertId: _id,
       clientName,
       city,
       senderName,
@@ -84,6 +115,98 @@ const reducer = (state, action) => {
       contactNumber,
     };
   }
+
+  if (type === LOGOUT_USER) {
+    return {
+      ...state,
+      user: null,
+      token: null,
+    };
+  }
+
+  if (type === GET_ALL_AGENTS) {
+    const { agents, iterator, currentPage, endingLink, totalPages } =
+      action.payload;
+    return {
+      ...state,
+      agents,
+      senderName: agents[0]?.senderName,
+      currentAgentPage: currentPage,
+      totalPagesAgent: totalPages,
+      endingLinkAgent: endingLink,
+      iteratorAgent: iterator,
+    };
+  }
+  if (type === GET_ALL_USERS) {
+    const { users } = action.payload;
+    return {
+      ...state,
+      users,
+    };
+  }
+  if (type === CREATE_TRANSFERT_BEGIN) {
+    return { ...state, isLoading: true };
+  }
+
+  if (type === CREATE_TRANSFERT_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertText: action.payload,
+      errorStatus: 'success',
+    };
+  }
+
+  if (type === CREATE_TRANSFERT_ERROR) {
+    return {
+      ...state,
+      alertText: action.payload,
+      isLoading: false,
+      showAlert: true,
+      errorStatus: 'error',
+    };
+  }
+
+  if (type === GET_ALL_TRANSFERTS_BEGIN) {
+    return { ...state, isLoading: true };
+  }
+  if (type === GET_ALL_TRANSFERTS_SUCCESS) {
+    const { transferts, currentPage, totalPages, endingLink, iterator } =
+      action.payload;
+    return {
+      ...state,
+      transferts,
+      currentPage,
+      totalPages,
+      endingLink,
+      iterator,
+      isLoading: false,
+    };
+  }
+  if (type === GET_ALL_TRANSFERTS_ERROR) {
+    return { ...state, isLoading: false };
+  }
+
+  if (type === TOGGLE_QUERY_FORM) {
+    return { ...state, showQueryForm: !state.showQueryForm };
+  }
+
+  if (type === RESET_FORM) {
+    return {
+      ...state,
+      queryClientName: '',
+      queryMoneyTypes: 'Tous',
+      queryCity: 'Tous',
+      querySenderName: 'Tous',
+      queryHasTakeMoney: false,
+      queryDateStart: '',
+      queryDateEnd: '',
+      currentPage: 1,
+    };
+  }
+
+  if (type === CHANGE_PAGE) return { ...state, currentPage: action.payload };
 };
 
 export default reducer;

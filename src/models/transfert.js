@@ -68,10 +68,13 @@ const transfertSchema = new mongoose.Schema({
     payoutDay: {
         type: Date,
     },
+    rate: {
+        type: Number,
+    },
     createdBy: {
         type: mongoose.Types.ObjectId,
-        ref: 'User',
-        required: [true, 'Please provide user'],
+        ref: 'Agent',
+        required: [true, 'Veuillez fournir un agent'],
     },
 });
 

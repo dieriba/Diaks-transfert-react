@@ -27,6 +27,10 @@ import xss from 'xss-clean';
 import rateLimit from 'express-rate-limit';
 import corsOptions from './src/middleware/corsOptions.js';
 import hpp from 'hpp';
+import cors from 'cors'
+
+//ACCESS MIDDLEWARE
+import { isAdmin } from './src/middleware/index.js';
 
 // ERRORS middleware
 import notFoundMiddleware from './src/middleware/not-found.js';
@@ -68,8 +72,7 @@ app.use(
     })
 );
 app.use(hpp());
-app.options('*', corsOptions);
-app.use(corsOptions);
+app.use(cors());
 app.use(xss());
 
 //PORT VARIABLES
@@ -96,11 +99,10 @@ app.use(express.json({ limit: '1kb' }));
 app.set('views', 'views');
 app.set('view engine', 'ejs');
 
-
 //ADMIN ROUTES
-app.use('/admin', authenticateUser, adminDashboardRoutes);
-app.use('/admin', authenticateUser, adminUserManagmentRoutes);
-app.use('/admin', authenticateUser, adminAgentManagmentRoutes);
+app.use('/admin', authenticateUser, isAdmin, adminDashboardRoutes);
+app.use('/admin', authenticateUser, isAdmin, adminUserManagmentRoutes);
+app.use('/admin', authenticateUser, isAdmin, adminAgentManagmentRoutes);
 
 //MED ADMIN ROUTES
 app.use('/med-admin', authenticateUser, mediumAdminRoutes);

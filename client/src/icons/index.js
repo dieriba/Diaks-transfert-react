@@ -11,3 +11,5 @@ export { default as HamburgerIcon } from './HamburgerIcon';
 export { default as CloseIcon } from './CloseIcon';
 export { default as EditIcon } from './EditIcon';
 export { default as DeleteIcon } from './DeleteIcon';
+export { default as ChevronRightIcon } from './ChevronRightIcon';
+export { default as ChevronLeftIcon } from './ChevronLeftIcon';

@@ -1,0 +1,3 @@
+export const SETUP_USER_BEGIN = 'SETUP_BEGIN';
+export const SETUP_USER_SUCCESS = 'SETUP_SUCCESS';
+export const SETUP_USER_ERROR = 'SETUP_ERROR';

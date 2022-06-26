@@ -10,7 +10,7 @@ const Loading = () => {
     >
       <CircularProgress
         isIndeterminate
-        emptyColor="gray.200"
+        emptycolor="gray.200"
         color="teal"
         size="200px"
         thickness="4px"

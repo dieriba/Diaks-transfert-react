@@ -6,6 +6,6 @@ const router = express.Router();
 import { getAllTransferts } from '../controllers/transfert.js';
 
 //RENDERS ALL TRANSFERTS FROM DATABASE ONLY ACCESSIBLE FOR MED ADMIN AND HIGH LEVEL ADMIN
-router.route('/dashboard').get(getAllTransferts);
+router.route('/transferts').get(getAllTransferts);
 
 export default router;

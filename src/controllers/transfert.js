@@ -5,7 +5,6 @@ import Agent from '../models/agent.js';
 //RENDER ALL TRANSFERT OF DB
 const getAllTransferts = async (req, res, next) => {
     try {
-
         let {
             page,
             size,
@@ -23,7 +22,7 @@ const getAllTransferts = async (req, res, next) => {
 
         let queryObj = {};
 
-        if (city) {
+        if (city && city !== 'Tous') {
             queryObj.city = city;
         }
         if (hasTakeMoney) {
@@ -32,10 +31,10 @@ const getAllTransferts = async (req, res, next) => {
         if (clientName) {
             queryObj.clientName = { $regex: clientName, $options: 'i' };
         }
-        if (senderName) {
+        if (senderName && senderName !== 'Tous') {
             queryObj.senderName = { $regex: senderName, $options: 'i' };
         }
-        if (moneyTypes) {
+        if (moneyTypes && moneyTypes !== 'Tous') {
             queryObj.moneyTypes = moneyTypes;
         }
 
@@ -54,7 +53,7 @@ const getAllTransferts = async (req, res, next) => {
         }
 
         page = page ? Number(page) : 1;
-        size = size ? Number(size) : 18;
+        size = size ? Number(size) : 11;
 
         const limit = size;
         const skip = (page - 1) * size;
@@ -67,12 +66,13 @@ const getAllTransferts = async (req, res, next) => {
 
         let totalPages = Math.ceil(count / limit);
 
-        let iterator = page - 5 < 1 ? 1 : page - 5;
+        let iterator = page - 2 < 1 ? 1 : page - 2;
         let endingLink =
-            iterator + 9 <= totalPages
-                ? iterator + 9
+            iterator + 4 <= totalPages
+                ? iterator + 4
                 : page + (totalPages - page);
 
+        console.log(totalPages, iterator, endingLink);
         res.status(200).json({
             transferts,
             totalPages,

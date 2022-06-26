@@ -9,19 +9,26 @@ const auth = async (req, res, next) => {
         const { username, password } = req.body;
 
         if (!username || !password)
-            next(new BadRequestError('Veuillez remplir tous les champs'));
+            return next(
+                new BadRequestError('Veuillez remplir tous les champs')
+            );
 
         const user = await User.findOne({ username });
 
-        if (!user) next(new BadRequestError('Champs Incorrects'));
+        if (!user) return next(new BadRequestError('Champs Incorrects'));
 
         const isSamePassword = await user.comparePassword(password);
-        if (!isSamePassword) next(new BadRequestError('Champs Incorrects'));
+        if (!isSamePassword)
+            return next(new BadRequestError('Champs Incorrects'));
 
         user.password = undefined;
         const token = user.createJWT({
             userId: user._id,
+            userAgentId: user.LinkedToAgentId?.toString() || null,
+            moneyGiverCity: user.role === 'moneyGiver' ? user.username : null,
+            role: user.role,
         });
+
         res.status(200).json({ user, token });
     } catch (error) {
         next(error);
