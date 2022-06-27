@@ -14,8 +14,6 @@ import { Loading } from './index';
 import AlertDialogPop from './AlertDialog';
 import { Badge } from '@chakra-ui/react';
 import { Link as ReachLink } from 'react-router-dom';
-import { useState } from 'react';
-
 const TableCompTransfertsMobile = ({
   clientName,
   senderName,
@@ -27,15 +25,8 @@ const TableCompTransfertsMobile = ({
   phoneNumber,
   moneyTypes,
   isLoading,
-  deleteTransfert,
   setEditForm,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const handleDelete = id => {
-    deleteTransfert(id);
-    setIsOpen(false);
-  };
-
   if (isLoading) {
     return <Loading />;
   }
@@ -97,13 +88,13 @@ const TableCompTransfertsMobile = ({
             <Td>
               <Link
                 as={ReachLink}
-                textDecor='none'
+                textDecor="none"
                 to="/shared/add-transfert"
-                onClick={() => setEditForm(_id)}
+                onClick={() => setEditForm('transfert', _id)}
               >
                 <Button size="xs">Modifier</Button>
               </Link>
-              <AlertDialogPop ml="0.5rem" s="xs" _id={_id} />
+              <AlertDialogPop ml="0.5rem" s="xs" _id={_id} field="transfert" />
             </Td>
           </Tr>
         </Tbody>

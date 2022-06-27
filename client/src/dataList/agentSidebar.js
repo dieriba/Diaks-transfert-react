@@ -1,7 +1,6 @@
 import { BiTransfer } from 'react-icons/bi';
 import { AiOutlineFileAdd } from 'react-icons/ai';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import { ImCalculator } from 'react-icons/im';
 import { SiConvertio } from 'react-icons/si';
 
 export const data = [
@@ -15,11 +14,7 @@ export const data = [
     path: '/shared/add-transfert',
     icon: <AiOutlineFileAdd />,
   },
-  {
-    title: 'Calcul',
-    path: '/agent/calcul',
-    icon: <ImCalculator />,
-  },
+
   {
     title: 'Convertisseur',
     path: '/shared/converter',

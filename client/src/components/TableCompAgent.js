@@ -3,17 +3,15 @@ import {
   Thead,
   Tbody,
   Tr,
-  Icon,
   TableContainer,
+  Link,
+  Button,
 } from '@chakra-ui/react';
-import { useGlobalContext } from '../context/contextProvider';
-import { EditIcon, DeleteIcon } from '../icons';
-
+import { Link as ReachLink } from 'react-router-dom';
+import AlertDialogPop from './AlertDialog';
 import { TdRow, ThRow } from './TableCompStyle';
 
-const TableComp = () => {
-  const { agents } = useGlobalContext();
-
+const TableComp = ({ agents , setEditForm}) => {
   return (
     <TableContainer w="100%">
       <Table size="sm" variant="simple">
@@ -28,8 +26,13 @@ const TableComp = () => {
         </Thead>
         <Tbody>
           {agents.map(user => {
-            const { _id, senderName, senderCode, phoneNumber, transfertCounts } =
-              user;
+            const {
+              _id,
+              senderName,
+              senderCode,
+              phoneNumber,
+              transfertCounts,
+            } = user;
             return (
               <Tr key={_id} fontSize="0.8rem">
                 <TdRow>{senderName}</TdRow>
@@ -37,16 +40,26 @@ const TableComp = () => {
                 <TdRow>{transfertCounts}</TdRow>
                 <TdRow>{phoneNumber}</TdRow>
                 <TdRow>
-                  <Icon
-                    onClick={() => console.log('edit')}
-                    fontSize="25px"
-                    as={EditIcon}
-                    cursor="pointer"
-                  />
-                  <Icon
-                    onClick={() => console.log('delete')}
-                    fontSize="30px"
-                    as={DeleteIcon}
+                  <Link
+                    as={ReachLink}
+                    to="/admin/add-agent"
+                    onClick={() => setEditForm('agent',_id)}
+                    textDecoration="none"
+                  >
+                    <Button
+                      size="sm"
+                      _hover={{ backgroundColor: 'teal' }}
+                      cursor="pointer"
+                    >
+                      Modifier
+                    </Button>
+                  </Link>
+                  <AlertDialogPop
+                    ml="0.5rem"
+                    h="#FF7F7F"
+                    s="sm"
+                    _id={_id}
+                    field="agent"
                   />
                 </TdRow>
               </Tr>

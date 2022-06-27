@@ -5,25 +5,25 @@ import {
   Th,
   Td,
   TableContainer,
-  Icon,
+  Badge,
+  Button,
+  Link,
 } from '@chakra-ui/react';
+import { Link as ReachLink } from 'react-router-dom';
+import AlertDialogPop from './AlertDialog';
 import { Loading } from './index';
-import { EditIcon, DeleteIcon } from '../icons';
-import { Badge } from '@chakra-ui/react';
-import { useGlobalContext } from '../context/contextProvider';
 
 const TableCompMobileUser = ({
   _id,
   username,
   role,
-  isBanned
+  isBanned,
+  isLoading,
+  setEditForm,
 }) => {
-  const { isLoading } = useGlobalContext();
-
   if (isLoading) {
     return <Loading />;
   }
-
 
   return (
     <TableContainer width="90%" boxShadow="lg" borderWidth={1} borderRadius={7}>
@@ -50,17 +50,15 @@ const TableCompMobileUser = ({
           <Tr>
             <Th color="teal">Actions</Th>
             <Td>
-              <Icon
-                onClick={() => console.log('edit')}
-                fontSize="23px"
-                as={EditIcon}
-                cursor="pointer"
-              />
-              <Icon
-                onClick={() => console.log('delete')}
-                fontSize="25px"
-                as={DeleteIcon}
-              />
+              <Link
+                as={ReachLink}
+                textDecor="none"
+                to="/admin/add-user"
+                onClick={() => setEditForm('user', _id)}
+              >
+                <Button size="xs">Modifier</Button>
+              </Link>
+              <AlertDialogPop ml="0.5rem" s="xs" _id={_id} field="user" />
             </Td>
           </Tr>
         </Tbody>

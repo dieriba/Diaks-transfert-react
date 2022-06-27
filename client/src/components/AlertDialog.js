@@ -11,10 +11,10 @@ import {
 import { useRef, useState } from 'react';
 import { useGlobalContext } from '../context/contextProvider';
 
-const AlertDialogPop = ({ _id, ml, h, s , handleClick}) => {
+const AlertDialogPop = ({ _id, ml, h, s, field }) => {
   const cancelRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
-  const { deleteTransfert} = useGlobalContext();
+  const { deleteTransfert, deleteFromDb } = useGlobalContext();
 
   const handleDelete = id => {
     deleteTransfert(id);
@@ -50,7 +50,11 @@ const AlertDialogPop = ({ _id, ml, h, s , handleClick}) => {
             <Button ref={cancelRef} onClick={() => setIsOpen(false)}>
               Non
             </Button>
-            <Button onClick={() => handleDelete(_id)} colorScheme="red" ml={3}>
+            <Button
+              onClick={() => deleteFromDb(field, _id)}
+              colorScheme="red"
+              ml={3}
+            >
               Oui
             </Button>
           </AlertDialogFooter>

@@ -13,7 +13,7 @@ import AlertDialogPop from './AlertDialog';
 import { TdRow, ThRow } from './TableCompStyle';
 import moment from 'moment';
 import 'moment/locale/fr';
-const TableComp = ({ setEditForm, transferts }) => {
+const TableComp = ({ setEditForm, transferts, getTransfertDetails }) => {
   return (
     <TableContainer w="100%">
       <Table variant="simple">
@@ -32,7 +32,7 @@ const TableComp = ({ setEditForm, transferts }) => {
             <ThRow>Actions</ThRow>
           </Tr>
         </Thead>
-        <Tbody textAlign="center">
+        <Tbody>
           {transferts.map(transfert => {
             const {
               clientName,
@@ -68,7 +68,8 @@ const TableComp = ({ setEditForm, transferts }) => {
                   <Link
                     _hover={{ color: 'teal' }}
                     as={ReachLink}
-                    to={`/shared/detais/${_id}`}
+                    to={`/shared/details`}
+                    onClick={() => getTransfertDetails(_id)}
                   >
                     Détails
                   </Link>
@@ -77,7 +78,7 @@ const TableComp = ({ setEditForm, transferts }) => {
                   <Link
                     as={ReachLink}
                     to="/shared/add-transfert"
-                    onClick={() => setEditForm(_id)}
+                    onClick={() => setEditForm('transfert', _id)}
                     textDecoration="none"
                   >
                     <Button
@@ -88,7 +89,13 @@ const TableComp = ({ setEditForm, transferts }) => {
                       Modifier
                     </Button>
                   </Link>
-                  <AlertDialogPop ml="0.5rem" h="#FF7F7F" s="sm" _id={_id} />
+                  <AlertDialogPop
+                    ml="0.5rem"
+                    h="#FF7F7F"
+                    s="sm"
+                    _id={_id}
+                    field="transfert"
+                  />
                 </TdRow>
               </Tr>
             );

@@ -72,7 +72,19 @@ const getAllTransferts = async (req, res, next) => {
                 ? iterator + 4
                 : page + (totalPages - page);
 
-        console.log(totalPages, iterator, endingLink);
+        let sum = await Transfert.aggregate([
+            { $match: queryObj },
+            {
+                $group: {
+                    _id: null,
+                    sum: { $sum: '$amountOfMoneyInEuro' },
+                },
+            },
+        ]);
+        if (sum[0] !== undefined) {
+            sum = sum[0].sum;
+        }
+
         res.status(200).json({
             transferts,
             totalPages,
@@ -80,6 +92,7 @@ const getAllTransferts = async (req, res, next) => {
             iterator,
             endingLink,
             agent,
+            sum,
         });
     } catch (error) {
         next(error);

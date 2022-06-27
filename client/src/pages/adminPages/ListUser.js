@@ -5,8 +5,15 @@ import Pagination from '../../components/Pagination';
 import TableCompMobileUser from '../../components/TableCompMobileUser';
 import TableCompUser from '../../components/TableCompUser';
 const ListUser = () => {
-  const { isOnMobile, useHandleResize, getAllUsers, users, currentPage } =
-    useGlobalContext();
+  const {
+    isOnMobile,
+    useHandleResize,
+    getAllUsers,
+    users,
+    currentPage,
+    isLoading,
+    setEditForm,
+  } = useGlobalContext();
 
   useEffect(() => {
     getAllUsers();
@@ -18,7 +25,14 @@ const ListUser = () => {
     return (
       <VStack display="flex" w="100%" spacing={4} mt={4} mb={4}>
         {users.map(user => {
-          return <TableCompMobileUser key={user._id} {...user} />;
+          return (
+            <TableCompMobileUser
+              key={user._id}
+              {...user}
+              isLoading={isLoading}
+              setEditForm = {setEditForm}
+            />
+          );
         })}
       </VStack>
     );
@@ -30,7 +44,11 @@ const ListUser = () => {
       alignItems="center"
       justifyContent="center"
     >
-      <TableCompUser />
+      <TableCompUser
+        users={users}
+        setEditForm={setEditForm}
+        isLoading={isLoading}
+      />
     </Flex>
   );
 };

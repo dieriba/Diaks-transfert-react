@@ -16,12 +16,21 @@ import {
   GET_ALL_TRANSFERTS_BEGIN,
   GET_ALL_TRANSFERTS_SUCCESS,
   GET_ALL_TRANSFERTS_ERROR,
-  TOGGLE_QUERY_FORM,
   RESET_FORM,
   CHANGE_PAGE,
   RESET_PAGE,
+  EDIT_TRANSFERT_SUCCESS,
   GET_ALL_USERS,
+  SET_EDIT_AGENT,
+  SET_EDIT_USER,
+  CANCEL_MODIFICATION,
+  CANCEL_MODIFICATION_TRANSFERT,
+  CANCEL_MODIFICATION_USER,
+  CANCEL_MODIFICATION_AGENT,
+  GET_DETAILS_TRANSFERT,
 } from './action';
+
+import { initialState } from './contextProvider';
 
 const reducer = (state, action) => {
   const { type } = action;
@@ -102,7 +111,7 @@ const reducer = (state, action) => {
     } = transfert;
     return {
       ...state,
-      isEditing: true,
+      isEditingTransfert: true,
       editTransfertId: _id,
       clientName,
       city,
@@ -115,7 +124,33 @@ const reducer = (state, action) => {
       contactNumber,
     };
   }
+  if (type === SET_EDIT_AGENT) {
+    const agent = state.agents.find(agent => agent._id === action.payload);
+    const { _id, phoneNumber, senderName, senderCode } = agent;
+    return {
+      ...state,
+      isEditingAgent: true,
+      editAgentId: _id,
+      phoneNumberAgent: phoneNumber,
+      senderNameUser: senderName,
+      senderCode,
+    };
+  }
 
+  if (type === SET_EDIT_USER) {
+    const user = state.users.find(user => user._id === action.payload);
+    const { _id, username, role } = user;
+
+    return {
+      ...state,
+      isEditingUser: true,
+      editUserId: _id,
+      username,
+      password: '',
+      confirmPassword: '',
+      role,
+    };
+  }
   if (type === LOGOUT_USER) {
     return {
       ...state,
@@ -127,6 +162,7 @@ const reducer = (state, action) => {
   if (type === GET_ALL_AGENTS) {
     const { agents, iterator, currentPage, endingLink, totalPages } =
       action.payload;
+
     return {
       ...state,
       agents,
@@ -172,24 +208,22 @@ const reducer = (state, action) => {
     return { ...state, isLoading: true };
   }
   if (type === GET_ALL_TRANSFERTS_SUCCESS) {
-    const { transferts, currentPage, totalPages, endingLink, iterator } =
+    const { transferts, currentPage, totalPages, endingLink, iterator, sum } =
       action.payload;
     return {
       ...state,
+      isEditingTransfert: false,
       transferts,
       currentPage,
       totalPages,
       endingLink,
       iterator,
+      totalAmountTransfered: sum,
       isLoading: false,
     };
   }
   if (type === GET_ALL_TRANSFERTS_ERROR) {
     return { ...state, isLoading: false };
-  }
-
-  if (type === TOGGLE_QUERY_FORM) {
-    return { ...state, showQueryForm: !state.showQueryForm };
   }
 
   if (type === RESET_FORM) {
@@ -207,6 +241,85 @@ const reducer = (state, action) => {
   }
 
   if (type === CHANGE_PAGE) return { ...state, currentPage: action.payload };
+
+  if (type === EDIT_TRANSFERT_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertText: action.payload,
+      errorStatus: 'success',
+      isEditingTransfert: false,
+      clientName: '',
+      amountOfMoneyInEuro: '',
+      moneyTypes: 'LIQUIDE',
+      city: 'CONAKRY',
+      phoneNumber: '',
+    };
+  }
+
+  if (type === CANCEL_MODIFICATION_TRANSFERT)
+    return {
+      ...state,
+      isEditingTransfert: false,
+      clientName: '',
+      amountOfMoneyInEuro: '',
+      moneyTypes: 'LIQUIDE',
+      city: 'CONAKRY',
+      phoneNumber: '',
+    };
+  if (type === CANCEL_MODIFICATION_USER)
+    return { ...state, isEditingUser: false, username: '', role: 'agent' };
+  if (type === CANCEL_MODIFICATION_AGENT)
+    return {
+      ...state,
+      isEditingAgent: false,
+      senderNameUser: '',
+      phoneNumberAgent: '',
+      senderCode: '',
+    };
+
+  if (type === GET_DETAILS_TRANSFERT) {
+    const transfert = state.transferts.find(
+      transfert => transfert._id === action.payload
+    );
+    const {
+      amountOfMoneyInEuro,
+      hasPaid,
+      city,
+      moneyTypes,
+      clientName,
+      phoneNumber,
+      senderName,
+      hasTakeMoney,
+      code,
+      contactNumber,
+      payoutDay,
+      date,
+      updatedDate,
+      hasBeenModified,
+      rate,
+    } = transfert;
+
+    return {
+      ...state,
+      amountOfMoneyInEuro,
+      hasPaid,
+      city,
+      moneyTypes,
+      clientName,
+      phoneNumber,
+      senderName,
+      hasTakeMoney,
+      code,
+      contactNumber,
+      payoutDay,
+      date,
+      updatedDate,
+      hasBeenModified,
+      rate,
+    };
+  }
 };
 
 export default reducer;

@@ -1,9 +1,9 @@
-import AlertDialogPop from "../../components/AlertDialog"
+import CalculShow from "../../components/CalculShow"
 
 const Calcul = () => {
   return (
     <>
-    <AlertDialogPop />
+    <CalculShow />
     </>
   )
 }

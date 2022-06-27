@@ -14,6 +14,8 @@ const ListAgent = () => {
     getAllAgents,
     totalPagesAgent,
     endingLinkAgent,
+    isLoading,
+    setEditForm
   } = useGlobalContext();
 
   useEffect(() => {
@@ -26,7 +28,14 @@ const ListAgent = () => {
     return (
       <VStack display="flex" w="100%" spacing={4} mt={4} mb={4}>
         {agents.map(agent => {
-          return <TableCompMobileAgent key={agent._id} {...agent} />;
+          return (
+            <TableCompMobileAgent
+              key={agent._id}
+              {...agent}
+              isLoading={isLoading}
+              setEditForm = {setEditForm}
+            />
+          );
         })}
         {totalPagesAgent > 1 && (
           <Pagination
@@ -46,7 +55,7 @@ const ListAgent = () => {
       alignItems="center"
       justifyContent="center"
     >
-      <TableCompAgent />
+      <TableCompAgent agents={agents} isLoading={isLoading} setEditForm={setEditForm} />
       {totalPagesAgent > 1 && (
         <Pagination
           currentPage={currentPageAgent}

@@ -35,7 +35,14 @@ const AddUserForm = () => {
     senderNameUser,
     phoneNumberAgent,
     createUser,
+    isEditingUser,
+    cancelModification,
   } = useGlobalContext();
+
+  const handleCancel = e => {
+    e.preventDefault();
+    cancelModification('user');
+  };
 
   const [showFormAgent, setShowFormAgent] = useState(
     role === 'agent' ? true : false
@@ -62,11 +69,13 @@ const AddUserForm = () => {
     createUser();
   };
 
+  
+
   return (
-    <Flex direction="column" minHeight="90vh" width="100%" alignItems="center">
+    <Flex direction="column" width="100%" alignItems="center">
       <Box
         w={[300, 400, 500]}
-        height={showAlert ? '750px' : '650px'}
+        height="auto"
         borderWidth={1}
         flexDirection="column"
         p={4}
@@ -99,7 +108,7 @@ const AddUserForm = () => {
           mb="1rem"
           fontStyle="italic"
         >
-          Ajouter Utilisateur
+          {isEditingUser ? 'Modifier Utilisateur' : 'Ajouter Utilisateur'}
         </Text>
 
         <form onSubmit={onSubmit}>
@@ -127,39 +136,47 @@ const AddUserForm = () => {
                 );
               })}
             </Select>
-            <InputGroup>
-              <Input
-                variant="filled"
-                placeholder="Mot de passe"
-                id="password"
-                type={show ? 'text' : 'password'}
-                onChange={handleInput}
-                name="password"
-                value={password}
-              />
+            {!isEditingUser ? (
+              <>
+                <InputGroup>
+                  <Input
+                    variant="filled"
+                    placeholder="Mot de passe"
+                    id="password"
+                    type={show ? 'text' : 'password'}
+                    onChange={handleInput}
+                    name="password"
+                    value={password}
+                  />
 
-              <InputRightElement width="4.5rem">
-                <Button h="1.75rem" size="sm" onClick={() => handleClick(1)}>
-                  {show ? 'Hide' : 'Show'}
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-            <InputGroup>
-              <Input
-                variant="filled"
-                placeholder="Confirmez Mot de passe"
-                id="confirmPassword"
-                type={showConfirm ? 'text' : 'password'}
-                onChange={handleInput}
-                name="confirmPassword"
-                value={confirmPassword}
-              />
-              <InputRightElement width="4.5rem">
-                <Button h="1.75rem" size="sm" onClick={handleClick}>
-                  {showConfirm ? 'Hide' : 'Show'}
-                </Button>
-              </InputRightElement>
-            </InputGroup>
+                  <InputRightElement width="4.5rem">
+                    <Button
+                      h="1.75rem"
+                      size="sm"
+                      onClick={() => handleClick(1)}
+                    >
+                      {show ? 'Hide' : 'Show'}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+                <InputGroup>
+                  <Input
+                    variant="filled"
+                    placeholder="Confirmez Mot de passe"
+                    id="confirmPassword"
+                    type={showConfirm ? 'text' : 'password'}
+                    onChange={handleInput}
+                    name="confirmPassword"
+                    value={confirmPassword}
+                  />
+                  <InputRightElement width="4.5rem">
+                    <Button h="1.75rem" size="sm" onClick={handleClick}>
+                      {showConfirm ? 'Hide' : 'Show'}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+              </>
+            ) : null}
             {showFormAgent && (
               <>
                 <Text
@@ -203,8 +220,18 @@ const AddUserForm = () => {
               marginTop="20px"
               type="submit"
             >
-              Créer un utilisateur
+              {isEditingUser ? 'Modifier Utilisateur' : 'Créer un utilisateur'}
             </Button>
+            {isEditingUser && (
+              <Button
+                w="100%"
+                _hover={{ backgroundColor: 'teal', color: 'white' }}
+                type="button"
+                onClick={handleCancel}
+              >
+                Annuler Modification
+              </Button>
+            )}
           </VStack>
         </form>
       </Box>

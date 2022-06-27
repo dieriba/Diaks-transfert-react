@@ -5,22 +5,21 @@ import {
   Th,
   Td,
   TableContainer,
-  Icon,
+  Link,
+  Button,
 } from '@chakra-ui/react';
 import { Loading } from './index';
-import { EditIcon, DeleteIcon } from '../icons';
-import { Badge } from '@chakra-ui/react';
-import { useGlobalContext } from '../context/contextProvider';
-
+import { Link as ReachLink } from 'react-router-dom';
+import AlertDialogPop from './AlertDialog';
 const TableCompMobileAgent = ({
   _id,
   senderName,
   senderCode,
   phoneNumber,
   transfertCounts,
+  isLoading,
+  setEditForm
 }) => {
-  const { isLoading } = useGlobalContext();
-
   if (isLoading) {
     return <Loading />;
   }
@@ -49,17 +48,15 @@ const TableCompMobileAgent = ({
           <Tr>
             <Th color="teal">Actions</Th>
             <Td>
-              <Icon
-                onClick={() => console.log('edit')}
-                fontSize="23px"
-                as={EditIcon}
-                cursor="pointer"
-              />
-              <Icon
-                onClick={() => console.log('delete')}
-                fontSize="25px"
-                as={DeleteIcon}
-              />
+              <Link
+                as={ReachLink}
+                textDecor="none"
+                to="/admin/add-agent"
+                onClick={() => setEditForm('agent',_id)}
+              >
+                <Button size="xs">Modifier</Button>
+              </Link>
+              <AlertDialogPop ml="0.5rem" s="xs" _id={_id} field="agent" />
             </Td>
           </Tr>
         </Tbody>

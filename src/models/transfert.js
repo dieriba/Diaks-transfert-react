@@ -57,10 +57,7 @@ const transfertSchema = new mongoose.Schema({
     code: {
         type: String,
     },
-    hasReceiveMoney: {
-        type: Boolean,
-        default: false,
-    },
+
     contactNumber: {
         type: String,
         minlength: 9,

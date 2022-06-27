@@ -8,14 +8,11 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { Badge } from '@chakra-ui/react';
-import { useGlobalContext } from '../context/contextProvider';
 import { Link as ReachLink } from 'react-router-dom';
 import AlertDialogPop from './AlertDialog';
 import { TdRow, ThRow } from './TableCompStyle';
 
-const TableComp = () => {
-  const { users, setEditUser } = useGlobalContext();
-
+const TableComp = ({ users, setEditForm }) => {
   return (
     <TableContainer w="100%">
       <Table size="sm" variant="simple">
@@ -46,7 +43,7 @@ const TableComp = () => {
                     as={ReachLink}
                     textDecoration="none"
                     to="/admin/add-user"
-                    onClick={setEditUser}
+                    onClick={() => setEditForm('user', _id)}
                   >
                     <Button
                       size="sm"
@@ -56,7 +53,13 @@ const TableComp = () => {
                       Modifier
                     </Button>
                   </Link>
-                  <AlertDialogPop ml="0.5rem" h="#FF7F7F" s="sm" _id={_id} />
+                  <AlertDialogPop
+                    ml="0.5rem"
+                    h="#FF7F7F"
+                    s="sm"
+                    _id={_id}
+                    field="user"
+                  />
                 </TdRow>
               </Tr>
             );

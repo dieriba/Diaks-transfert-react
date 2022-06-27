@@ -1,9 +1,5 @@
-import React, { useState } from 'react';
 import {
   Input,
-  Select,
-  InputGroup,
-  InputRightElement,
   Button,
   Box,
   Text,
@@ -28,6 +24,8 @@ const AddAgentForm = () => {
     senderNameUser,
     phoneNumberAgent,
     senderCode,
+    isEditingAgent,
+    cancelModification,
   } = useGlobalContext();
 
   const handleInput = e => {
@@ -35,6 +33,11 @@ const AddAgentForm = () => {
     const value = e.target.value;
 
     handleChange({ name, value });
+  };
+
+  const handleCancel = e => {
+    e.preventDefault();
+    cancelModification('agent');
   };
 
   const onSubmit = e => {
@@ -47,15 +50,15 @@ const AddAgentForm = () => {
 
   return (
     <Flex
-      justifyContent="center"
       direction="column"
-      minHeight="90vh"
       width="100%"
       alignItems="center"
+      minH='90vh'
+      mt='2rem'
     >
       <Box
         w={[350, 400, 500]}
-        height={showAlert ? '420px' : '350px'}
+        height="auto"
         borderWidth={1}
         flexDirection="column"
         p={4}
@@ -87,7 +90,7 @@ const AddAgentForm = () => {
           mb="1rem"
           fontStyle="italic"
         >
-          Ajouter Agent
+          {isEditingAgent ? 'Modifier Agent' : 'Ajouter Agent'}
         </Text>
 
         <form onSubmit={onSubmit}>
@@ -122,8 +125,18 @@ const AddAgentForm = () => {
               marginTop="20px"
               type="submit"
             >
-              Ajouter Agent
+              {isEditingAgent ? 'Modifier Agent' : 'Ajouter Agent'}
             </Button>
+            {isEditingAgent && (
+              <Button
+                w="100%"
+                _hover={{ backgroundColor: 'teal', color: 'white' }}
+                type="button"
+                onClick={handleCancel}
+              >
+                Annuler Modification
+              </Button>
+            )}
           </VStack>
         </form>
       </Box>

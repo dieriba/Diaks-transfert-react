@@ -32,13 +32,15 @@ const TransfertForm = () => {
     amountOfMoneyInEuro,
     handleChange,
     hasPaid,
-    isEditing,
+    isEditingTransfert,
     getAllAgents,
     agents,
     createTransfert,
     errorStatus,
-    isOnMobile,
     editTransfert,
+    senderName,
+    city,
+    cancelModification,
   } = useGlobalContext();
 
   const handleInput = e => {
@@ -70,20 +72,20 @@ const TransfertForm = () => {
     if (moneyTypes === 'Orange Money' && !phoneNumber)
       return displayError('Numéro Requis');
 
-    if (isEditing) return editTransfert();
+    if (isEditingTransfert) return editTransfert();
 
     createTransfert();
   };
 
+  const handleCancel = e => {
+    e.preventDefault();
+    cancelModification('transfert');
+  };
   return (
-    <Flex
-      minHeight={isOnMobile ? '100vh' : '90vh'}
-      width="100%"
-      justifyContent="center"
-    >
+    <Flex width="100%" justifyContent="center">
       <Box
         w={[300, 400, 500]}
-        height={showAlert ? '720px' : '580px'}
+        height="auto"
         borderWidth={1}
         flexDirection="column"
         p={4}
@@ -93,7 +95,7 @@ const TransfertForm = () => {
         <form onSubmit={onSubmit}>
           <VStack spacing={6}>
             <Text textAlign="left" fontSize="2xl" fontStyle="italic">
-              {isEditing ? 'Modifier Transfert' : 'Ajouter Transfert'}
+              {isEditingTransfert ? 'Modifier Transfert' : 'Ajouter Transfert'}
             </Text>
             {showAlert && (
               <Alert
@@ -134,6 +136,7 @@ const TransfertForm = () => {
               name="senderName"
               variant="filled"
               cursor="pointer"
+              value={senderName}
             >
               {agents?.map(agent => {
                 const { _id, senderName } = agent;
@@ -149,6 +152,7 @@ const TransfertForm = () => {
               name="city"
               variant="filled"
               cursor="pointer"
+              value={city}
             >
               {cityOptions?.map((senderName, index) => {
                 return (
@@ -221,8 +225,18 @@ const TransfertForm = () => {
               isLoading={isLoading}
               type="submit"
             >
-              {isEditing ? 'Modifier Transfert' : 'Ajouter Transfert'}
+              {isEditingTransfert ? 'Modifier Transfert' : 'Ajouter Transfert'}
             </Button>
+            {isEditingTransfert && (
+              <Button
+                w="100%"
+                _hover={{ backgroundColor: 'teal', color: 'white' }}
+                type="button"
+                onClick={handleCancel}
+              >
+                Annuler Modification
+              </Button>
+            )}
           </VStack>
         </form>
       </Box>

@@ -2,7 +2,6 @@ import { BiTransfer } from 'react-icons/bi';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { GrGroup } from 'react-icons/gr';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import { ImCalculator } from 'react-icons/im';
 import { SiConvertio } from 'react-icons/si';
 import { FaCity } from 'react-icons/fa';
 
@@ -42,11 +41,7 @@ export const data = [
     path: '/shared/converter',
     icon: <SiConvertio />,
   },
-  {
-    title: 'Calcul',
-    path: '/med-admin/calcul',
-    icon: <ImCalculator />,
-  },
+
   {
     title: 'Modifier Mot de passe',
     path: '/shared/change-password',

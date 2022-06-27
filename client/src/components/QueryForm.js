@@ -12,14 +12,11 @@ import {
   Fade,
 } from '@chakra-ui/react';
 import { useGlobalContext } from '../context/contextProvider';
-import useGetAgent from '../hooks/useGetAgents';
 
-const QueryForm = () => {
+const QueryFormMobile = () => {
   const {
     handleChange,
-    getAllAgents,
     moneyTypesOptions,
-    agents,
     cityOptions,
     hasPaid,
     isLoading,
@@ -30,12 +27,12 @@ const QueryForm = () => {
     querySenderName,
     queryCity,
     queryHasTakeMoney,
+    agents,
     queryMoneyTypes,
     getAllTransferts,
-    resetQueryForm
+    resetQueryForm,
   } = useGlobalContext();
 
-  useGetAgent();
   const handleInput = e => {
     const name = e.target.name;
     const value = e.target.value;
@@ -45,21 +42,20 @@ const QueryForm = () => {
 
   const onSubmit = e => {
     e.preventDefault();
-    getAllAgents();
+    getAllTransferts();
   };
 
-  const handleReset = (e) => {
+  const handleReset = e => {
     e.preventDefault();
     resetQueryForm();
-  }
+  };
   return (
-    <Fade in={showQueryForm} unmountOnExit>
       <Grid
         height="650px"
         borderWidth={1}
         p={4}
         direction="column"
-        mt="1rem"
+        mt="3rem"
         boxShadow="lg"
       >
         <form onSubmit={onSubmit}>
@@ -168,7 +164,7 @@ const QueryForm = () => {
             <Button
               w="100%"
               _hover={{ backgroundColor: 'red', color: 'white' }}
-              type='button'
+              type="button"
               onClick={handleReset}
             >
               Reset
@@ -185,8 +181,7 @@ const QueryForm = () => {
           </VStack>
         </form>
       </Grid>
-    </Fade>
   );
 };
 
-export default QueryForm;
+export default QueryFormMobile;

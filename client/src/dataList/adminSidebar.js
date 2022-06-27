@@ -5,7 +5,6 @@ import {
   UserAddIcon,
   UserGroupIcon,
   ChangePasswordIcon,
-  CalculatorIcon,
   TransferIcon,
   ExchangeIcon
 } from '../icons';
@@ -50,11 +49,6 @@ export const data = [
     title: 'Convertisseur',
     path: '/shared/converter',
     icon: ExchangeIcon,
-  },
-  {
-    title: 'Calcul',
-    path: '/admin/calcul',
-    icon: CalculatorIcon,
   },
   {
     title: 'PDF',

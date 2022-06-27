@@ -21,6 +21,7 @@ import {
   SharedLayout,
 } from './pages';
 import { TransfertForm } from './components';
+import DetailsTransfert from './components/DetailsTransfert';
 function App() {
   return (
     <ChakraProvider theme={theme}>
@@ -76,6 +77,7 @@ function App() {
                 </Route> */}
           <Route path="/shared" element={<SharedLayout />}>
             <Route path="add-transfert" element={<TransfertForm />} />
+            <Route path="details" element={<DetailsTransfert />} />
             <Route path="converter" element={<Converter />} />
             <Route path="change-password" element={<ChangePassword />} />
           </Route>
