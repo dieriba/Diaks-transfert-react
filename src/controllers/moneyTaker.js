@@ -5,38 +5,35 @@ import { NotFoundError } from '../../errors/index.js';
 //Render LIST OF MONEY TAKERS
 const getAllMoneyTakers = async (req, res, next) => {
     try {
-        let { page, size, hasTakeMoney, name } = req.query;
+        let { page, size, name } = req.query;
 
         let queryObj = {};
-
-        if (hasTakeMoney)
-            queryObj.hasTakeMoney = hasTakeMoney === 'true' ? true : false;
 
         if (name) queryObj.name = { $regex: name, $options: 'i' };
 
         page = page ? Number(page) : 1;
-        size = size ? Number(size) : 11;
+        size = size ? Number(size) : 15;
 
         //TRANSFORM QUERY INTO URI ENCODE STRING TO BE ABLE TO QUERY NEXT PAGE WITHOUT GETTING RESET
 
         const limit = size;
         const skip = (page - 1) * size;
 
-        const moneyTaker = await MoneyTaker.find(queryObj)
+        const moneyTakers = await MoneyTaker.find(queryObj)
             .sort({ date: -1 })
             .limit(limit)
             .skip(skip);
         const count = await MoneyTaker.count(queryObj);
         let totalPages = Math.ceil(count / limit);
 
-        let iterator = page - 5 < 1 ? 1 : page - 5;
+        let iterator = page - 2 < 1 ? 1 : page - 2;
         let endingLink =
-            iterator + 9 <= totalPages
-                ? iterator + 9
+            iterator + 4 <= totalPages
+                ? iterator + 4
                 : page + (totalPages - page);
 
         res.status(200).json({
-            moneyTaker,
+            moneyTakers,
             totalPages,
             currentPage: page,
             iterator,
@@ -67,6 +64,7 @@ const addMoneyTaker = async (req, res, next) => {
 const editMoneyTaker = async (req, res, next) => {
     try {
         const { id } = req.params;
+        console.log(req.body);
         const moneyTaker = await MoneyTaker.findOneAndUpdate(
             { _id: id },
             req.body,
@@ -85,7 +83,7 @@ const editMoneyTaker = async (req, res, next) => {
         }
 
         res.status(200).json({
-            message: 'Money Taker succesfully modified',
+            message: 'Récupérateur Modifié avec succès',
             status: 'sucess',
         });
     } catch (error) {

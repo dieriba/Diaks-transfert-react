@@ -2,13 +2,23 @@ import { Avatar, Divider, Flex, Heading, Text, Box } from '@chakra-ui/react';
 import { BiLogOut } from 'react-icons/bi';
 import { IconButton } from '@chakra-ui/react';
 import NavItem from './NavItem';
-import { data } from '../dataList/adminSidebar';
+import { data as adminSidebar } from '../dataList/adminSidebar';
+import { data as agentSidebar } from '../dataList/agentSidebar';
+import { data as mediumAdminSidebar } from '../dataList/mediumAdminSidebar';
+import { data as moneyGiverSidebar } from '../dataList/moneyGiverSidebar';
 import { useGlobalContext } from '../context/contextProvider';
 
 const Sidebar = () => {
-  const { logoutUser } = useGlobalContext();
+  const { logoutUser, userRole, nameUser } = useGlobalContext();
+  let sidebarData;
+
+  if (userRole === 'highAdmin') sidebarData = adminSidebar;
+  if (userRole === 'admin') sidebarData = adminSidebar;
+  if (userRole === 'mediumAdmin') sidebarData = mediumAdminSidebar;
+  if (userRole === 'agent') sidebarData = agentSidebar;
+  if (userRole === 'moneyGiver') sidebarData = moneyGiverSidebar;
+
   return (
-    // <ScaleFade initialScale={0.9} in={showSidebar}>
     <Flex
       position="sticky"
       w="300px"
@@ -22,7 +32,7 @@ const Sidebar = () => {
       display={['none', 'none', 'none', 'flex']}
     >
       <Box mt="6rem">
-        {data.map((link, index) => {
+        {sidebarData.map((link, index) => {
           return (
             <NavItem
               key={index}
@@ -30,6 +40,7 @@ const Sidebar = () => {
               icon={link.icon}
               index={index}
               path={link.path}
+              isClickable={link.onClick ? true : false}
             />
           );
         })}
@@ -48,9 +59,9 @@ const Sidebar = () => {
           <Flex ml={4} justifyContent="space-between" w="170px">
             <Box>
               <Heading as="h3" size="sm">
-                Dieriba
+                {nameUser && nameUser}
               </Heading>
-              <Text fontSize="1rem">Admin</Text>
+              <Text fontSize="1rem">{userRole}</Text>
             </Box>
             <IconButton
               onClick={logoutUser}
@@ -61,7 +72,6 @@ const Sidebar = () => {
         </Flex>
       </Flex>
     </Flex>
-    // </ScaleFade>
   );
 };
 export default Sidebar;

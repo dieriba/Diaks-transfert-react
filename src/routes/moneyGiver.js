@@ -17,6 +17,6 @@ router.route('/validate/:id').patch(validateTransfert);
 router.route('/search').post(validateTransfertPage);
 
 //SEARCH FOR ALL MONEY THAT HAS BEEN TAKEN AND RENDERS IT
-router.route('/taken').get(moneyTaken);
+router.route('/all-transferts').get(moneyTaken);
 
 export default router;

@@ -7,7 +7,7 @@ import { addMoneyTaker } from '../controllers/moneyTaker.js';
 import { rate } from '../controllers/converter.js';
 
 //MODIFY NEW RATE OF MONEY
-router.route('/new-rate').patch(rate);
+router.route('/new-rate').post(rate);
 
 //RENDER MEDIUM ADMIN PAGE
 router.route('/transferts').get(getAllTransferts);

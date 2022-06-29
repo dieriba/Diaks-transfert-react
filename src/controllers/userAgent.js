@@ -5,7 +5,6 @@ import mongoose from 'mongoose';
 const getUserAgentTransfert = async (req, res, next) => {
     try {
         const { userAgentId } = req.user;
-
         let {
             page,
             size,
@@ -22,15 +21,19 @@ const getUserAgentTransfert = async (req, res, next) => {
 
         let queryObj = {};
 
-        if (city) queryObj.city = city;
-
         if (hasTakeMoney)
             queryObj.hasTakeMoney = hasTakeMoney === 'true' ? true : false;
 
         if (clientName)
             queryObj.clientName = { $regex: clientName, $options: 'i' };
 
-        if (moneyTypes) queryObj.moneyTypes = moneyTypes;
+        if (moneyTypes && moneyTypes !== 'Tous') {
+            queryObj.moneyTypes = moneyTypes;
+        }
+
+        if (city && city !== 'Tous') {
+            queryObj.city = city;
+        }
 
         if (start && end) {
             const date = {
@@ -54,7 +57,7 @@ const getUserAgentTransfert = async (req, res, next) => {
         //FIND ONLY TRANSFERTS WHERE SENDERNAME IS EQUAL TO LOGGED USER
         const transferts = await Transfert.find({
             ...queryObj,
-            createdBy: userAgentId,
+            createdBy: mongoose.Types.ObjectId(userAgentId),
         })
             .sort({ date: -1 })
             .limit(limit)
@@ -62,6 +65,7 @@ const getUserAgentTransfert = async (req, res, next) => {
 
         const count = await Transfert.count({
             queryObj,
+            createdBy: mongoose.Types.ObjectId(userAgentId),
         });
         let totalPages = Math.ceil(count / limit);
 
@@ -70,67 +74,6 @@ const getUserAgentTransfert = async (req, res, next) => {
             iterator + 9 <= totalPages
                 ? iterator + 9
                 : page + (totalPages - page);
-
-        res.status(200).json({
-            transferts,
-            totalPages,
-            currentPage: page,
-            iterator,
-            endingLink,
-        });
-    } catch (error) {
-        next(error);
-    }
-};
-
-const totalAgentTransfert = async (req, res, next) => {
-    try {
-        const { userAgentId } = req.user;
-
-        let { start, end, city, page, size, moneyTypes } = req.query;
-
-        //ADD 2 OBJECT THE FIRST ONE IS USED AS QUERY PARAMETER FOR MONGOOSE FUNCTION
-        // THE SECOND ONE IS HERE TO PAGINATION SYSTEM AND SEND QUERY STRING TO LINK BUT WITHOUT THE PAGE QUERY TO AVOID BUGS
-
-        let queryObj = {};
-
-        if (city) queryObj.city = city;
-
-        if (moneyTypes) queryObj.moneyTypes = moneyTypes;
-
-        if (start && end) {
-            const endYear = Number(end.split('-')[0]);
-            const endMonth = Number(end.split('-')[1]) - 1;
-            const endDay = Number(end.split('-')[2]);
-            const date = {
-                start: new Date(start),
-                end: new Date(endYear, endMonth, endDay, 25, 59, 59, 999),
-            };
-            queryObj.date = {
-                $gte: date.start,
-                $lte: date.end,
-            };
-        }
-
-        page = page ? Number(page) : 1;
-        size = size ? Number(size) : 18;
-
-        //TRANSFORM QUERY INTO URI ENCODE STRING TO BE ABLE TO QUERY NEXT PAGE WITHOUT GETTING RESET
-
-        const limit = size;
-        const skip = (page - 1) * size;
-
-        const transferts = await Transfert.find({
-            ...queryObj,
-            createdBy: userAgentId,
-        })
-            .sort({ date: -1 })
-            .limit(limit)
-            .skip(skip);
-        const count = await Transfert.count({
-            ...queryObj,
-            createdBy: userAgentId,
-        });
 
         let sum = await Transfert.aggregate([
             {
@@ -139,18 +82,16 @@ const totalAgentTransfert = async (req, res, next) => {
                     ...queryObj,
                 },
             },
-            { $group: { _id: null, sum: { $sum: '$amountOfMoneyInEuro' } } },
+            {
+                $group: {
+                    _id: null,
+                    sum: { $sum: '$amountOfMoneyInEuro' },
+                },
+            },
         ]);
         if (sum[0] !== undefined) {
             sum = sum[0].sum;
         }
-        let totalPages = Math.ceil(count / limit);
-
-        let iterator = page - 5 < 1 ? 1 : page - 5;
-        let endingLink =
-            iterator + 9 <= totalPages
-                ? iterator + 9
-                : page + (totalPages - page);
 
         res.status(200).json({
             transferts,
@@ -158,11 +99,12 @@ const totalAgentTransfert = async (req, res, next) => {
             currentPage: page,
             iterator,
             endingLink,
-            sum,
+            sum
         });
     } catch (error) {
         next(error);
     }
 };
 
-export { getUserAgentTransfert, totalAgentTransfert };
+
+export { getUserAgentTransfert };

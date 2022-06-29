@@ -1,6 +1,8 @@
+import ChangePasswordComp from "../../components/ChangePasswordComp"
+
 const ChangePassword = () => {
   return (
-    <div>ChangePassword</div>
+    <ChangePasswordComp />
   )
 }
 export default ChangePassword

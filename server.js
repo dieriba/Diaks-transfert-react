@@ -105,13 +105,13 @@ app.use('/admin', authenticateUser, isAdmin, adminUserManagmentRoutes);
 app.use('/admin', authenticateUser, isAdmin, adminAgentManagmentRoutes);
 
 //MED ADMIN ROUTES
-app.use('/med-admin', authenticateUser, mediumAdminRoutes);
+app.use('/med-admin', mediumAdminRoutes);
 
 //AGENT ROUTES
 app.use('/agent', authenticateUser, agentsRoutes);
 
 //MONEY GIVER ROUTES
-app.use('/money', authenticateUser, moneyGiverRoutes);
+app.use('/moneygiver', authenticateUser, moneyGiverRoutes);
 
 //SHARED ROUTES
 app.use('/shared', authenticateUser, sharedRoutes);

@@ -6,8 +6,8 @@ import { Link as ReachLink } from 'react-router-dom';
 import { Flex, Button, VStack, Text, Link, Box } from '@chakra-ui/react';
 import Pagination from '../../components/Pagination';
 import CalculShow from '../../components/CalculShow';
-import useGetAgent from '../../hooks/useGetAgents';
 import QueryFormShow from '../../components/QueryFormShow';
+import useGetAgentsQuery from '../../hooks/useGetAgentsQuery';
 const Dashboard = () => {
   const {
     isOnMobile,
@@ -23,6 +23,7 @@ const Dashboard = () => {
     endingLink,
     iterator,
     getTransfertDetails,
+    userRole,
   } = useGlobalContext();
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const Dashboard = () => {
   }, [currentPage]);
   useHandleResize();
 
-  useGetAgent();
+  useGetAgentsQuery();
 
   if (isOnMobile) {
     return (
@@ -47,6 +48,7 @@ const Dashboard = () => {
               setEditForm={setEditForm}
               isLoading={isLoading}
               deleteTransfert={deleteTransfert}
+              userRole={userRole}
             />
           );
         })}
@@ -58,6 +60,7 @@ const Dashboard = () => {
             endingLink={endingLink}
             iterator={iterator}
             changePage={changePage}
+            collection="transfert"
           />
         )}
       </VStack>
@@ -101,6 +104,7 @@ const Dashboard = () => {
         setEditForm={setEditForm}
         transferts={transferts}
         getTransfertDetails={getTransfertDetails}
+        userRole={userRole}
       />
       {totalPages > 1 && (
         <Pagination
@@ -109,6 +113,7 @@ const Dashboard = () => {
           endingLink={endingLink}
           iterator={iterator}
           changePage={changePage}
+          collection="transfert"
           mt="0.6rem"
         />
       )}

@@ -6,7 +6,7 @@ import { NotFoundError, BadRequestError } from '../../errors/index.js';
 //RENDER ALL AGENTS OF THE WEB APP PAGE ONLY FOR ADMIN
 const getAllAgents = async (req, res, next) => {
     try {
-        let { senderName, senderCode, phoneNumber, page , size } = req.query;
+        let { senderName, senderCode, phoneNumber, page, size } = req.query;
 
         const queryObj = {};
 
@@ -19,7 +19,7 @@ const getAllAgents = async (req, res, next) => {
         if (phoneNumber) queryObj.phoneNumber = phoneNumber;
 
         page = page ? Number(page) : 1;
-        size = size ? Number(size) : 11;
+        size = size ? Number(size) : 16;
 
         const limit = size;
         const skip = (page - 1) * size;
@@ -45,10 +45,11 @@ const getAllAgents = async (req, res, next) => {
             agents,
         });
     } catch (error) {
-        console.log(error);
         next(error);
     }
 };
+
+
 
 //CREATE NEW AGENT INTO DATABASE
 const createAgent = async (req, res, next) => {
@@ -113,7 +114,7 @@ const editAgent = async (req, res, next) => {
         const transferts = await Transfert.find({
             createdBy: id,
         });
-
+        console.log(req.body);
         let phone = '';
 
         for (let i = 0; i < phoneNumber.length; i++) {

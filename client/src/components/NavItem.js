@@ -1,13 +1,14 @@
 import { Flex, Icon, Menu, Link, MenuButton, Text } from '@chakra-ui/react';
 import { NavLink as ReachLink } from 'react-router-dom';
-const NavItem = ({ icon, title, path , color}) => {
+import { useGlobalContext } from '../context/contextProvider';
+const NavItem = ({ icon, title, path, color}) => {
   return (
-    <Flex 
-    mt="15px" 
-    w="100%" 
-    alignItems="flex-center"
-    textAlign='center'
-    fontSize={18}
+    <Flex
+      mt="15px"
+      w="100%"
+      alignItems="flex-center"
+      textAlign="center"
+      fontSize={18}
     >
       <Menu>
         <Link
@@ -19,8 +20,7 @@ const NavItem = ({ icon, title, path , color}) => {
           _activeLink={{ backgroundColor: 'teal' }}
           w="100%"
         >
-          <MenuButton  
-          w="100%">
+          <MenuButton w="100%">
             <Flex display="flex" alignItems="center">
               <Icon as={icon} />
               <Text ml={4}>{title}</Text>

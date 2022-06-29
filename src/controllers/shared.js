@@ -87,27 +87,26 @@ const totalAmountTransfert = async (req, res, next) => {
 //CONVERT VALUE FOR CLIENT
 const Convert = async (req, res, next) => {
     try {
-        const { rate } = await Rate.findById('62764205c1cf091846cea5c6');
+        console.log(req.body);
+        const { rate } = await Rate.findOne({ inUse: true });
         let { euro, gnf } = req.body;
-        euro = euro.replace(/\s+/g, '');
-        gnf = gnf.replace(/\s+/g, '');
+        euro = euro ? euro.replace(/\s+/g, '') : null;
+        gnf = gnf ? gnf.replace(/\s+/g, '') : null;
 
-        if (euro != '') {
-            gnf = Number(euro) * rate;
-        }
-        if (gnf != '') {
-            euro = Number(gnf) / rate;
-        }
+        if (euro) gnf = Number(euro) * rate;
+
+        if (gnf != '') euro = Number(gnf) / rate;
 
         const fee = calculFees(euro);
 
-        res.json('transferts/converter', {
+        res.json({
             rate,
             euro,
             gnf,
             fee,
         });
     } catch (error) {
+        console.log(error);
         next(error);
     }
 };
@@ -115,14 +114,25 @@ const Convert = async (req, res, next) => {
 //CREATE A NEW TRANSFERT INTO DB ONLY HIGH LEVEL USER AND LOW LEVEL USER CAN CREATE A NEW TRANSFERT
 const createTransfert = async (req, res, next) => {
     try {
-        const { userAgentId, userId } = req.user;
+        const { userAgentId, userId, userRole } = req.user;
         const { senderName } = req.body;
-        const agent = await Agent.findOne({ senderName });
-        if (!agent) return next(new BadRequestError('Agent non identifié'));
+        console.log(senderName);
+        if (userRole === 'agent') {
+            const agent = await Agent.findOne({ _id: userAgentId });
+            if (!agent) return next(new BadRequestError('Agent non identifié'));
+            req.body.createdBy = userAgentId;
+            req.body.senderName = agent.senderName;
+        }
 
-        if (userAgentId === null) req.body.createdBy = agent._id;
-        if (userAgentId) req.body.createdBy = userAgentId;
+        if (userRole !== 'agent') {
+            const agent = await Agent.findOne({ senderName: senderName });
+            console.log(agent,senderName);
+            if (!agent) return next(new BadRequestError('Agent non identifié'));
+            req.body.createdBy = agent._id;
+        }
 
+        const { rate } = await Rate.findOne({ inUse: true });
+        req.body.rate = rate;
         const transfert = await Transfert.create(req.body);
         // const { code } = transfert;
         res.status(201).json({
@@ -240,6 +250,21 @@ const deleteTransfert = async (req, res, next) => {
     }
 };
 
+const getAgentNames = async (req, res, next) => {
+    try {
+        const agents = await Agent.find({}).select([
+            '-phoneNumber',
+            '-transfertCounts',
+            '-senderCode',
+            '-linkedToUserId',
+        ]);
+
+        res.status(200).json(agents);
+    } catch (error) {
+        next(error);
+    }
+};
+
 export {
     totalAmountTransfert,
     createTransfert,
@@ -247,4 +272,5 @@ export {
     editTransfert,
     deleteTransfert,
     Convert,
+    getAgentNames,
 };

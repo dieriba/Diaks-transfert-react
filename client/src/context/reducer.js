@@ -17,7 +17,8 @@ import {
   GET_ALL_TRANSFERTS_SUCCESS,
   GET_ALL_TRANSFERTS_ERROR,
   RESET_FORM,
-  CHANGE_PAGE,
+  CHANGE_PAGE_AGENT,
+  CHANGE_PAGE_TRANSFERT,
   RESET_PAGE,
   EDIT_TRANSFERT_SUCCESS,
   GET_ALL_USERS,
@@ -28,6 +29,21 @@ import {
   CANCEL_MODIFICATION_USER,
   CANCEL_MODIFICATION_AGENT,
   GET_DETAILS_TRANSFERT,
+  EDIT_AGENT_SUCCESS,
+  CONVERT_MONEY,
+  GET_RATE,
+  IS_LOADING,
+  END_LOADING,
+  CONVERT_MONEY_ERROR,
+  SHOW_ERROR,
+  GET_AGENTS_QUERY,
+  GET_TRANSFERT_CITY,
+  CANCEL_MODIFICATION_MONEYTAKER,
+  GET_MONEY_TAKERS,
+  SET_EDIT_MONEYTAKER,
+  CHANGE_PAGE_MONEYTAKERS,
+  SUBMIT_NEW_RATE,
+  NEW_RATE_ADDED,
 } from './action';
 
 import { initialState } from './contextProvider';
@@ -40,15 +56,16 @@ const reducer = (state, action) => {
   }
 
   if (type === SETUP_USER_SUCCESS) {
-    const { token, user, role } = action.payload;
+    const { token, user, userRole } = action.payload;
     return {
       ...state,
       isLoading: false,
       user,
       token,
-      role,
+      userRole,
       showAlert: false,
       alertText: '',
+      nameUser: user?.username,
     };
   }
 
@@ -151,11 +168,27 @@ const reducer = (state, action) => {
       role,
     };
   }
-  if (type === LOGOUT_USER) {
+  if (type === SET_EDIT_MONEYTAKER) {
+    const moneyTaker = state.moneyTakers.find(
+      moneyTaker => moneyTaker._id === action.payload
+    );
+    const { phoneNumber, amountMoney, name, optionalInfo, _id } = moneyTaker;
     return {
       ...state,
+      isEditingMoneyTaker: true,
+      editMoneyTakerId: _id,
+      moneyTakerAmount: amountMoney,
+      moneyTakerPhoneNumber: phoneNumber,
+      moneyTakerName: name,
+      moneyTakerOptionalInfo: optionalInfo,
+    };
+  }
+  if (type === LOGOUT_USER) {
+    return {
+      ...initialState,
       user: null,
       token: null,
+      userRole: null,
     };
   }
 
@@ -166,6 +199,7 @@ const reducer = (state, action) => {
     return {
       ...state,
       agents,
+      isLoading: false,
       senderName: agents[0]?.senderName,
       currentAgentPage: currentPage,
       totalPagesAgent: totalPages,
@@ -240,7 +274,12 @@ const reducer = (state, action) => {
     };
   }
 
-  if (type === CHANGE_PAGE) return { ...state, currentPage: action.payload };
+  if (type === CHANGE_PAGE_TRANSFERT)
+    return { ...state, currentPage: action.payload };
+  if (type === CHANGE_PAGE_AGENT)
+    return { ...state, currentAgentPage: action.payload };
+  if (type === CHANGE_PAGE_MONEYTAKERS)
+    return { ...state, currentMoneyTakerPage: action.payload };
 
   if (type === EDIT_TRANSFERT_SUCCESS) {
     return {
@@ -255,6 +294,17 @@ const reducer = (state, action) => {
       moneyTypes: 'LIQUIDE',
       city: 'CONAKRY',
       phoneNumber: '',
+    };
+  }
+
+  if (type === EDIT_AGENT_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertText: action.payload,
+      errorStatus: 'success',
+      isEditingAgent: false,
     };
   }
 
@@ -278,7 +328,15 @@ const reducer = (state, action) => {
       phoneNumberAgent: '',
       senderCode: '',
     };
-
+  if (type === CANCEL_MODIFICATION_MONEYTAKER)
+    return {
+      ...state,
+      isEditingMoneyTaker: false,
+      moneyTakerAmount: '',
+      moneyTakerPhoneNumber: '',
+      moneyTakerName: '',
+      moneyTakerOptionalInfor: '',
+    };
   if (type === GET_DETAILS_TRANSFERT) {
     const transfert = state.transferts.find(
       transfert => transfert._id === action.payload
@@ -317,6 +375,83 @@ const reducer = (state, action) => {
       date,
       updatedDate,
       hasBeenModified,
+      rate,
+    };
+  }
+
+  if (type === CONVERT_MONEY) {
+    return {
+      ...state,
+      amountEuro: action.payload.euro,
+      amountGnf: action.payload.gnf,
+      fee: action.payload.fee,
+      isLoading: false,
+    };
+  }
+
+  if (type === GET_RATE) {
+    return { ...state, rate: action.payload };
+  }
+
+  if (type === IS_LOADING) return { ...state, isLoading: true };
+  if (type === END_LOADING)
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertText: action.payload,
+      errorStatus: 'success',
+    };
+
+  if (type === CONVERT_MONEY_ERROR)
+    return {
+      ...state,
+      alertText: action.payload,
+      isLoading: false,
+      showAlert: true,
+      errorStatus: 'error',
+    };
+
+  if (type === SHOW_ERROR)
+    return {
+      ...state,
+      alertText: action.payload,
+      isLoading: false,
+      showAlert: true,
+      errorStatus: 'error',
+    };
+
+  if (type === GET_AGENTS_QUERY) {
+    return { ...state, agents: action.payload };
+  }
+
+  if (type === GET_MONEY_TAKERS) {
+    const { moneyTakers, iterator, currentPage, endingLink, totalPages } =
+      action.payload;
+
+    return {
+      ...state,
+      moneyTakers,
+      isLoading: false,
+      currentMoneyTakerPage: currentPage,
+      totalPagesMoneyTaker: totalPages,
+      endingLinkMoneyTaker: endingLink,
+      iteratorMoneyTaker: iterator,
+    };
+  }
+
+  if (type === SUBMIT_NEW_RATE) {
+    return { ...state, newRate: action.payload };
+  }
+
+  if (type === NEW_RATE_ADDED) {
+    const { rate, message } = action.payload;
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertText: message,
+      errorStatus: 'success',
       rate,
     };
   }

@@ -11,3 +11,4 @@ export { default as NavItemMobile } from './NavItemMobile';
 export { default as Loading } from './Loading';
 export { default as TableComp } from './TableComp';
 export { default as QueryForm } from './QueryForm';
+export { default as AddMoneyTakerForm } from './AddMoneyTakerForm';

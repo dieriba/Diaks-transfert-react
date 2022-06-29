@@ -1,6 +1,8 @@
+const { default: ConvertForm } = require("../../components/ConvertForm")
+
 const Converter = () => {
   return (
-    <div>Converter</div>
+    <ConvertForm />
   )
 }
 export default Converter

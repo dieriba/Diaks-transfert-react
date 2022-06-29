@@ -26,6 +26,7 @@ const TableCompTransfertsMobile = ({
   moneyTypes,
   isLoading,
   setEditForm,
+  userRole
 }) => {
   if (isLoading) {
     return <Loading />;
@@ -83,20 +84,27 @@ const TableCompTransfertsMobile = ({
               )}
             </Td>
           </Tr>
-          <Tr>
-            <Th color="teal">Actions</Th>
-            <Td>
-              <Link
-                as={ReachLink}
-                textDecor="none"
-                to="/shared/add-transfert"
-                onClick={() => setEditForm('transfert', _id)}
-              >
-                <Button size="xs">Modifier</Button>
-              </Link>
-              <AlertDialogPop ml="0.5rem" s="xs" _id={_id} field="transfert" />
-            </Td>
-          </Tr>
+          {userRole !== 'mediumAdmin' && (
+            <Tr>
+              <Th color="teal">Actions</Th>
+              <Td>
+                <Link
+                  as={ReachLink}
+                  textDecor="none"
+                  to="/shared/add-transfert"
+                  onClick={() => setEditForm('transfert', _id)}
+                >
+                  <Button size="xs">Modifier</Button>
+                </Link>
+                <AlertDialogPop
+                  ml="0.5rem"
+                  s="xs"
+                  _id={_id}
+                  field="transfert"
+                />
+              </Td>
+            </Tr>
+          )}
         </Tbody>
       </Table>
     </TableContainer>

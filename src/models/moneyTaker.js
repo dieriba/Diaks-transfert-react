@@ -25,6 +25,10 @@ const moneyTakerSchema = new mongoose.Schema({
         type: Date,
         default: new Date(),
     },
+    payoutDay : {
+        type : Boolean,
+        default : false
+    },
     code: {
         type: String,
     },
@@ -35,7 +39,7 @@ const moneyTakerSchema = new mongoose.Schema({
 });
 
 moneyTakerSchema.pre('save', async function () {
-    const user = await User.findOne({ username: this.username });
+    const user = await User.findOne({ role : 'mediumAdmin' });
     const { transfertCounts, id } = user;
     this.code = `AB${transfertCounts}`;
 

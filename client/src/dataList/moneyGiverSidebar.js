@@ -1,21 +1,19 @@
-import { VscChecklist } from 'react-icons/vsc';
-import { AiOutlineFileSearch } from 'react-icons/ai';
-import { RiLockPasswordLine } from 'react-icons/ri';
+import { ChangePasswordIcon, TransferIcon, Search } from '../icons';
 
 export const data = [
   {
     title: 'Recherche',
-    path: '/money/search',
-    icon: <AiOutlineFileSearch />,
+    path: '/moneygiver/search-transfert',
+    icon: Search,
   },
   {
     title: 'Transfert Effectué',
-    path: '/money/taken',
-    icon: <VscChecklist />,
+    path: '/moneygiver/all-transferts',
+    icon: TransferIcon,
   },
   {
     title: 'Modifier Mot de passe',
     path: '/shared/change-password',
-    icon: <RiLockPasswordLine />,
+    icon: ChangePasswordIcon,
   },
 ];

@@ -6,6 +6,7 @@ import {
     createTransfert,
     totalAmountTransfert,
     editPassword,
+    getAgentNames,
 } from '../controllers/shared.js';
 import {
     editMoneyTaker,
@@ -18,12 +19,13 @@ import {
     editTransfert,
     Convert,
 } from '../controllers/shared.js';
+import { getRate } from '../controllers/converter.js';
 
 //CREATE NEW TRANSFERT INTO DB
 router.route('/add-transfert').post(createTransfert);
 
 router.route('/convertisseur').post(Convert);
-
+router.route('/taux').get(getRate);
 //RENDERS ALL MONEY TAKERS OF THE DATABASE
 router.route('/list-money-takers').get(getAllMoneyTakers);
 
@@ -44,5 +46,6 @@ router.route('/delete-transfert/:id').delete(deleteTransfert);
 
 //GET EDIT FORM THAT WILL MODIFY TRANSFERT TO DATABASE
 router.route('/edit-transfert/:id').patch(editTransfert);
+router.route('/agents').get(getAgentNames);
 
 export default router;

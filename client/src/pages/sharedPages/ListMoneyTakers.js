@@ -3,27 +3,26 @@ import { useGlobalContext } from '../../context/contextProvider';
 import { Flex, VStack } from '@chakra-ui/react';
 import { Loading } from '../../components';
 import Pagination from '../../components/Pagination';
-import TableCompMobileAgent from '../../components/TableCompMobileAgent';
-import TableCompAgent from '../../components/TableCompAgent';
-const ListAgent = () => {
+import TableCompMobileMoneyTaker from '../../components/TableCompMobileMoneyTaker';
+import TableCompMoneyTaker from '../../components/TableCompMoneyTaker';
+const ListMoneyTakers = () => {
   const {
     isOnMobile,
     useHandleResize,
-    agents,
-    currentAgentPage,
+    moneyTakers,
+    currentMoneyTakerPage,
     changePage,
-    iteratorAgent,
-    getAllAgents,
-    totalPagesAgent,
-    endingLinkAgent,
+    iteratorMoneyTaker,
+    getAllMoneyTakers,
+    totalPagesMoneyTaker,
+    endingLinkMoneyTaker,
     isLoading,
     setEditForm,
-    editAgent,
   } = useGlobalContext();
 
   useEffect(() => {
-    getAllAgents();
-  }, [currentAgentPage]);
+    getAllMoneyTakers();
+  }, [currentMoneyTakerPage]);
 
   useHandleResize();
 
@@ -31,9 +30,9 @@ const ListAgent = () => {
     if (isLoading) return <Loading />;
     return (
       <VStack display="flex" w="100%" spacing={4} mt={4} mb={4}>
-        {agents.map(agent => {
+        {moneyTakers.map(agent => {
           return (
-            <TableCompMobileAgent
+            <TableCompMobileMoneyTaker
               key={agent._id}
               {...agent}
               isLoading={isLoading}
@@ -41,14 +40,14 @@ const ListAgent = () => {
             />
           );
         })}
-        {totalPagesAgent > 1 && (
+        {totalPagesMoneyTaker > 1 && (
           <Pagination
-            currentPage={currentAgentPage}
-            endingLink={endingLinkAgent}
-            iterator={iteratorAgent}
-            totalPages={totalPagesAgent}
+            currentPage={currentMoneyTakerPage}
+            endingLink={endingLinkMoneyTaker}
+            iterator={iteratorMoneyTaker}
+            totalPages={totalPagesMoneyTaker}
             changePage={changePage}
-            collection="agent"
+            collection="moneyTaker"
           />
         )}
       </VStack>
@@ -64,19 +63,19 @@ const ListAgent = () => {
       alignItems="center"
       justifyContent="center"
     >
-      <TableCompAgent
-        agents={agents}
+      <TableCompMoneyTaker
+        moneyTakers={moneyTakers}
         isLoading={isLoading}
         setEditForm={setEditForm}
       />
-      {totalPagesAgent > 1 && (
+      {totalPagesMoneyTaker > 1 && (
         <Pagination
-          currentPage={currentAgentPage}
-          endingLink={endingLinkAgent}
-          iterator={iteratorAgent}
-          totalPages={totalPagesAgent}
+          currentPage={currentMoneyTakerPage}
+          endingLink={endingLinkMoneyTaker}
+          iterator={iteratorMoneyTaker}
+          totalPages={totalPagesMoneyTaker}
           changePage={changePage}
-          collection="agent"
+          collection="moneyTaker"
           mt="1rem"
         />
       )}
@@ -84,4 +83,4 @@ const ListAgent = () => {
   );
 };
 
-export default ListAgent;
+export default ListMoneyTakers;

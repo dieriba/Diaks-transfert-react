@@ -1,7 +1,8 @@
 // @ts-nocheck
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import {
-  CHANGE_PAGE,
+  CHANGE_PAGE_TRANSFERT,
+  CHANGE_PAGE_AGENT,
   CLEAN_ERROR,
   CREATE_TRANSFERT_BEGIN,
   CREATE_TRANSFERT_ERROR,
@@ -24,17 +25,30 @@ import {
   EDIT_TRANSFERT_SUCCESS,
   SET_EDIT_AGENT,
   SET_EDIT_USER,
+  SET_EDIT_MONEYTAKER,
   CANCEL_MODIFICATION_TRANSFERT,
   CANCEL_MODIFICATION_AGENT,
   CANCEL_MODIFICATION_USER,
+  CANCEL_MODIFICATION_MONEYTAKER,
   GET_DETAILS_TRANSFERT,
+  EDIT_AGENT_SUCCESS,
+  CONVERT_MONEY,
+  GET_RATE,
+  IS_LOADING,
+  CONVERT_MONEY_ERROR,
+  SHOW_ERROR,
+  END_LOADING,
+  GET_AGENTS_QUERY,
+  GET_MONEY_TAKERS,
+  CHANGE_PAGE_MONEYTAKERS,
+  NEW_RATE_ADDED,
 } from './action';
 import axios from 'axios';
 import reducer from './reducer';
 
 const token = localStorage.getItem('token');
 const user = localStorage.getItem('user');
-
+const userRole = localStorage.getItem('userRole');
 const stateContext = createContext();
 const initialState = {
   isLoading: false,
@@ -62,7 +76,6 @@ const initialState = {
   date: '',
   updatedDate: '',
   hasBeenModified: false,
-  rate: '',
   isEditingTransfert: false,
   isEditingAgent: false,
   isEditingUser: false,
@@ -75,7 +88,7 @@ const initialState = {
   //AUTH
   user: user ? JSON.parse(user) : null,
   token: token ? token : '',
-  userRole: '',
+  userRole: userRole ? userRole : '',
 
   //AGENTS
   agents: [],
@@ -109,6 +122,31 @@ const initialState = {
   role: 'agent',
   phoneNumberAgent: '',
   users: [],
+  rate: '',
+  amountEuro: '',
+  amountGnf: '',
+  fees: '',
+  newPasswordAccount: '',
+  confirmNewPasswordAccount: '',
+  oldPasswordAccount: '',
+  nameUser: user ? JSON.parse(user).username : '',
+
+  //MONEYTAKER
+  isEditingMoneyTaker: false,
+  editMoneyTakerId: '',
+  moneyTakerAmount: '',
+  moneyTakerName: '',
+  moneyTakerPhoneNumber: '',
+  moneyTakerOptionalInfo: '',
+  currentMoneyTakerPage: 1,
+  moneyTakers: [],
+  totalPagesMoneyTaker: 0,
+  endingLinkMoneyTaker: 0,
+  iteratorMoneyTaker: 0,
+  newRate: '',
+
+  //MONEYGIVER
+  searchTransfertCode: '',
 };
 
 export const ContextProvider = ({ children }) => {
@@ -133,19 +171,21 @@ export const ContextProvider = ({ children }) => {
     },
     error => {
       if (error.response.status === 401) {
+        logoutUser();
       }
       return Promise.reject(error);
     }
   );
-
-  const addUserToLocalStorage = ({ user, token }) => {
+  console.log(state);
+  const addUserToLocalStorage = ({ user, token, userRole }) => {
     localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('token', token);
+    localStorage.setItem('userRole', userRole);
   };
-
   const deleteUserFromLocalStorage = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
+    localStorage.removeItem('userRole');
   };
   //HANDLE LOGIN
   const handleLogin = async ({ username, password }) => {
@@ -155,9 +195,12 @@ export const ContextProvider = ({ children }) => {
         username,
         password,
       });
-      const { token, user, role } = data;
-      dispatch({ type: SETUP_USER_SUCCESS, payload: { token, user, role } });
-      addUserToLocalStorage({ token, user });
+      const { token, user, userRole } = data;
+      dispatch({
+        type: SETUP_USER_SUCCESS,
+        payload: { token, user, userRole },
+      });
+      addUserToLocalStorage({ token, user, userRole });
     } catch (error) {
       dispatch({
         type: SETUP_USER_ERROR,
@@ -165,7 +208,6 @@ export const ContextProvider = ({ children }) => {
       });
     }
   };
-
   const logoutUser = () => {
     dispatch({ type: LOGOUT_USER });
     deleteUserFromLocalStorage();
@@ -194,10 +236,29 @@ export const ContextProvider = ({ children }) => {
   };
 
   const getAllAgents = async () => {
-    const { data } = await authFetch('/admin/agents');
-    dispatch({ type: GET_ALL_AGENTS, payload: { ...data } });
+    const { userRole } = state;
+    if (userRole === 'agent') return;
+
+    dispatch({ type: GET_ALL_TRANSFERTS_BEGIN });
+    try {
+      const { currentAgentPage } = state;
+
+      let url = `/admin/agents?page=${currentAgentPage}`;
+
+      const { data } = await authFetch(url);
+      dispatch({ type: GET_ALL_AGENTS, payload: { ...data } });
+    } catch (error) {
+      dispatch({ type: GET_ALL_TRANSFERTS_ERROR });
+    }
   };
 
+  //ONLY TO FETCH AGENTS IN QUERY FORM AND ADD FORM
+  const getAgents = async () => {
+    try {
+      const { data } = await authFetch('/shared/agents');
+      dispatch({ type: GET_AGENTS_QUERY, payload: data });
+    } catch (error) {}
+  };
   const getAllUsers = async () => {
     const { data } = await authFetch('/admin/users');
     const { users } = data;
@@ -213,9 +274,10 @@ export const ContextProvider = ({ children }) => {
       hasPaid,
       amountOfMoneyInEuro,
     } = state;
-
     dispatch({ type: CREATE_TRANSFERT_BEGIN });
     try {
+      console.log(state);
+
       const { data } = await authFetch.post('/shared/add-transfert', {
         senderName,
         amountOfMoneyInEuro,
@@ -235,23 +297,36 @@ export const ContextProvider = ({ children }) => {
   };
 
   const getAllTransferts = async () => {
-    dispatch({ type: GET_ALL_TRANSFERTS_BEGIN });
-    try {
-      const {
-        queryCity,
-        queryClientName,
-        queryDateEnd,
-        queryDateStart,
-        queryHasTakeMoney,
-        queryMoneyTypes,
-        querySenderName,
-        currentPage,
-      } = state;
-
-      let url = `/admin/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&senderName=${querySenderName}&city=${queryCity}&moneyTypes=${queryMoneyTypes}`;
+    const {
+      queryCity,
+      queryClientName,
+      queryDateEnd,
+      queryDateStart,
+      queryHasTakeMoney,
+      queryMoneyTypes,
+      querySenderName,
+      currentPage,
+    } = state;
+    const { userRole } = state;
+    let url = '';
+    if (userRole === 'agent') {
+      url = `/agent/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&city=${queryCity}&moneyTypes=${queryMoneyTypes}`;
+    }
+    if (userRole === 'mediumAdmin') {
+      url = `/med-admin/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&senderName=${querySenderName}&city=${queryCity}&moneyTypes=${queryMoneyTypes}`;
       if (queryClientName) {
         url = url + `&clientName=${queryClientName}`;
       }
+    }
+
+    if (userRole === 'highAdmin') {
+      url = `/admin/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&senderName=${querySenderName}&city=${queryCity}&moneyTypes=${queryMoneyTypes}`;
+      if (queryClientName) {
+        url = url + `&clientName=${queryClientName}`;
+      }
+    }
+    dispatch({ type: GET_ALL_TRANSFERTS_BEGIN });
+    try {
       const { data } = await authFetch(url);
 
       dispatch({
@@ -268,7 +343,16 @@ export const ContextProvider = ({ children }) => {
     getAllTransferts();
   };
 
-  const changePage = page => dispatch({ type: CHANGE_PAGE, payload: page });
+  const changePage = (page, collection) => {
+    if (collection === 'transfert')
+      return dispatch({ type: CHANGE_PAGE_TRANSFERT, payload: page });
+
+    if (collection === 'agent')
+      return dispatch({ type: CHANGE_PAGE_AGENT, payload: page });
+
+    if (collection === 'moneyTaker')
+      return dispatch({ type: CHANGE_PAGE_MONEYTAKERS, payload: page });
+  };
 
   const createUser = async () => {
     const {
@@ -335,6 +419,8 @@ export const ContextProvider = ({ children }) => {
     if (field === 'agent')
       return dispatch({ type: SET_EDIT_AGENT, payload: id });
     if (field === 'user') return dispatch({ type: SET_EDIT_USER, payload: id });
+    if (field === 'moneyTaker')
+      return dispatch({ type: SET_EDIT_MONEYTAKER, payload: id });
   };
 
   const editTransfert = async () => {
@@ -372,6 +458,28 @@ export const ContextProvider = ({ children }) => {
     }
   };
 
+  const editAgent = async () => {
+    const { senderNameUser, phoneNumberAgent, editAgentId, senderCode } = state;
+
+    dispatch({ type: CREATE_TRANSFERT_BEGIN });
+    try {
+      const { data } = await authFetch.patch(
+        `/admin/edit-agent/${editAgentId}`,
+        {
+          senderNameUser,
+          phoneNumber: phoneNumberAgent,
+          senderCode,
+        }
+      );
+      dispatch({ type: EDIT_AGENT_SUCCESS, payload: data.message });
+    } catch (error) {
+      dispatch({
+        type: CREATE_TRANSFERT_ERROR,
+        payload: error.response.data.msg,
+      });
+    }
+  };
+
   const deleteFromDb = async (field, id) => {
     if (field === 'user') {
       await authFetch.delete(`/admin/delete-user/${id}`);
@@ -385,20 +493,182 @@ export const ContextProvider = ({ children }) => {
       await authFetch.delete(`/admin/delete-agent/${id}`);
       return getAllAgents();
     }
-  };
 
-  console.log(state);
+    if (field === 'moneyTaker') {
+      await authFetch.delete(`/shared/delete-money-taker/${id}`);
+      return getAllMoneyTakers();
+    }
+  };
 
   const cancelModification = field => {
     if (field === 'transfert')
       return dispatch({ type: CANCEL_MODIFICATION_TRANSFERT });
     if (field === 'agent') return dispatch({ type: CANCEL_MODIFICATION_AGENT });
     if (field === 'user') return dispatch({ type: CANCEL_MODIFICATION_USER });
+    if (field === 'moneyTaker')
+      return dispatch({ type: CANCEL_MODIFICATION_MONEYTAKER });
   };
 
   const getTransfertDetails = id => {
     dispatch({ type: GET_DETAILS_TRANSFERT, payload: id });
   };
+
+  const convertMoney = async () => {
+    dispatch({ type: IS_LOADING });
+    try {
+      const { amountEuro, amountGnf } = state;
+      const { data } = await authFetch.post('/shared/convertisseur', {
+        euro: amountEuro.toString(),
+        gnf: amountGnf.toString(),
+      });
+      const { euro, gnf, fee } = data;
+      dispatch({ type: CONVERT_MONEY, payload: { euro, gnf, fee } });
+    } catch (error) {
+      dispatch({
+        type: CONVERT_MONEY_ERROR,
+        payload: error.response.data.msg,
+      });
+    }
+  };
+
+  const getRate = async () => {
+    const { data } = await authFetch.get('/shared/taux');
+    const { rate } = data;
+    dispatch({ type: GET_RATE, payload: rate });
+  };
+
+  const changePassword = async () => {
+    dispatch({ type: IS_LOADING });
+    try {
+      const {
+        oldPasswordAccount,
+        newPasswordAccount,
+        confirmNewPasswordAccount,
+      } = state;
+      const { data } = await authFetch.patch('/shared/change-password', {
+        actualPassword: oldPasswordAccount,
+        newPassword: newPasswordAccount,
+        confirmNewPassword: confirmNewPasswordAccount,
+      });
+      const { message } = data;
+      dispatch({ type: END_LOADING, payload: message });
+    } catch (error) {
+      dispatch({ type: SHOW_ERROR, payload: error.response.data.msg });
+    }
+  };
+
+  const createMoneyTaker = async () => {
+    const {
+      moneyTakerAmount,
+      moneyTakerName,
+      moneyTakerPhoneNumber,
+      moneyTakerOptionalInfo,
+    } = state;
+
+    dispatch({ type: IS_LOADING });
+    try {
+      const { data } = await authFetch.post('/med-admin/add-money-taker', {
+        name: moneyTakerName,
+        phoneNumber: moneyTakerPhoneNumber,
+        optionalInfo: moneyTakerOptionalInfo || null,
+        amountMoney: moneyTakerAmount,
+      });
+      dispatch({ type: END_LOADING, payload: data.message });
+    } catch (error) {
+      dispatch({
+        type: CREATE_TRANSFERT_ERROR,
+        payload: SHOW_ERROR,
+      });
+    }
+  };
+
+  const editMoneyTaker = async () => {
+    const {
+      moneyTakerAmount,
+      moneyTakerName,
+      moneyTakerPhoneNumber,
+      moneyTakerOptionalInfo,
+      editMoneyTakerId,
+    } = state;
+
+    dispatch({ type: IS_LOADING });
+    try {
+      const { data } = await authFetch.patch(
+        `/shared/edit-money-taker/${editMoneyTakerId}`,
+        {
+          name: moneyTakerName,
+          phoneNumber: moneyTakerPhoneNumber,
+          optionalInfo: moneyTakerOptionalInfo || null,
+          amountMoney: moneyTakerAmount,
+        }
+      );
+      dispatch({ type: END_LOADING, payload: data.message });
+    } catch (error) {
+      dispatch({
+        type: CREATE_TRANSFERT_ERROR,
+        payload: error.response.data.msg,
+      });
+    }
+  };
+  const getAllMoneyTakers = async () => {
+    const { currentMoneyTakerPage } = state;
+    let url = `/shared/list-money-takers?page=${currentMoneyTakerPage}`;
+
+    dispatch({ type: IS_LOADING });
+    try {
+      const { data } = await authFetch(url);
+      dispatch({
+        type: GET_MONEY_TAKERS,
+        payload: { ...data },
+      });
+    } catch (error) {
+      dispatch({ SHOW_ERROR });
+    }
+  };
+
+  const addNewRate = async () => {
+    dispatch({ type: IS_LOADING });
+    try {
+      const { data } = await authFetch.post('/med-admin/new-rate', {
+        rate: state.newRate,
+      });
+      const { newRate, message } = data;
+      dispatch({ type: NEW_RATE_ADDED, payload: { ...newRate, message } });
+    } catch (error) {
+      dispatch({ type: SHOW_ERROR, payload: error.response.data.msg });
+    }
+  };
+
+  const searchAllValidateTransferts = async () => {
+    const {
+      queryClientName,
+      queryDateEnd,
+      queryDateStart,
+      queryMoneyTypes,
+      querySenderName,
+      currentPage,
+    } = state;
+
+    let url = `/moneygiver/all-transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&senderName=${querySenderName}&moneyTypes=${queryMoneyTypes}`;
+
+    if (queryClientName) {
+      url = url + `&clientName=${queryClientName}`;
+    }
+    dispatch({ type: GET_ALL_TRANSFERTS_BEGIN });
+    try {
+      const { data } = await authFetch(url);
+
+      dispatch({
+        type: GET_ALL_TRANSFERTS_SUCCESS,
+        payload: { ...data },
+      });
+    } catch (error) {
+      dispatch({ type: GET_ALL_TRANSFERTS_ERROR });
+    }
+  };
+
+  const searchTransfert = async () => {};
+
   return (
     <stateContext.Provider
       value={{
@@ -422,7 +692,18 @@ export const ContextProvider = ({ children }) => {
         setEditForm,
         editTransfert,
         deleteFromDb,
-        getTransfertDetails
+        getTransfertDetails,
+        editAgent,
+        convertMoney,
+        getRate,
+        changePassword,
+        getAgents,
+        createMoneyTaker,
+        editMoneyTaker,
+        getAllMoneyTakers,
+        addNewRate,
+        searchAllValidateTransferts,
+        searchTransfert,
       }}
     >
       {children}

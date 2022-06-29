@@ -17,6 +17,7 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { useGlobalContext } from '../context/contextProvider';
+import useGetAgentsQuery from '../hooks/useGetAgentsQuery';
 const TransfertForm = () => {
   const {
     showAlert,
@@ -33,7 +34,6 @@ const TransfertForm = () => {
     handleChange,
     hasPaid,
     isEditingTransfert,
-    getAllAgents,
     agents,
     createTransfert,
     errorStatus,
@@ -41,20 +41,17 @@ const TransfertForm = () => {
     senderName,
     city,
     cancelModification,
+    userRole,
   } = useGlobalContext();
 
   const handleInput = e => {
     const name = e.target.name;
     const value = e.target.value;
-
     handleChange({ name, value });
   };
   const [phoneNumberState, setPhoneNumberState] = useState(true);
 
-  useEffect(() => {
-    getAllAgents();
-  }, []);
-
+  useGetAgentsQuery();
   useEffect(() => {
     if (moneyTypes === 'LIQUIDE') {
       setPhoneNumberState(true);
@@ -131,22 +128,24 @@ const TransfertForm = () => {
                 );
               })}
             </Select>
-            <Select
-              onChange={handleInput}
-              name="senderName"
-              variant="filled"
-              cursor="pointer"
-              value={senderName}
-            >
-              {agents?.map(agent => {
-                const { _id, senderName } = agent;
-                return (
-                  <option key={_id} value={senderName}>
-                    {senderName}
-                  </option>
-                );
-              })}
-            </Select>
+            {userRole !== 'agent' && (
+              <Select
+                onChange={handleInput}
+                name="senderName"
+                variant="filled"
+                cursor="pointer"
+                value={senderName}
+              >
+                {agents?.map(agent => {
+                  const { _id, senderName } = agent;
+                  return (
+                    <option key={_id} value={senderName}>
+                      {senderName}
+                    </option>
+                  );
+                })}
+              </Select>
+            )}
             <Select
               onChange={handleInput}
               name="city"
@@ -154,10 +153,10 @@ const TransfertForm = () => {
               cursor="pointer"
               value={city}
             >
-              {cityOptions?.map((senderName, index) => {
+              {cityOptions?.map((city, index) => {
                 return (
-                  <option key={index} value={senderName}>
-                    {senderName}
+                  <option key={index} value={city}>
+                    {city}
                   </option>
                 );
               })}

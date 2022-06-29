@@ -19,6 +19,11 @@ import {
   ChangePassword,
   Dashboard,
   SharedLayout,
+  AddMoneyTaker,
+  ListMoneyTakers,
+  Rate,
+  SearchTransfert,
+  AllTransfert,
 } from './pages';
 import { TransfertForm } from './components';
 import DetailsTransfert from './components/DetailsTransfert';
@@ -35,47 +40,55 @@ function App() {
               </ProtectAdminRoutes>
             }
           >
-            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="transferts" element={<Dashboard />} />
             <Route path="agents" element={<ListAgent />} />
             <Route path="add-agent" element={<AddAgent />} />
             <Route path="users" element={<ListUser />} />
             <Route path="add-user" element={<AddUser />} />
             <Route path="calcul" element={<Calcul />} />
           </Route>
-          {/* <Route
-                  path="/admin"
-                  element={
-              
-                  }
-                >
-                  <Route index element={<Stat />} />
-                  <Route path="add-job" element={<AddJob />} />
-                  <Route path="all-job" element={<AllJobs />} />
-                  <Route path="profile" element={<Profile />} />
-                </Route> */}
-          {/* <Route
-                  path="/admin"
-                  element={
-              
-                  }
-                >
-                  <Route index element={<Stat />} />
-                  <Route path="add-job" element={<AddJob />} />
-                  <Route path="all-job" element={<AllJobs />} />
-                  <Route path="profile" element={<Profile />} />
-                </Route> */}
-          {/* <Route
-                  path="/admin"
-                  element={
-              
-                  }
-                >
-                  <Route index element={<Stat />} />
-                  <Route path="add-job" element={<AddJob />} />
-                  <Route path="all-job" element={<AllJobs />} />
-                  <Route path="profile" element={<Profile />} />
-                </Route> */}
-          <Route path="/shared" element={<SharedLayout />}>
+          <Route
+            path="/med-admin"
+            element={
+              <ProtectAdminRoutes>
+                <SharedLayout />
+              </ProtectAdminRoutes>
+            }
+          >
+            <Route path="transferts" element={<Dashboard />} />
+            <Route path="rate" element={<Rate />} />
+            <Route path="add-money-takers" element={<AddMoneyTaker />} />
+          </Route>
+          <Route
+            path="/agent"
+            element={
+              <ProtectAdminRoutes>
+                <SharedLayout />
+              </ProtectAdminRoutes>
+            }
+          >
+            <Route path="transferts" element={<Dashboard />} />
+          </Route>
+          <Route
+            path="/moneygiver"
+            element={
+              <ProtectAdminRoutes>
+                <SharedLayout />
+              </ProtectAdminRoutes>
+            }
+          >
+            <Route path="search-transfert" element={<SearchTransfert />} />
+            <Route path="all-transferts" element={<AllTransfert />} />
+          </Route>
+          <Route
+            path="/shared"
+            element={
+              <ProtectAdminRoutes>
+                <SharedLayout />
+              </ProtectAdminRoutes>
+            }
+          >
+            <Route path="list-money-takers" element={<ListMoneyTakers />} />
             <Route path="add-transfert" element={<TransfertForm />} />
             <Route path="details" element={<DetailsTransfert />} />
             <Route path="converter" element={<Converter />} />

@@ -22,7 +22,6 @@ import 'moment/locale/fr';
 import { useRef } from 'react';
 import { QueryForm } from '.';
 const QueryFormShow = ({ isOnMobile, mt, w, text, mb, ml }) => {
-  console.log(mt);
   const btnRef = useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
 

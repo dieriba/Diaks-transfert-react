@@ -8,12 +8,13 @@ import {
   CloseButton,
   Flex,
   VStack,
+  NumberInput,
+  NumberInputField,
 } from '@chakra-ui/react';
 import { useGlobalContext } from '../context/contextProvider';
 
 const AddAgentForm = () => {
   const {
-    createAgent,
     showAlert,
     alertText,
     displayError,
@@ -21,12 +22,14 @@ const AddAgentForm = () => {
     isLoading,
     handleChange,
     errorStatus,
-    senderNameUser,
-    phoneNumberAgent,
-    senderCode,
-    isEditingAgent,
+    isEditingMoneyTaker,
     cancelModification,
-    editAgent,
+    editMoneyTaker,
+    moneyTakerAmount,
+    moneyTakerName,
+    moneyTakerPhoneNumber,
+    moneyTakerOptionalInfo,
+    createMoneyTaker,
   } = useGlobalContext();
 
   const handleInput = e => {
@@ -38,15 +41,15 @@ const AddAgentForm = () => {
 
   const handleCancel = e => {
     e.preventDefault();
-    cancelModification('agent');
+    cancelModification('moneyTaker');
   };
 
   const onSubmit = e => {
     e.preventDefault();
-    if (!senderCode || !senderNameUser || !phoneNumberAgent)
+    if (!moneyTakerName || !moneyTakerPhoneNumber || !moneyTakerAmount)
       return displayError('Veuillez remplir tous les champs');
-    if (isEditingAgent) return editAgent();
-    createAgent();
+    if (isEditingMoneyTaker) return editMoneyTaker();
+    createMoneyTaker();
   };
 
   return (
@@ -54,7 +57,7 @@ const AddAgentForm = () => {
       direction="column"
       width="100%"
       alignItems="center"
-      minH="90vh"
+      minH="85vh"
       mt="2rem"
     >
       <Box
@@ -91,34 +94,51 @@ const AddAgentForm = () => {
           mb="1rem"
           fontStyle="italic"
         >
-          {isEditingAgent ? 'Modifier Agent' : 'Ajouter Agent'}
+          {isEditingMoneyTaker
+            ? 'Modifier Récupérateur'
+            : 'Ajouter Récupérateur'}
         </Text>
 
         <form onSubmit={onSubmit}>
           <VStack spacing={6}>
             <Input
               variant="filled"
-              placeholder="Nom Agent"
-              id="senderNameAgent"
+              placeholder="Nom Récupérateur"
+              id="moneyTakerName"
               onChange={handleInput}
-              name="senderNameUser"
-              value={senderNameUser}
+              name="moneyTakerName"
+              value={moneyTakerName}
             />
+            <NumberInput
+              size="md"
+              value={moneyTakerAmount}
+              variant="filled"
+              width="100%"
+              name="moneyTakerAmount"
+              id="moneyTakerAmount"
+            >
+              <NumberInputField
+                value={moneyTakerAmount}
+                placeholder="Montant en €"
+                variant="filled"
+                onChange={handleInput}
+              />
+            </NumberInput>
             <Input
               variant="filled"
-              placeholder="Numéro Ex: XX-XX-XX-XX-XX"
-              id="phoneNumberAgent"
+              placeholder="Numéro"
+              id="moneyTakerPhoneNumber"
               onChange={handleInput}
-              name="phoneNumberAgent"
-              value={phoneNumberAgent}
+              name="moneyTakerPhoneNumber"
+              value={moneyTakerPhoneNumber}
             />
             <Input
-              variant="filled"
-              placeholder="Code"
-              id="senderCode"
+              type="textarea"
+              id="moneyTakerOptionalInfo"
               onChange={handleInput}
-              name="senderCode"
-              value={senderCode}
+              placeholder="Info supplémentaires"
+              name="moneyTakerOptionalInfo"
+              value={moneyTakerOptionalInfo}
             />
             <Button
               w="100%"
@@ -126,9 +146,11 @@ const AddAgentForm = () => {
               marginTop="20px"
               type="submit"
             >
-              {isEditingAgent ? 'Modifier Agent' : 'Ajouter Agent'}
+              {isEditingMoneyTaker
+                ? 'Modifier Récupérateur'
+                : 'Ajouter Récupérateur'}
             </Button>
-            {isEditingAgent && (
+            {isEditingMoneyTaker && (
               <Button
                 w="100%"
                 _hover={{ backgroundColor: 'teal', color: 'white' }}

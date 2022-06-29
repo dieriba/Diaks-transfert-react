@@ -1,28 +1,37 @@
-import { BiTransfer } from 'react-icons/bi';
-import { AiOutlineFileAdd } from 'react-icons/ai';
-import { RiLockPasswordLine } from 'react-icons/ri';
-import { SiConvertio } from 'react-icons/si';
+import {
+  EuroIcon,
+  PdfIcon,
+  FileAddIcon,
+  ChangePasswordIcon,
+  TransferIcon,
+  ExchangeIcon,
+} from '../icons';
 
 export const data = [
   {
     title: 'Transfert',
-    path: '/agent/dashboard',
-    icon: <BiTransfer />,
+    path: '/agent/transferts',
+    icon: TransferIcon,
   },
   {
     title: 'Ajouter Transfert',
     path: '/shared/add-transfert',
-    icon: <AiOutlineFileAdd />,
+    icon: FileAddIcon,
   },
 
   {
     title: 'Convertisseur',
     path: '/shared/converter',
-    icon: <SiConvertio />,
+    icon: ExchangeIcon,
+  },
+  {
+    title: 'PDF',
+    path: '/shared/pdf',
+    icon: PdfIcon,
   },
   {
     title: 'Modifier Mot de passe',
     path: '/shared/change-password',
-    icon: <RiLockPasswordLine />,
+    icon: ChangePasswordIcon,
   },
 ];

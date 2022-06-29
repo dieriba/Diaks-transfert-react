@@ -22,14 +22,15 @@ const auth = async (req, res, next) => {
             return next(new BadRequestError('Champs Incorrects'));
 
         user.password = undefined;
+        const userRole = user.role;
         const token = user.createJWT({
             userId: user._id,
             userAgentId: user.LinkedToAgentId?.toString() || null,
             moneyGiverCity: user.role === 'moneyGiver' ? user.username : null,
-            role: user.role,
+            userRole : user.role
         });
 
-        res.status(200).json({ user, token });
+        res.status(200).json({ user, token, userRole });
     } catch (error) {
         next(error);
     }

@@ -10,3 +10,8 @@ export { default as AddUser } from './adminPages/AddUser';
 export { default as ListAgent } from './adminPages/ListAgent';
 export { default as ListUser } from './adminPages/ListUser';
 export { default as SharedLayout } from './sharedPages/SharedLayout';
+export { default as AddMoneyTaker } from './mediumAdmin/AddMoneyTaker';
+export { default as ListMoneyTakers } from './sharedPages/ListMoneyTakers';
+export { default as Rate } from './mediumAdmin/Rate';
+export { default as SearchTransfert } from './moneyGivers/SearchTransfert';
+export { default as AllTransfert } from './moneyGivers/AllTransferts';

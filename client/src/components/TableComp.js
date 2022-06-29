@@ -13,7 +13,7 @@ import AlertDialogPop from './AlertDialog';
 import { TdRow, ThRow } from './TableCompStyle';
 import moment from 'moment';
 import 'moment/locale/fr';
-const TableComp = ({ setEditForm, transferts, getTransfertDetails }) => {
+const TableComp = ({ setEditForm, transferts, getTransfertDetails , userRole }) => {
   return (
     <TableContainer w="100%">
       <Table variant="simple">
@@ -29,7 +29,7 @@ const TableComp = ({ setEditForm, transferts, getTransfertDetails }) => {
             <ThRow>Ajouté le</ThRow>
             <ThRow>Statut</ThRow>
             <ThRow>Détails</ThRow>
-            <ThRow>Actions</ThRow>
+            {userRole !== 'mediumAdmin' && <ThRow>Actions</ThRow>}
           </Tr>
         </Thead>
         <Tbody>
@@ -74,29 +74,31 @@ const TableComp = ({ setEditForm, transferts, getTransfertDetails }) => {
                     Détails
                   </Link>
                 </TdRow>
-                <TdRow>
-                  <Link
-                    as={ReachLink}
-                    to="/shared/add-transfert"
-                    onClick={() => setEditForm('transfert', _id)}
-                    textDecoration="none"
-                  >
-                    <Button
-                      size="sm"
-                      _hover={{ backgroundColor: 'teal' }}
-                      cursor="pointer"
+                {userRole !== 'mediumAdmin' && (
+                  <TdRow>
+                    <Link
+                      as={ReachLink}
+                      to="/shared/add-transfert"
+                      onClick={() => setEditForm('transfert', _id)}
+                      textDecoration="none"
                     >
-                      Modifier
-                    </Button>
-                  </Link>
-                  <AlertDialogPop
-                    ml="0.5rem"
-                    h="#FF7F7F"
-                    s="sm"
-                    _id={_id}
-                    field="transfert"
-                  />
-                </TdRow>
+                      <Button
+                        size="sm"
+                        _hover={{ backgroundColor: 'teal' }}
+                        cursor="pointer"
+                      >
+                        Modifier
+                      </Button>
+                    </Link>
+                    <AlertDialogPop
+                      ml="0.5rem"
+                      h="#FF7F7F"
+                      s="sm"
+                      _id={_id}
+                      field="transfert"
+                    />
+                  </TdRow>
+                )}
               </Tr>
             );
           })}

@@ -7,6 +7,7 @@ const Pagination = ({
   totalPages,
   endingLink,
   iterator,
+  collection,
 }) => {
   let startingPoint = iterator;
   let pageBtn = [];
@@ -42,7 +43,7 @@ const Pagination = ({
             isActive={currentPage === page}
             _active={{ backgroundColor: 'teal' }}
             borderRadius="50%"
-            onClick={() => changePage(page)}
+            onClick={() => changePage(page, collection)}
           >
             {page}
           </Button>

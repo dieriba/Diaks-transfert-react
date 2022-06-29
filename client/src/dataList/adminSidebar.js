@@ -12,7 +12,7 @@ import {
 export const data = [
   {
     title: 'Transfert',
-    path: '/admin/dashboard',
+    path: '/admin/transferts',
     icon: TransferIcon,
   },
   {
@@ -52,7 +52,7 @@ export const data = [
   },
   {
     title: 'PDF',
-    path: '/shared/change-password',
+    path: '/shared/pdf',
     icon: PdfIcon,
   },
   {

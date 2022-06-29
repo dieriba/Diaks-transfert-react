@@ -5,6 +5,10 @@ const rateSchema = new mongoose.Schema({
     rate: {
         type: Number,
     },
+    inUse: {
+        type: Boolean,
+        default: false,
+    },
     startDate: {
         type: Date,
         default: new Date(),
