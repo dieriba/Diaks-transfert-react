@@ -8,12 +8,12 @@ import {
   TransferIcon,
   ExchangeIcon,
   City,
-} from '../icons';
+} from '../assets/icons';
 
 export const data = [
   {
     title: 'Transfert',
-    path: '/admin/transferts',
+    path: '/med-admin/transferts',
     icon: TransferIcon,
   },
   {

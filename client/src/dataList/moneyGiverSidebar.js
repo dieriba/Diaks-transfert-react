@@ -1,4 +1,4 @@
-import { ChangePasswordIcon, TransferIcon, Search } from '../icons';
+import { ChangePasswordIcon, TransferIcon, Search } from '../assets/icons';
 
 export const data = [
   {

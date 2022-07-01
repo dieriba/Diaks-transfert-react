@@ -1,16 +1,9 @@
 import React from 'react';
-import { ChakraProvider, Box, Grid, theme } from '@chakra-ui/react';
+import { ChakraProvider, theme } from '@chakra-ui/react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import {
-  ProtectAdminRoutes,
-  ProtectedMoneyGiverRoutes,
-  ProtectAgentRoutes,
-  ProtectMediumAdminRoutes,
-} from './context/protectedUserRoutes';
 import {
   Login,
   Error,
-  Calcul,
   Converter,
   AddAgent,
   AddUser,
@@ -23,10 +16,12 @@ import {
   ListMoneyTakers,
   Rate,
   SearchTransfert,
-  AllTransfert,
+  Unauthorized,
 } from './pages';
 import { TransfertForm } from './components';
-import DetailsTransfert from './components/DetailsTransfert';
+import DetailsTransfert from './components/transferts/DetailsTransfert';
+import Auth from './protectedUserRoutes/Auth';
+import { AdminRoutes } from './routes';
 function App() {
   return (
     <ChakraProvider theme={theme}>
@@ -35,9 +30,9 @@ function App() {
           <Route
             path="/admin"
             element={
-              <ProtectAdminRoutes>
+              <Auth role="highAdmin">
                 <SharedLayout />
-              </ProtectAdminRoutes>
+              </Auth>
             }
           >
             <Route path="transferts" element={<Dashboard />} />
@@ -45,14 +40,13 @@ function App() {
             <Route path="add-agent" element={<AddAgent />} />
             <Route path="users" element={<ListUser />} />
             <Route path="add-user" element={<AddUser />} />
-            <Route path="calcul" element={<Calcul />} />
           </Route>
           <Route
             path="/med-admin"
             element={
-              <ProtectAdminRoutes>
+              <Auth role="mediumAdmin">
                 <SharedLayout />
-              </ProtectAdminRoutes>
+              </Auth>
             }
           >
             <Route path="transferts" element={<Dashboard />} />
@@ -62,9 +56,9 @@ function App() {
           <Route
             path="/agent"
             element={
-              <ProtectAdminRoutes>
+              <Auth role="agent">
                 <SharedLayout />
-              </ProtectAdminRoutes>
+              </Auth>
             }
           >
             <Route path="transferts" element={<Dashboard />} />
@@ -72,20 +66,20 @@ function App() {
           <Route
             path="/moneygiver"
             element={
-              <ProtectAdminRoutes>
+              <Auth role="moneyGiver">
                 <SharedLayout />
-              </ProtectAdminRoutes>
+              </Auth>
             }
           >
             <Route path="search-transfert" element={<SearchTransfert />} />
-            <Route path="all-transferts" element={<AllTransfert />} />
+            <Route path="all-transferts" element={<Dashboard />} />
           </Route>
           <Route
             path="/shared"
             element={
-              <ProtectAdminRoutes>
+              <Auth>
                 <SharedLayout />
-              </ProtectAdminRoutes>
+              </Auth>
             }
           >
             <Route path="list-money-takers" element={<ListMoneyTakers />} />
@@ -96,6 +90,7 @@ function App() {
           </Route>
           <Route path="/" element={<Navigate to="/user/login" replace />} />
           <Route path="/user/login" element={<Login />} />
+          <Route path="unauthorized" element={<Unauthorized />} />
           <Route path="*" element={<Error />} />
         </Routes>
       </BrowserRouter>

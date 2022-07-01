@@ -1,27 +1,24 @@
 import { useEffect } from 'react';
-import { useGlobalContext } from '../../context/contextProvider';
+import { useGlobalContext } from '../../context/context-provider/globalContext';
 import { Flex, VStack } from '@chakra-ui/react';
-import Pagination from '../../components/Pagination';
-import TableCompMobileUser from '../../components/TableCompMobileUser';
-import TableCompUser from '../../components/TableCompUser';
+import TableCompMobileUser from '../../components/users/TableCompMobileUser';
+import TableCompUser from '../../components/users/TableCompUser';
+import useUserContext from '../../context/context-provider/userContext';
+import { Loading } from '../../components';
 const ListUser = () => {
-  const {
-    isOnMobile,
-    useHandleResize,
-    getAllUsers,
-    users,
-    currentPage,
-    isLoading,
-    setEditForm,
-  } = useGlobalContext();
+  const { isOnMobile, useHandleResize } = useGlobalContext();
+
+  const { setEditForm, isLoading, users, getAllUsers, deleteFromDb } =
+    useUserContext();
 
   useEffect(() => {
     getAllUsers();
-  }, [currentPage]);
-
+  }, []);
   useHandleResize();
 
   if (isOnMobile) {
+    if (isLoading) return <Loading />;
+
     return (
       <VStack display="flex" w="100%" spacing={4} mt={4} mb={4}>
         {users.map(user => {
@@ -30,13 +27,17 @@ const ListUser = () => {
               key={user._id}
               {...user}
               isLoading={isLoading}
-              setEditForm = {setEditForm}
+              setEditForm={setEditForm}
+              deleteFromDb={deleteFromDb}
             />
           );
         })}
       </VStack>
     );
   }
+
+  if (isLoading) return <Loading />;
+
   return (
     <Flex
       width="100%"
@@ -48,6 +49,7 @@ const ListUser = () => {
         users={users}
         setEditForm={setEditForm}
         isLoading={isLoading}
+        deleteFromDb={deleteFromDb}
       />
     </Flex>
   );

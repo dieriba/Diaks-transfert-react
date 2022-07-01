@@ -1,2 +1,2 @@
-export { default as handleResize } from './useGetScreenWidth';
-export { default as userGetAgents } from './useGetAgents';
+export { default as handleResize } from './global/useGetScreenWidth';
+export { default as userGetAgents } from './agents/useGetAgents';

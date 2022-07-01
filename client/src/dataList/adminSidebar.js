@@ -7,7 +7,7 @@ import {
   ChangePasswordIcon,
   TransferIcon,
   ExchangeIcon
-} from '../icons';
+} from '../assets/icons';
 
 export const data = [
   {

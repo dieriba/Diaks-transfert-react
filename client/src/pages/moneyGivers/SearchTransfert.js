@@ -10,7 +10,7 @@ import {
   Input,
 } from '@chakra-ui/react';
 
-import { useGlobalContext } from '../../context/contextProvider';
+import { useGlobalContext } from '../../context/context-provider/contextProvider';
 
 const SearchTransfert = () => {
   const {

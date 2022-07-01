@@ -1,0 +1,141 @@
+import {
+  Button,
+  Table,
+  Tbody,
+  TableContainer,
+  Tr,
+  Flex,
+  Link,
+  Badge,
+} from '@chakra-ui/react';
+import { Link as ReachLink } from 'react-router-dom';
+import moment from 'moment';
+import 'moment/locale/fr';
+import { useGlobalContext } from '../../context/context-provider/contextProvider';
+import { TdRowMobile, ThRowMobile } from '../styleComp/TableCompStyle';
+import useTransfertContext from '../../context/context-provider/transfertContext';
+const DetailsTransfert = () => {
+  const {
+    senderName,
+    city,
+    moneyTypes,
+    clientName,
+    phoneNumber,
+    hasPaid,
+    amountOfMoneyInEuro,
+    hasTakeMoney,
+    date,
+    updatedDate,
+    hasBeenModified,
+    payoutDay,
+    rate,
+  } = useTransfertContext();
+
+  const { userRole } = useGlobalContext();
+
+  let backLink;
+
+  if (userRole === 'highAdmin') backLink = '/admin/transferts';
+  if (userRole === 'mediumAdmin') backLink = '/med-admin/transferts';
+  if (userRole === 'agent') backLink = '/agent/transferts';
+  if (userRole === 'moneyGiver') backLink = '/moneygiver/all-transferts';
+  return (
+    <Flex
+      width="100%"
+      minH="90vh"
+      alignItems="center"
+      direction="column"
+      mt="2rem"
+    >
+      <TableContainer width={['90%', '90%']} boxShadow="lg">
+        <Table size="sm" variant="simple">
+          <Tbody>
+            {senderName && (
+              <Tr>
+                <ThRowMobile>Nom Agent</ThRowMobile>
+                <TdRowMobile>{senderName}</TdRowMobile>
+              </Tr>
+            )}
+            {clientName && (
+              <Tr>
+                <ThRowMobile>Nom Client</ThRowMobile>
+                <TdRowMobile>{clientName}</TdRowMobile>
+              </Tr>
+            )}
+            {date && (
+              <Tr>
+                <ThRowMobile>Date d'ajout </ThRowMobile>
+                <TdRowMobile>{moment(date).format('L')}</TdRowMobile>
+              </Tr>
+            )}
+            {moneyTypes === 'ORANGE MONEY' && (
+              <Tr>
+                <ThRowMobile>Numéro</ThRowMobile>
+                <TdRowMobile>{phoneNumber}</TdRowMobile>
+              </Tr>
+            )}
+            {moneyTypes && (
+              <Tr>
+                <ThRowMobile>Type</ThRowMobile>
+                <TdRowMobile>{moneyTypes}</TdRowMobile>
+              </Tr>
+            )}
+            {amountOfMoneyInEuro && (
+              <Tr>
+                <ThRowMobile>Montant A Retiré</ThRowMobile>
+                <TdRowMobile>
+                  {amountOfMoneyInEuro.toLocaleString()} €
+                </TdRowMobile>
+              </Tr>
+            )}
+            <Tr>
+              <ThRowMobile>Statut</ThRowMobile>
+              <TdRowMobile>
+                {hasTakeMoney ? (
+                  <Badge colorScheme="green">Payé</Badge>
+                ) : (
+                  <Badge colorScheme="red">Non payé</Badge>
+                )}
+              </TdRowMobile>
+            </Tr>
+
+            {rate && (
+              <Tr>
+                <ThRowMobile>Taux</ThRowMobile>
+                <TdRowMobile>
+                  {rate.toLocaleString()} Franc Guinéens
+                </TdRowMobile>
+              </Tr>
+            )}
+            {city && (
+              <Tr>
+                <ThRowMobile>Ville</ThRowMobile>
+                <TdRowMobile>{city}</TdRowMobile>
+              </Tr>
+            )}
+
+            {hasBeenModified && (
+              <Tr>
+                <ThRowMobile>Modifié Le</ThRowMobile>
+                <TdRowMobile>{moment(updatedDate).format('L')}</TdRowMobile>
+              </Tr>
+            )}
+            {payoutDay && (
+              <Tr>
+                <ThRowMobile>Paiement Le</ThRowMobile>
+                <TdRowMobile>{payoutDay}</TdRowMobile>
+              </Tr>
+            )}
+          </Tbody>
+        </Table>
+      </TableContainer>
+
+      <Link mt="1rem" w="90%" as={ReachLink} to={backLink}>
+        <Button w="100%" _hover={{ backgroundColor: 'teal' }}>
+          Retour
+        </Button>
+      </Link>
+    </Flex>
+  );
+};
+export default DetailsTransfert;

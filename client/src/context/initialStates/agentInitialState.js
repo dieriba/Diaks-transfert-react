@@ -1,3 +1,16 @@
 export const agentInitialState = {
-    
-}
+  agents: [],
+  currentAgentPage: 1,
+  totalPagesAgent: '',
+  endingLinkAgent: 0,
+  iteratorAgent: 0,
+  editAgentId: '',
+  phoneNumberAgent: '',
+  isLoading: false,
+  showAlert: false,
+  alertText: '',
+  errorStatus: '',
+  alertType: '',
+  senderNameUser: '',
+  senderCode: '',
+};

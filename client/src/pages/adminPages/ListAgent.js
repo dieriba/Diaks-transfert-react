@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
-import { useGlobalContext } from '../../context/contextProvider';
+import { useGlobalContext } from '../../context/context-provider/globalContext';
 import { Flex, VStack } from '@chakra-ui/react';
 import { Loading } from '../../components';
-import Pagination from '../../components/Pagination';
-import TableCompMobileAgent from '../../components/TableCompMobileAgent';
-import TableCompAgent from '../../components/TableCompAgent';
+import Pagination from '../../components/pagination/Pagination';
+import TableCompMobileAgent from '../../components/agents/TableCompMobileAgent';
+import TableCompAgent from '../../components/agents/TableCompAgent';
+import { useAgentContext } from '../../context/context-provider/agentContext';
 const ListAgent = () => {
+  const { isOnMobile, useHandleResize } = useGlobalContext();
+
   const {
-    isOnMobile,
-    useHandleResize,
     agents,
     currentAgentPage,
     changePage,
@@ -18,8 +19,8 @@ const ListAgent = () => {
     endingLinkAgent,
     isLoading,
     setEditForm,
-    editAgent,
-  } = useGlobalContext();
+    deleteFromDb
+  } = useAgentContext();
 
   useEffect(() => {
     getAllAgents();
@@ -38,6 +39,7 @@ const ListAgent = () => {
               {...agent}
               isLoading={isLoading}
               setEditForm={setEditForm}
+              deleteFromDb={deleteFromDb}
             />
           );
         })}
@@ -48,7 +50,6 @@ const ListAgent = () => {
             iterator={iteratorAgent}
             totalPages={totalPagesAgent}
             changePage={changePage}
-            collection="agent"
           />
         )}
       </VStack>
@@ -68,6 +69,7 @@ const ListAgent = () => {
         agents={agents}
         isLoading={isLoading}
         setEditForm={setEditForm}
+        deleteFromDb={deleteFromDb}
       />
       {totalPagesAgent > 1 && (
         <Pagination
@@ -76,7 +78,6 @@ const ListAgent = () => {
           iterator={iteratorAgent}
           totalPages={totalPagesAgent}
           changePage={changePage}
-          collection="agent"
           mt="1rem"
         />
       )}

@@ -1,8 +1,16 @@
-const token = localStorage.getItem('token');
-const user = localStorage.getItem('user');
-
 export const userInitialState = {
-  user: user ? JSON.parse(user) : null,
-  token: token ? token : '',
-  role: '',
+  editUserId: '',
+  username: '',
+  password: '',
+  confirmPassword: '',
+  senderNameUser: '',
+  senderCode: '',
+  roleOptions: ['highAdmin', 'admin', 'mediumAdmin', 'agent', 'moneyGiver'],
+  role: 'agent',
+  users: [],
+  isLoading: false,
+  showAlert: false,
+  alertText: '',
+  errorStatus: '',
+  alertType: '',
 };
