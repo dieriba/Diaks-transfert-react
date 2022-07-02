@@ -39,6 +39,10 @@ const transfertSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    hasPaid: {
+        type: Boolean,
+        default: false,
+    },
     date: {
         type: Date,
         default: new Date(),
@@ -96,19 +100,14 @@ transfertSchema.pre('save', async function () {
     }
 });
 
-// transfertSchema.pre('save', async function () {
-//     const agent = await Agent.findOne({ senderName: this.senderName });
-//     const { senderCode, transfertCounts, id } = agent;
-//     this.code = `${senderCode}${transfertCounts}`;
+transfertSchema.pre('save', async function () {
+    
+    const agent = await Agent.findById(this.createdBy);
+    const { senderCode, transfertCounts, _id } = agent;
+    this.code = `${senderCode}${transfertCounts}`;
 
-//     await Agent.updateOne(
-//         { _id: id },
-//         { transfertCounts: transfertCounts + 1 },
-//         {
-//             new: true,
-//             runValidators: true,
-//         }
-//     );
-// });
+    agent.transfertCounts = transfertCounts + 1;
+    await agent.save();
+});
 
 export default mongoose.model('Transfert', transfertSchema);

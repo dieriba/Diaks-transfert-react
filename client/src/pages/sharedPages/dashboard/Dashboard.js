@@ -80,8 +80,12 @@ const Dashboard = () => {
         alignItems="center"
       >
         <Flex alignSelf="flex-start" width="100%">
-          <QueryFormShow />
-          <CalculShow mt="0.6rem" mb="0.6rem" ml="1rem" />
+          <QueryFormShow
+            text="Formulaire Recherche"
+            mt="0.6rem"
+            ml="1rem"
+          />
+          <CalculShow w="20%" mt="0.6rem" mb="0.6rem" ml="1rem" />
         </Flex>
         <Box justifySelf="center" w="100%">
           <Text>Aucun Transfert Trouvé....</Text>

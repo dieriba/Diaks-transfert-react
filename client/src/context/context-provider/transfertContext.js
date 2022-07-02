@@ -13,6 +13,8 @@ import {
   RESET_FORM,
   HANDLE_CHANGE,
   CLEAN_ERROR,
+  RESET_TRANSFERT_FORM,
+  DISPLAY_ERROR,
 } from '../action/transfertAction';
 import axios from 'axios';
 import { useAuthContext } from './authContext';
@@ -49,6 +51,9 @@ export const TransfertProvider = ({ children }) => {
     }
   );
 
+  const displayError = alertText =>
+    dispatch({ type: DISPLAY_ERROR, payload: { alertText } });
+
   const createTransfert = async () => {
     const {
       senderName,
@@ -61,7 +66,6 @@ export const TransfertProvider = ({ children }) => {
     } = state;
     dispatch({ type: SET_LOADING_BEGIN });
     try {
-      console.log(state);
 
       const { data } = await authFetch.post('/shared/add-transfert', {
         senderName,
@@ -92,17 +96,17 @@ export const TransfertProvider = ({ children }) => {
 
     let url = '';
     if (userRole === 'agent') {
-      url = `/agent/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&city=${queryCity}&moneyTypes=${queryMoneyTypes}`;
+      url = `/agent/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&city=${queryCity}&moneyTypes=${queryMoneyTypes}&hasTakeMoney=${queryHasTakeMoney}`;
     }
     if (userRole === 'mediumAdmin') {
-      url = `/med-admin/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&senderName=${querySenderName}&city=${queryCity}&moneyTypes=${queryMoneyTypes}`;
+      url = `/med-admin/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&senderName=${querySenderName}&city=${queryCity}&moneyTypes=${queryMoneyTypes}&hasTakeMoney=${queryHasTakeMoney}`;
       if (queryClientName) {
         url = url + `&clientName=${queryClientName}`;
       }
     }
 
     if (userRole === 'highAdmin') {
-      url = `/admin/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&senderName=${querySenderName}&city=${queryCity}&moneyTypes=${queryMoneyTypes}`;
+      url = `/admin/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&senderName=${querySenderName}&city=${queryCity}&moneyTypes=${queryMoneyTypes}&hasTakeMoney=${queryHasTakeMoney}`;
       if (queryClientName) {
         url = url + `&clientName=${queryClientName}`;
       }
@@ -132,6 +136,9 @@ export const TransfertProvider = ({ children }) => {
 
   const resetQueryForm = () => {
     dispatch({ type: RESET_FORM });
+  };
+  const resetTransfertForm = () => {
+    dispatch({ type: RESET_TRANSFERT_FORM });
   };
 
   const changePage = page => {
@@ -205,6 +212,8 @@ export const TransfertProvider = ({ children }) => {
         createTransfert,
         handleChange,
         cleanError,
+        resetTransfertForm,
+        displayError,
       }}
     >
       {children}

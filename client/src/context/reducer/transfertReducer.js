@@ -5,13 +5,14 @@ import {
   CANCEL_MODIFICATION_TRANSFERT,
   GET_DETAILS_TRANSFERT,
   RESET_FORM,
+  RESET_TRANSFERT_FORM,
   SET_LOADING_BEGIN,
   SET_LOADING_ERROR,
   SET_LOADING_SUCCESS,
   HANDLE_CHANGE,
   CLEAN_ERROR,
+  DISPLAY_ERROR,
 } from '../action/transfertAction';
-
 const transfertReducer = (state, action) => {
   const { type } = action;
 
@@ -131,12 +132,11 @@ const transfertReducer = (state, action) => {
     };
 
   if (type === HANDLE_CHANGE) {
-    const { name, value } = action.payload;
-
+    const { name, value, type, checked } = action.payload;
     return {
       ...state,
       currentPage: 1,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     };
   }
 
@@ -151,6 +151,15 @@ const transfertReducer = (state, action) => {
       queryDateStart: '',
       queryDateEnd: '',
       currentPage: 1,
+    };
+  }
+
+  if (type === RESET_TRANSFERT_FORM) {
+    return {
+      ...state,
+      clientName: '',
+      amountOfMoneyInEuro: '',
+      phoneNumber: '',
     };
   }
 
@@ -195,6 +204,14 @@ const transfertReducer = (state, action) => {
       rate,
     };
   }
+
+  if (type === DISPLAY_ERROR)
+    return {
+      ...state,
+      alertText: action.payload.alertText,
+      showAlert: true,
+      errorStatus: 'error',
+    };
 };
 
 export default transfertReducer;

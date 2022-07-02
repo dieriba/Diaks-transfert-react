@@ -27,10 +27,15 @@ import xss from 'xss-clean';
 import rateLimit from 'express-rate-limit';
 import corsOptions from './src/middleware/corsOptions.js';
 import hpp from 'hpp';
-import cors from 'cors'
+import cors from 'cors';
 
 //ACCESS MIDDLEWARE
-import { isAdmin } from './src/middleware/index.js';
+import {
+    isAdmin,
+    isAgent,
+    isMediumAdmin,
+    isMoneyGiver,
+} from './src/middleware/index.js';
 
 // ERRORS middleware
 import notFoundMiddleware from './src/middleware/not-found.js';
@@ -105,13 +110,13 @@ app.use('/admin', authenticateUser, isAdmin, adminUserManagmentRoutes);
 app.use('/admin', authenticateUser, isAdmin, adminAgentManagmentRoutes);
 
 //MED ADMIN ROUTES
-app.use('/med-admin', mediumAdminRoutes);
+app.use('/med-admin', authenticateUser, isMediumAdmin, mediumAdminRoutes);
 
 //AGENT ROUTES
-app.use('/agent', authenticateUser, agentsRoutes);
+app.use('/agent', authenticateUser, isAgent, agentsRoutes);
 
 //MONEY GIVER ROUTES
-app.use('/moneygiver', authenticateUser, moneyGiverRoutes);
+app.use('/moneygiver', authenticateUser, isMoneyGiver, moneyGiverRoutes);
 
 //SHARED ROUTES
 app.use('/shared', authenticateUser, sharedRoutes);

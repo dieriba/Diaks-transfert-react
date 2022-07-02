@@ -11,9 +11,9 @@ import {
 import { Link as ReachLink } from 'react-router-dom';
 import moment from 'moment';
 import 'moment/locale/fr';
-import { useGlobalContext } from '../../context/context-provider/contextProvider';
 import { TdRowMobile, ThRowMobile } from '../styleComp/TableCompStyle';
 import useTransfertContext from '../../context/context-provider/transfertContext';
+import { useAuthContext } from '../../context/context-provider/authContext';
 const DetailsTransfert = () => {
   const {
     senderName,
@@ -31,7 +31,7 @@ const DetailsTransfert = () => {
     rate,
   } = useTransfertContext();
 
-  const { userRole } = useGlobalContext();
+  const { userRole } = useAuthContext();
 
   let backLink;
 

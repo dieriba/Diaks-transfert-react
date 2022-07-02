@@ -8,20 +8,21 @@ import {
   AlertIcon,
   CloseButton,
   Select,
-  Radio,
-  RadioGroup,
+  FormLabel,
   Stack,
   VStack,
   NumberInput,
   NumberInputField,
   Flex,
+  Checkbox,
 } from '@chakra-ui/react';
 import useGetAgentsQuery from '../../hooks/agents/useGetAgentsQuery';
 import useTransfertContext from '../../context/context-provider/transfertContext';
 import { useAgentContext } from '../../context/context-provider/agentContext';
+
 const TransfertForm = () => {
-  const { agents , userRole } = useAgentContext();
-  
+  const { agents, userRole } = useAgentContext();
+
   const {
     isEditingTransfert,
     hasPaid,
@@ -39,18 +40,25 @@ const TransfertForm = () => {
     alertText,
     cancelModification,
     cleanError,
+    resetTransfertForm,
     showAlert,
-    displayError,
     editTransfert,
     createTransfert,
+    displayError,
   } = useTransfertContext();
-
   const handleInput = e => {
     const name = e.target.name;
     const value = e.target.value;
-    handleChange({ name, value });
+    const type = e.target.type;
+    const checked = e.target.checked;
+    handleChange({ name, value, type, checked });
   };
   const [phoneNumberState, setPhoneNumberState] = useState(true);
+
+  const handleReset = e => {
+    e.preventDefault();
+    resetTransfertForm();
+  };
 
   useGetAgentsQuery();
   useEffect(() => {
@@ -193,32 +201,24 @@ const TransfertForm = () => {
               isDisabled={phoneNumberState}
               name="phoneNumber"
             />
-            <RadioGroup
-              defaultValue={hasPaid ? null : 'false'}
-              display="flex"
-              justifyContent="center"
+            <Stack spacing={5} direction="row">
+              <FormLabel fontStyle="italic">A Payé </FormLabel>
+              <Checkbox
+                name="hasPaid"
+                onChange={handleInput}
+                colorScheme="green"
+                checked={hasPaid}
+                defaultChecked={hasPaid}
+              />
+            </Stack>
+            <Button
+              w="100%"
+              _hover={{ backgroundColor: 'red', color: 'white' }}
+              type="button"
+              onClick={handleReset}
             >
-              <Stack spacing={5} direction="row">
-                <Radio
-                  colorScheme="red"
-                  onChange={handleInput}
-                  name="hasPaid"
-                  value="false"
-                  checked={hasPaid === false ? true : false}
-                >
-                  N'a Pas Payé
-                </Radio>
-                <Radio
-                  colorScheme="green"
-                  onChange={handleInput}
-                  name="hasPaid"
-                  value="true"
-                  checked={hasPaid === true ? true : false}
-                >
-                  A Payé
-                </Radio>
-              </Stack>
-            </RadioGroup>
+              Reset
+            </Button>
             <Button
               w="100%"
               _hover={{ backgroundColor: 'teal', color: 'white' }}

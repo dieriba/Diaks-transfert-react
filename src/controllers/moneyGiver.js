@@ -33,19 +33,20 @@ const validateTransfertPage = async (req, res, next) => {
 const moneyTaken = async (req, res, next) => {
     try {
         const { moneyGiverCity } = req.user;
-
         let { page, size, clientName, senderName, start, end, moneyTypes } =
             req.query;
-
         let queryObj = {};
 
         if (clientName)
             queryObj.clientName = { $regex: clientName, $options: 'i' };
 
-        if (senderName)
-            queryObj.senderName = { $regex: senderName, $options: 'i' };
+        if (senderName && senderName !== 'Tous') {
+            queryObj.senderName = senderName;
+        }
 
-        if (moneyTypes) queryObj.moneyTypes = moneyTypes;
+        if (moneyTypes && moneyTypes !== 'Tous') {
+            queryObj.moneyTypes = moneyTypes;
+        }
 
         if (start && end) {
             const endYear = Number(end.split('-')[0]);
@@ -65,7 +66,6 @@ const moneyTaken = async (req, res, next) => {
         size = size ? Number(size) : 15;
 
         //TRANSFORM QUERY INTO URI ENCODE STRING TO BE ABLE TO QUERY NEXT PAGE WITHOUT GETTING RESET
-
         let sum = await Transfert.aggregate([
             {
                 $match: {
@@ -95,6 +95,7 @@ const moneyTaken = async (req, res, next) => {
             city: moneyGiverCity,
             hasTakeMoney: true,
         });
+        let totalPages = Math.ceil(count / limit);
 
         let iterator = page - 2 < 1 ? 1 : page - 2;
         let endingLink =
@@ -102,7 +103,7 @@ const moneyTaken = async (req, res, next) => {
                 ? iterator + 4
                 : page + (totalPages - page);
 
-        res.status(200).jsonr({
+        res.status(200).json({
             transferts,
             totalPages,
             currentPage: page,
@@ -111,6 +112,7 @@ const moneyTaken = async (req, res, next) => {
             sum,
         });
     } catch (error) {
+        console.log(error);
         next(error);
     }
 };

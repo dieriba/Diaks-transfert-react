@@ -49,8 +49,6 @@ const getAllAgents = async (req, res, next) => {
     }
 };
 
-
-
 //CREATE NEW AGENT INTO DATABASE
 const createAgent = async (req, res, next) => {
     try {
@@ -114,7 +112,6 @@ const editAgent = async (req, res, next) => {
         const transferts = await Transfert.find({
             createdBy: id,
         });
-        console.log(req.body);
         let phone = '';
 
         for (let i = 0; i < phoneNumber.length; i++) {

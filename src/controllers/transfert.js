@@ -5,6 +5,8 @@ import Agent from '../models/agent.js';
 //RENDER ALL TRANSFERT OF DB
 const getAllTransferts = async (req, res, next) => {
     try {
+
+        console.log(req.query);
         let {
             page,
             size,
@@ -16,7 +18,6 @@ const getAllTransferts = async (req, res, next) => {
             moneyTypes,
             hasTakeMoney,
         } = req.query;
-
         //ADD 2 OBJECT THE FIRST ONE IS USED AS QUERY PARAMETER FOR MONGOOSE FUNCTION
         // THE SECOND ONE IS HERE TO PAGINATION SYSTEM AND SEND QUERY STRING TO LINK BUT WITHOUT THE PAGE QUERY TO AVOID BUGS
 

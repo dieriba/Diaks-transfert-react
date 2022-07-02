@@ -87,7 +87,6 @@ const totalAmountTransfert = async (req, res, next) => {
 //CONVERT VALUE FOR CLIENT
 const Convert = async (req, res, next) => {
     try {
-        console.log(req.body);
         const { rate } = await Rate.findOne({ inUse: true });
         let { euro, gnf } = req.body;
         euro = euro ? euro.replace(/\s+/g, '') : null;
@@ -114,9 +113,9 @@ const Convert = async (req, res, next) => {
 //CREATE A NEW TRANSFERT INTO DB ONLY HIGH LEVEL USER AND LOW LEVEL USER CAN CREATE A NEW TRANSFERT
 const createTransfert = async (req, res, next) => {
     try {
+        console.log(req.body);
         const { userAgentId, userId, userRole } = req.user;
         const { senderName } = req.body;
-        console.log(senderName);
         if (userRole === 'agent') {
             const agent = await Agent.findOne({ _id: userAgentId });
             if (!agent) return next(new BadRequestError('Agent non identifié'));
@@ -126,7 +125,6 @@ const createTransfert = async (req, res, next) => {
 
         if (userRole !== 'agent') {
             const agent = await Agent.findOne({ senderName: senderName });
-            console.log(agent,senderName);
             if (!agent) return next(new BadRequestError('Agent non identifié'));
             req.body.createdBy = agent._id;
         }
@@ -134,10 +132,10 @@ const createTransfert = async (req, res, next) => {
         const { rate } = await Rate.findOne({ inUse: true });
         req.body.rate = rate;
         const transfert = await Transfert.create(req.body);
-        // const { code } = transfert;
+        const { code } = transfert;
         res.status(201).json({
             transfert,
-            message: 'Transfert ajouté avec succès',
+            message: `Transfert ajouté avec le code : ${code}`,
             success: true,
         });
     } catch (error) {

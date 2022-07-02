@@ -109,7 +109,7 @@ export const AgentProvider = ({ children }) => {
       const { data } = await authFetch.patch(
         `/admin/edit-agent/${editAgentId}`,
         {
-          senderNameUser,
+          senderName : senderNameUser,
           phoneNumber: phoneNumberAgent,
           senderCode,
         }

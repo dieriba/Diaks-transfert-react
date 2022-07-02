@@ -2,7 +2,7 @@ import { UnauthenticatedError } from '../../errors/index.js';
 
 const isMediumAdmin = (req, res, next) => {
     const { userRole } = req.user;
-    if (userRole !== 'isMediumAdmin')
+    if (userRole !== 'mediumAdmin')
         return next(
             new UnauthenticatedError(
                 "Vous n'êtes pas autorisés à utiliser cette fonctionnalité"

@@ -8,16 +8,17 @@ import {
   Stack,
   VStack,
   Grid,
+  FormLabel,
+  Checkbox,
 } from '@chakra-ui/react';
 import useTransfertContext from '../../context/context-provider/transfertContext';
-import { useGlobalContext } from '../../context/context-provider/contextProvider';
+import { useAgentContext } from '../../context/context-provider/agentContext';
 
 const QueryFormMobile = () => {
   const {
     handleChange,
     moneyTypesOptions,
     cityOptions,
-    hasPaid,
     isLoading,
     queryDateEnd,
     queryDateStart,
@@ -25,17 +26,18 @@ const QueryFormMobile = () => {
     querySenderName,
     queryCity,
     userRole,
-
+    queryHasTakeMoney,
     queryMoneyTypes,
     getAllTransferts,
     resetQueryForm,
   } = useTransfertContext();
-  const { agents } = useGlobalContext();
+  const { agents } = useAgentContext();
   const handleInput = e => {
     const name = e.target.name;
     const value = e.target.value;
-    e.stopPropagation();
-    handleChange({ name, value });
+    const type = e.target.type;
+    const checked = e.target.checked;
+    handleChange({ name, value, type, checked });
   };
 
   const onSubmit = e => {
@@ -136,32 +138,17 @@ const QueryFormMobile = () => {
             onChange={handleInput}
             name="queryDateEnd"
           />
-          <RadioGroup
-            defaultValue={hasPaid ? null : 'false'}
-            display="flex"
-            justifyContent="center"
-          >
-            <Stack spacing={5} direction="row">
-              <Radio
-                colorScheme="red"
-                onChange={handleInput}
-                name="hasPaid"
-                value="false"
-                checked={hasPaid === false ? true : false}
-              >
-                N'a Pas Payé
-              </Radio>
-              <Radio
-                colorScheme="green"
-                onChange={handleInput}
-                name="hasPaid"
-                value="true"
-                checked={hasPaid === true ? true : false}
-              >
-                A Payé
-              </Radio>
-            </Stack>
-          </RadioGroup>
+          <Stack spacing={5} direction="row">
+            <FormLabel fontStyle="italic">A Pris L'argent</FormLabel>
+            <Checkbox
+              name="queryHasTakeMoney"
+              onChange={handleInput}
+              colorScheme="green"
+              checked={queryHasTakeMoney}
+              defaultChecked={queryHasTakeMoney}
+            />
+          </Stack>
+
           <Button
             w="100%"
             _hover={{ backgroundColor: 'red', color: 'white' }}
