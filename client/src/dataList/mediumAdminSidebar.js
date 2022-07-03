@@ -1,13 +1,11 @@
 import {
   EuroIcon,
   PdfIcon,
-  FileAddIcon,
   UserAddIcon,
   UserGroupIcon,
   ChangePasswordIcon,
   TransferIcon,
   ExchangeIcon,
-  City,
 } from '../assets/icons';
 
 export const data = [

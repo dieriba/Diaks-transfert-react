@@ -75,6 +75,12 @@ const CalculShow = ({ ml, mt, mb, w }) => {
                       <TdRowMobile>{queryMoneyTypes}</TdRowMobile>
                     </Tr>
                   )}
+                  {queryHasTakeMoney && (
+                    <Tr>
+                      <ThRowMobile>A Pris L'argent</ThRowMobile>
+                      <TdRowMobile>{queryHasTakeMoney}</TdRowMobile>
+                    </Tr>
+                  )}
                   {queryCity && (
                     <Tr>
                       <ThRowMobile>Ville</ThRowMobile>

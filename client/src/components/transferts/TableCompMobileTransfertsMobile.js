@@ -28,7 +28,7 @@ const TableCompTransfertsMobile = ({
   setEditForm,
   userRole,
   code,
-  deleteFromDb
+  deleteFromDb,
 }) => {
   if (isLoading) {
     return <Loading />;
@@ -86,7 +86,7 @@ const TableCompTransfertsMobile = ({
               )}
             </Td>
           </Tr>
-          {userRole !== 'mediumAdmin' && (
+          {userRole !== 'mediumAdmin' && userRole !== 'moneyGiver' && (
             <Tr>
               <Th color="teal">Actions</Th>
               <Td>

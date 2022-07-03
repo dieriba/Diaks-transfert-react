@@ -1,26 +1,15 @@
 import {
-  GET_WINDOW_WIDTH,
   GET_RATE,
   NEW_RATE_ADDED,
   CONVERT_MONEY,
-  TOGGLE_SIDEBAR,
   SUBMIT_NEW_RATE,
-  CLEAN_ERROR,
   DISPLAY_ERROR,
+  CLEAN_ERROR,
+  HANDLE_CHANGE,
 } from '../action/globalAction';
 
-const globalReducer = (state, action) => {
+const convertReducer = (state, action) => {
   const { type } = action;
-
-  if (type === TOGGLE_SIDEBAR)
-    return { ...state, showSidebar: !state.showSidebar };
-
-  if (type === GET_WINDOW_WIDTH) {
-    if (action.payload < 1000)
-      return { ...state, windowWidth: action.payload, isOnMobile: true };
-
-    return { ...state, windowWidth: action.payload, isOnMobile: false };
-  }
 
   if (type === CONVERT_MONEY) {
     return {
@@ -33,10 +22,14 @@ const globalReducer = (state, action) => {
   }
   if (type === CLEAN_ERROR)
     return { ...state, showAlert: false, alertText: '' };
-  if (type === GET_RATE) {
-    return { ...state, rate: action.payload };
-  }
+  if (type === HANDLE_CHANGE) {
+    const { name, value } = action.payload;
 
+    return {
+      ...state,
+      [name]: value,
+    };
+  }
   if (type === DISPLAY_ERROR)
     return {
       ...state,
@@ -44,6 +37,10 @@ const globalReducer = (state, action) => {
       showAlert: true,
       errorStatus: 'error',
     };
+
+  if (type === GET_RATE) {
+    return { ...state, rate: action.payload };
+  }
 
   if (type === SUBMIT_NEW_RATE) {
     return { ...state, newRate: action.payload };
@@ -62,4 +59,4 @@ const globalReducer = (state, action) => {
   }
 };
 
-export default globalReducer;
+export default convertReducer;

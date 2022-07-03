@@ -6,7 +6,6 @@ import {
   Link,
   TableContainer,
   Button,
-  deleteFromDb,
 } from '@chakra-ui/react';
 import { Badge } from '@chakra-ui/react';
 import { Link as ReachLink } from 'react-router-dom';
@@ -36,7 +35,7 @@ const TableComp = ({
             <ThRow>Ajouté le</ThRow>
             <ThRow>Statut</ThRow>
             <ThRow>Détails</ThRow>
-            {(userRole !== 'mediumAdmin' || userRole !== 'moneyGiver') && (
+            {userRole !== 'mediumAdmin' && userRole !== 'moneyGiver' && (
               <ThRow>Actions</ThRow>
             )}
           </Tr>
@@ -84,7 +83,7 @@ const TableComp = ({
                     Détails
                   </Link>
                 </TdRow>
-                {(userRole !== 'mediumAdmin' || userRole !== 'moneyGiver') && (
+                {userRole !== 'mediumAdmin' && userRole !== 'moneyGiver' && (
                   <TdRow>
                     <Link
                       as={ReachLink}

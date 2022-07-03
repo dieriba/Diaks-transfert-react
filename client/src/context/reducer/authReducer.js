@@ -28,7 +28,7 @@ const authReducer = (state, action) => {
       isLoading: false,
       showAlert: true,
       alertText: action.payload,
-      errorStatus: 'success',
+      errorStatus: 'error',
     };
 
   if (type === SETUP_USER_SUCCESS) {

@@ -5,8 +5,6 @@ import Agent from '../models/agent.js';
 //RENDER ALL TRANSFERT OF DB
 const getAllTransferts = async (req, res, next) => {
     try {
-
-        console.log(req.query);
         let {
             page,
             size,

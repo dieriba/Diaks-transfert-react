@@ -1,30 +1,44 @@
 /* eslint-disable linebreak-style */
 import Transfert from '../models/transfert.js';
 import { BadRequestError, NotFoundError } from '../../errors/index.js';
-
+import moment from 'moment';
+import 'moment/locale/fr.js';
 //CHECK TRANSFERT INTO DATABASE AND AUTOMATICALLY CHANGE TRUE TO HASTAKEMONEY FIELD SO THAT WE KNOW THAT PEOPLE HAVE TAKE THE MONEY
 const validateTransfertPage = async (req, res, next) => {
     try {
         const { code } = req.body;
         const { moneyGiverCity } = req.user;
         const transfert = await Transfert.findOne({ code });
+        if (!code) {
+            return next(new BadRequestError('Veuilllez entre un code'));
+        }
         if (!transfert) {
             return next(new NotFoundError('Aucun transfert trouvé'));
         }
 
-        if (transfert.hasTakeMoney) {
-            return next(
-                new BadRequestError(
-                    '`Le transfert Recherché a déjà été validé à la date du ${transfert.payoutDay}`'
-                )
-            );
-        }
         if (transfert.city != moneyGiverCity) {
             return next(
                 new BadRequestError('Vous ne pouvez pas gérer ce transfert')
             );
         }
-        res.status(200).json({ success: true });
+
+        if (transfert.hasTakeMoney) {
+            return next(
+                new BadRequestError(
+                    `Le transfert Recherché a déjà été validé à la date du ${
+                        transfert.payoutDay
+                            ? moment(transfert.payoutDay).format('L')
+                            : ''
+                    }`
+                )
+            );
+        }
+
+        res.status(200).json({
+            success: true,
+            transfert,
+            transfertFoundId: transfert._id,
+        });
     } catch (error) {
         next(error);
     }
@@ -63,7 +77,7 @@ const moneyTaken = async (req, res, next) => {
         }
 
         page = page ? Number(page) : 1;
-        size = size ? Number(size) : 15;
+        size = size ? Number(size) : 12;
 
         //TRANSFORM QUERY INTO URI ENCODE STRING TO BE ABLE TO QUERY NEXT PAGE WITHOUT GETTING RESET
         let sum = await Transfert.aggregate([
@@ -112,7 +126,6 @@ const moneyTaken = async (req, res, next) => {
             sum,
         });
     } catch (error) {
-        console.log(error);
         next(error);
     }
 };

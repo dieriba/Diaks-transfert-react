@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { useGlobalContext } from '../context/context-provider/contextProvider';
+import { useConvertContext } from '../context/context-provider/convertContext';
 
 const useGetRate = () => {
-  const { getRate } = useGlobalContext();
+  const { getRate } = useConvertContext();
   useEffect(() => {
     getRate();
   }, []);

@@ -18,12 +18,16 @@ const ListMoneyTakers = () => {
     endingLinkMoneyTaker,
     isLoading,
     setEditForm,
-    deleteFromDb
+    deleteFromDb,
   } = useMoneyTakerContext();
   const { isOnMobile, useHandleResize } = useGlobalContext();
-  useEffect(() => {
-    getAllMoneyTakers();
-  }, [currentMoneyTakerPage]);
+  useEffect(
+    () => {
+      getAllMoneyTakers();
+    },
+    //eslint-disable-next-line
+    [currentMoneyTakerPage]
+  );
 
   useHandleResize();
 
@@ -77,7 +81,6 @@ const ListMoneyTakers = () => {
           iterator={iteratorMoneyTaker}
           totalPages={totalPagesMoneyTaker}
           changePage={changePage}
-          collection="moneyTaker"
           mt="1rem"
         />
       )}

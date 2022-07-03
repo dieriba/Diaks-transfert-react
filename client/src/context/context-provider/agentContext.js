@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer } from 'react';
 
 import {
   GET_AGENTS_QUERY,
@@ -109,7 +109,7 @@ export const AgentProvider = ({ children }) => {
       const { data } = await authFetch.patch(
         `/admin/edit-agent/${editAgentId}`,
         {
-          senderName : senderNameUser,
+          senderName: senderNameUser,
           phoneNumber: phoneNumberAgent,
           senderCode,
         }

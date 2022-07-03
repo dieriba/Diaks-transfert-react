@@ -113,9 +113,17 @@ const Convert = async (req, res, next) => {
 //CREATE A NEW TRANSFERT INTO DB ONLY HIGH LEVEL USER AND LOW LEVEL USER CAN CREATE A NEW TRANSFERT
 const createTransfert = async (req, res, next) => {
     try {
-        console.log(req.body);
-        const { userAgentId, userId, userRole } = req.user;
-        const { senderName } = req.body;
+        const { userAgentId, userRole } = req.user;
+        const { senderName, amountOfMoneyInEuro, amountGiven, hasFullyPaid } =
+            req.body;
+
+        if (!hasFullyPaid && amountGiven >= amountOfMoneyInEuro)
+            return next(
+                new BadRequestError(
+                    'Le montant Donné ne peut être supérieure ou égale à celui envoyé'
+                )
+            );
+
         if (userRole === 'agent') {
             const agent = await Agent.findOne({ _id: userAgentId });
             if (!agent) return next(new BadRequestError('Agent non identifié'));
@@ -131,6 +139,7 @@ const createTransfert = async (req, res, next) => {
 
         const { rate } = await Rate.findOne({ inUse: true });
         req.body.rate = rate;
+        req.body.leftAmountToPay = amountOfMoneyInEuro - amountGiven;
         const transfert = await Transfert.create(req.body);
         const { code } = transfert;
         res.status(201).json({

@@ -70,7 +70,7 @@ const TableCompMobileMoneyTaker = ({
                 as={ReachLink}
                 textDecor="none"
                 to="/admin/add-user"
-                onClick={() => setEditForm('moneyTaker', _id)}
+                onClick={() => setEditForm(_id)}
               >
                 <Button size="xs">Modifier</Button>
               </Link>

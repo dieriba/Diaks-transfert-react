@@ -63,10 +63,11 @@ export const TransfertProvider = ({ children }) => {
       phoneNumber,
       hasPaid,
       amountOfMoneyInEuro,
+      hasFullyPaid,
+      amountGiven,
     } = state;
     dispatch({ type: SET_LOADING_BEGIN });
     try {
-
       const { data } = await authFetch.post('/shared/add-transfert', {
         senderName,
         amountOfMoneyInEuro,
@@ -75,6 +76,8 @@ export const TransfertProvider = ({ children }) => {
         clientName,
         phoneNumber,
         hasPaid,
+        hasFullyPaid,
+        amountGiven,
       });
       dispatch({ type: SET_LOADING_SUCCESS, payload: data.message });
     } catch (error) {

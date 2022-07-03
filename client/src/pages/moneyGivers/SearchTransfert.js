@@ -1,102 +1,89 @@
 import {
-  VStack,
-  Flex,
-  Box,
-  Text,
-  Alert,
-  AlertIcon,
-  CloseButton,
   Button,
-  Input,
+  NumberInput,
+  NumberInputField,
+  VStack,
 } from '@chakra-ui/react';
-
-import { useGlobalContext } from '../../context/context-provider/contextProvider';
-
+import { useMoneyGiverContext } from '../../context/context-provider/moneyGiverContext';
+import {
+  ValidateTransfert,
+  SearchTransfertComp,
+  AlertDialogPop,
+} from '../../components/moneygiver';
 const SearchTransfert = () => {
-  const {
-    showAlert,
-    cleanError,
-    alertText,
-    errorStatus,
-    handleChange,
-    displayError,
-    isLoading,
-    searchTransfert,
-    searchTransfertCode,
-  } = useGlobalContext();
-
-  const searchCode = e => {
-    e.preventDefault();
-    if (!searchTransfertCode)
-      return displayError('Veuillez Entrez Le Code Du Transfert');
-
-    searchTransfert();
-  };
-
   const handleInput = e => {
-    const name = e.target.name;
     const value = e.target.value;
-
+    const name = e.target.name;
     handleChange({ name, value });
   };
+
+  const {
+    cleanError,
+    errorStatus,
+    displayError,
+    transfertCode,
+    showAlert,
+    alertText,
+    searchTransfert,
+    isLoading,
+    handleChange,
+    foundTransfert,
+    transfert,
+    resetPage,
+    contactNumber,
+    transfertValidated,
+  } = useMoneyGiverContext();
+
+  if (foundTransfert) {
+    return (
+      <VStack w="100%">
+        <ValidateTransfert
+          showAlert={showAlert}
+          alertText={alertText}
+          cleanError={cleanError}
+          {...transfert}
+          errorStatus={errorStatus}
+        />
+        <NumberInput
+          size="md"
+          value={contactNumber}
+          variant="filled"
+          width="90%"
+        >
+          <NumberInputField
+            onChange={handleInput}
+            placeholder="Contact"
+            id="contact"
+            name="contact"
+            variant="filled"
+          />
+        </NumberInput>
+        {!transfertValidated && <AlertDialogPop w="90%" h="teal" />}
+        {transfertValidated && (
+          <Button
+            w="90%"
+            _hover={{ backgroundColor: 'teal' }}
+            onClick={resetPage}
+          >
+            Validez Nouveau Transfert
+          </Button>
+        )}
+      </VStack>
+    );
+  }
+
   return (
-    <Flex width="100%" direction="column" alignItems="center">
-      <Box
-        w={[350, 400, '90%']}
-        height="auto"
-        borderWidth={1}
-        flexDirection="column"
-        p={4}
-        mt="2rem"
-        boxShadow="lg"
-      >
-        <form onSubmit={searchCode}>
-          <VStack spacing={6}>
-            {showAlert && (
-              <Alert
-                status={errorStatus || 'error'}
-                fontSize="0.8rem"
-                height="auto"
-                borderRadius="15px"
-                marginBottom="0.5rem"
-                marginTop="0.5rem"
-                position="relative"
-              >
-                <AlertIcon />
-                {alertText}
-                <CloseButton
-                  position="absolute"
-                  right="0.3rem"
-                  onClick={cleanError}
-                />
-              </Alert>
-            )}
-            <Text textAlign="left" fontSize="2xl" fontStyle="italic">
-              Recherchez Un Transfert
-            </Text>
-
-            <Input
-              onChange={handleInput}
-              placeholder="Rechercher Transfert"
-              id="searchTransfertCode"
-              name="searchTransfertCode"
-              variant="filled"
-              value={searchTransfertCode}
-            />
-
-            <Button
-              w="100%"
-              _hover={{ backgroundColor: 'teal', color: 'white' }}
-              fontStyle="italic"
-              type="submit"
-              isLoading={isLoading}
-            >
-              Rechercher Transfert
-            </Button>
-          </VStack>
-        </form>
-      </Box>
-    </Flex>
+    <SearchTransfertComp
+      searchTransfert={searchTransfert}
+      displayError={displayError}
+      isLoading={isLoading}
+      showAlert={showAlert}
+      errorStatus={errorStatus}
+      cleanError={cleanError}
+      alertText={alertText}
+      transfertCode={transfertCode}
+      handleInput={handleInput}
+    />
   );
 };
 export default SearchTransfert;

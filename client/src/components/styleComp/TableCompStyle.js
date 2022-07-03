@@ -24,4 +24,4 @@ const TdRowMobile = ({ children }) => {
   );
 };
 
-export { TdRow, ThRow , ThRowMobile , TdRowMobile };
+export { TdRow, ThRow, ThRowMobile, TdRowMobile };

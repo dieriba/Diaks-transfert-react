@@ -1,6 +1,6 @@
 import { Flex, Icon, Menu, Link, MenuButton, Text } from '@chakra-ui/react';
 import { NavLink as ReachLink } from 'react-router-dom';
-const NavItem = ({ icon, title, path, color}) => {
+const NavItem = ({ icon, title, path, color }) => {
   return (
     <Flex
       mt="15px"

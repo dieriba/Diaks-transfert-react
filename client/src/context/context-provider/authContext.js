@@ -14,7 +14,7 @@ import {
 import authReducer from '../reducer/authReducer';
 export const stateContext = createContext();
 
-export const AuthContextProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, authInitialState);
   const { token } = state;
   const authFetch = axios.create({

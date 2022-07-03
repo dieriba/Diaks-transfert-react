@@ -14,27 +14,28 @@ import {
   InputRightAddon,
   FormControl,
 } from '@chakra-ui/react';
-
+import { useConvertContext } from '../../../context/context-provider/convertContext';
 import { useGlobalContext } from '../../../context/context-provider/globalContext';
 
 import useGetRate from '../../../hooks/useGetRate';
 
 const Convert = () => {
+  const { isOnMobile } = useGlobalContext();
+
   const {
+    fee,
+    convertMoney,
+    amountEuro,
+    amountGnf,
+    rate,
+    handleChange,
     showAlert,
     cleanError,
     alertText,
     errorStatus,
-    rate,
-    handleChange,
-    isOnMobile,
-    amountEuro,
-    amountGnf,
-    displayError,
-    convertMoney,
     isLoading,
-    fee,
-  } = useGlobalContext();
+    displayError,
+  } = useConvertContext();
 
   useGetRate();
   const handleSubmit = e => {
@@ -48,7 +49,6 @@ const Convert = () => {
   const handleInput = e => {
     const name = e.target.name;
     const value = e.target.value;
-
     handleChange({ name, value });
   };
 

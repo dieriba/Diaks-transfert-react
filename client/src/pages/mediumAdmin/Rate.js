@@ -13,7 +13,8 @@ import {
   InputRightAddon,
 } from '@chakra-ui/react';
 
-import { useGlobalContext } from '../../context/context-provider/contextProvider';
+import { useGlobalContext } from '../../context/context-provider/globalContext';
+import { useConvertContext } from '../../context/context-provider/convertContext';
 const Rate = () => {
   const {
     showAlert,
@@ -21,13 +22,13 @@ const Rate = () => {
     alertText,
     errorStatus,
     handleChange,
-    isOnMobile,
     handleSubmit,
     displayError,
     isLoading,
     newRate,
     addNewRate,
-  } = useGlobalContext();
+  } = useConvertContext();
+  const { isOnMobile } = useGlobalContext();
   const submitNewRate = e => {
     e.preventDefault();
     if (!newRate) return displayError('Veuillez entrez un taux');

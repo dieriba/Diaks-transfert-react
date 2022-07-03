@@ -39,9 +39,12 @@ const transfertSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    hasPaid: {
+    hasFullyPaid: {
         type: Boolean,
-        default: false,
+        default: true,
+    },
+    leftAmountToPay: {
+        type: Number,
     },
     date: {
         type: Date,
@@ -77,6 +80,9 @@ const transfertSchema = new mongoose.Schema({
         ref: 'Agent',
         required: [true, 'Veuillez fournir un agent'],
     },
+    amountGiven: {
+        type: Number,
+    },
 });
 
 transfertSchema.pre('save', async function () {
@@ -101,7 +107,6 @@ transfertSchema.pre('save', async function () {
 });
 
 transfertSchema.pre('save', async function () {
-    
     const agent = await Agent.findById(this.createdBy);
     const { senderCode, transfertCounts, _id } = agent;
     this.code = `${senderCode}${transfertCounts}`;

@@ -19,12 +19,16 @@ const ListAgent = () => {
     endingLinkAgent,
     isLoading,
     setEditForm,
-    deleteFromDb
+    deleteFromDb,
   } = useAgentContext();
 
-  useEffect(() => {
-    getAllAgents();
-  }, [currentAgentPage]);
+  useEffect(
+    () => {
+      getAllAgents();
+    },
+    //eslint-disable-next-line
+    [currentAgentPage]
+  );
 
   useHandleResize();
 

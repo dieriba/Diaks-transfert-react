@@ -56,7 +56,7 @@ const TableCompMoneyTaker = ({ moneyTakers, setEditForm, deleteFromDb }) => {
                   <Link
                     as={ReachLink}
                     to="/med-admin/add-money-takers"
-                    onClick={() => setEditForm('moneyTaker', _id)}
+                    onClick={() => setEditForm(_id)}
                     textDecoration="none"
                   >
                     <Button

@@ -2,7 +2,8 @@ const transfertInitialState = {
   amountOfMoneyInEuro: '',
   cityOptions: ['CONAKRY', 'KINDIA', 'BOKE', 'COLLAB'],
   moneyTypesOptions: ['LIQUIDE', 'ORANGE MONEY'],
-  hasPaid: false,
+  hasPaid: true,
+  hasFullyPaid : true,
   city: 'CONAKRY',
   moneyTypes: 'LIQUIDE',
   clientName: '',
@@ -39,6 +40,7 @@ const transfertInitialState = {
   alertText: '',
   alertType: '',
   errorStatus: '',
+  amountGiven : ''
 };
 
 export { transfertInitialState };

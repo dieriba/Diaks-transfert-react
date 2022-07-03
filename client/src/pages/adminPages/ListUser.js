@@ -11,9 +11,13 @@ const ListUser = () => {
   const { setEditForm, isLoading, users, getAllUsers, deleteFromDb } =
     useUserContext();
 
-  useEffect(() => {
-    getAllUsers();
-  }, []);
+  useEffect(
+    () => {
+      getAllUsers();
+    },
+    //eslint-disable-next-line
+    []
+  );
   useHandleResize();
 
   if (isOnMobile) {

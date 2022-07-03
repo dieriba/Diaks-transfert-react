@@ -19,15 +19,16 @@ import {
 import useGetAgentsQuery from '../../hooks/agents/useGetAgentsQuery';
 import useTransfertContext from '../../context/context-provider/transfertContext';
 import { useAgentContext } from '../../context/context-provider/agentContext';
+import { useAuthContext } from '../../context/context-provider/authContext';
 
 const TransfertForm = () => {
-  const { agents, userRole } = useAgentContext();
-
+  const { agents } = useAgentContext();
   const {
     isEditingTransfert,
     hasPaid,
     errorStatus,
     cityOptions,
+    hasFullyPaid,
     clientName,
     phoneNumber,
     amountOfMoneyInEuro,
@@ -45,7 +46,9 @@ const TransfertForm = () => {
     editTransfert,
     createTransfert,
     displayError,
+    amountGiven,
   } = useTransfertContext();
+  const { userRole } = useAuthContext();
   const handleInput = e => {
     const name = e.target.name;
     const value = e.target.value;
@@ -192,15 +195,7 @@ const TransfertForm = () => {
                 variant="filled"
               />
             </NumberInput>
-            <Input
-              variant="filled"
-              placeholder="Numéro Ex : XXX-XX-XX-XX"
-              id="phoneNumber"
-              value={phoneNumber}
-              onChange={handleInput}
-              isDisabled={phoneNumberState}
-              name="phoneNumber"
-            />
+
             <Stack spacing={5} direction="row">
               <FormLabel fontStyle="italic">A Payé </FormLabel>
               <Checkbox
@@ -210,7 +205,42 @@ const TransfertForm = () => {
                 checked={hasPaid}
                 defaultChecked={hasPaid}
               />
+              <FormLabel fontStyle="italic">En Totalité </FormLabel>
+              <Checkbox
+                name="hasFullyPaid"
+                onChange={handleInput}
+                colorScheme="green"
+                checked={hasFullyPaid}
+                defaultChecked={hasFullyPaid}
+              />
             </Stack>
+
+            {!hasFullyPaid && (
+              <NumberInput
+                size="md"
+                value={amountGiven}
+                variant="filled"
+                width="100%"
+              >
+                <NumberInputField
+                  onChange={handleInput}
+                  placeholder="Montant Donné"
+                  id="amountGiven"
+                  name="amountGiven"
+                  variant="filled"
+                />
+              </NumberInput>
+            )}
+            <Input
+              variant="filled"
+              placeholder="Numéro Ex : XXX-XX-XX-XX"
+              id="phoneNumber"
+              value={phoneNumber}
+              onChange={handleInput}
+              isDisabled={phoneNumberState}
+              name="phoneNumber"
+            />
+
             <Button
               w="100%"
               _hover={{ backgroundColor: 'red', color: 'white' }}

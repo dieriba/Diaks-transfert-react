@@ -27,9 +27,13 @@ const Dashboard = () => {
     isLoading,
   } = useTransfertContext();
 
-  useEffect(() => {
-    getAllTransferts();
-  }, [currentPage]);
+  useEffect(
+    () => {
+      getAllTransferts();
+    },
+    //eslint-disable-next-line
+    [currentPage]
+  );
   useHandleResize();
 
   useGetAgentsQuery();
@@ -80,11 +84,7 @@ const Dashboard = () => {
         alignItems="center"
       >
         <Flex alignSelf="flex-start" width="100%">
-          <QueryFormShow
-            text="Formulaire Recherche"
-            mt="0.6rem"
-            ml="1rem"
-          />
+          <QueryFormShow text="Formulaire Recherche" mt="0.6rem" ml="1rem" />
           <CalculShow w="20%" mt="0.6rem" mb="0.6rem" ml="1rem" />
         </Flex>
         <Box justifySelf="center" w="100%">

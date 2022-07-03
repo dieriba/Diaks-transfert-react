@@ -1,18 +1,15 @@
 import { Link } from 'react-router-dom';
-import { Box, Text, Heading , Flex} from '@chakra-ui/react';
+import { Box, Text, Heading, Flex } from '@chakra-ui/react';
 
 const Error = () => {
   return (
     <Flex
-    minHeight='100vh'
-    width='100%'
-    justifyContent='center'
-    alignItems='center'
+      minHeight="100vh"
+      width="100%"
+      justifyContent="center"
+      alignItems="center"
     >
-      <Box
-        w={[300, 400, 700]}
-        textAlign="center"
-      >
+      <Box w={[300, 400, 700]} textAlign="center">
         <Box maxWidth="600px" width="100%">
           <Box>
             <Heading

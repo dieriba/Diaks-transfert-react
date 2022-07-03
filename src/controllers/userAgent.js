@@ -99,12 +99,11 @@ const getUserAgentTransfert = async (req, res, next) => {
             currentPage: page,
             iterator,
             endingLink,
-            sum
+            sum,
         });
     } catch (error) {
         next(error);
     }
 };
-
 
 export { getUserAgentTransfert };

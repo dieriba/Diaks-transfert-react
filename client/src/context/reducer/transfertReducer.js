@@ -183,6 +183,9 @@ const transfertReducer = (state, action) => {
       updatedDate,
       hasBeenModified,
       rate,
+      amountGiven,
+      leftAmountToPay,
+      hasFullyPaid,
     } = transfert;
 
     return {
@@ -202,6 +205,9 @@ const transfertReducer = (state, action) => {
       updatedDate,
       hasBeenModified,
       rate,
+      amountGiven,
+      leftAmountToPay,
+      hasFullyPaid,
     };
   }
 

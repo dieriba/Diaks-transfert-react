@@ -1,5 +1,4 @@
 import {
-  EuroIcon,
   PdfIcon,
   FileAddIcon,
   ChangePasswordIcon,

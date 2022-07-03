@@ -21,7 +21,6 @@ const DetailsTransfert = () => {
     moneyTypes,
     clientName,
     phoneNumber,
-    hasPaid,
     amountOfMoneyInEuro,
     hasTakeMoney,
     date,
@@ -29,6 +28,9 @@ const DetailsTransfert = () => {
     hasBeenModified,
     payoutDay,
     rate,
+    leftAmountToPay,
+    hasFullyPaid,
+    amountGiven,
   } = useTransfertContext();
 
   const { userRole } = useAuthContext();
@@ -88,6 +90,35 @@ const DetailsTransfert = () => {
                 </TdRowMobile>
               </Tr>
             )}
+            <Tr>
+              <ThRowMobile>A payé En Totalité </ThRowMobile>
+              <TdRowMobile>
+                {hasFullyPaid ? (
+                  <Badge colorScheme="green">Oui</Badge>
+                ) : (
+                  <Badge colorScheme="red">Non</Badge>
+                )}
+              </TdRowMobile>
+            </Tr>
+            {!hasFullyPaid && (
+              <>
+                {amountGiven && (
+                  <Tr>
+                    <ThRowMobile>Montant Donné</ThRowMobile>
+                    <TdRowMobile>{amountGiven.toLocaleString()}</TdRowMobile>
+                  </Tr>
+                )}
+                {leftAmountToPay && (
+                  <Tr>
+                    <ThRowMobile>Montant Restant A Payé</ThRowMobile>
+                    <TdRowMobile>
+                      {leftAmountToPay.toLocaleString()} €
+                    </TdRowMobile>
+                  </Tr>
+                )}
+              </>
+            )}
+
             <Tr>
               <ThRowMobile>Statut</ThRowMobile>
               <TdRowMobile>

@@ -3,8 +3,6 @@ import {
   Button,
   Text,
   Select,
-  Radio,
-  RadioGroup,
   Stack,
   VStack,
   Grid,
@@ -13,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import useTransfertContext from '../../context/context-provider/transfertContext';
 import { useAgentContext } from '../../context/context-provider/agentContext';
+import { useAuthContext } from '../../context/context-provider/authContext';
 
 const QueryFormMobile = () => {
   const {
@@ -25,13 +24,13 @@ const QueryFormMobile = () => {
     queryClientName,
     querySenderName,
     queryCity,
-    userRole,
     queryHasTakeMoney,
     queryMoneyTypes,
     getAllTransferts,
     resetQueryForm,
   } = useTransfertContext();
   const { agents } = useAgentContext();
+  const { userRole } = useAuthContext();
   const handleInput = e => {
     const name = e.target.name;
     const value = e.target.value;
@@ -97,22 +96,25 @@ const QueryFormMobile = () => {
               })}
             </Select>
           )}
-          <Select
-            onChange={handleInput}
-            name="queryCity"
-            variant="filled"
-            cursor="pointer"
-            value={queryCity}
-          >
-            {['', ...cityOptions].map((city, index) => {
-              if (city === 'COLLAB' && userRole === 'mediumAdmin') return null;
-              return (
-                <option key={index} value={city}>
-                  {city}
-                </option>
-              );
-            })}
-          </Select>
+          {userRole !== 'moneyGiver' && (
+            <Select
+              onChange={handleInput}
+              name="queryCity"
+              variant="filled"
+              cursor="pointer"
+              value={queryCity}
+            >
+              {['', ...cityOptions].map((city, index) => {
+                if (city === 'COLLAB' && userRole === 'mediumAdmin')
+                  return null;
+                return (
+                  <option key={index} value={city}>
+                    {city}
+                  </option>
+                );
+              })}
+            </Select>
+          )}
           <Input
             variant="filled"
             placeholder="Nom Prénom"
@@ -138,16 +140,18 @@ const QueryFormMobile = () => {
             onChange={handleInput}
             name="queryDateEnd"
           />
-          <Stack spacing={5} direction="row">
-            <FormLabel fontStyle="italic">A Pris L'argent</FormLabel>
-            <Checkbox
-              name="queryHasTakeMoney"
-              onChange={handleInput}
-              colorScheme="green"
-              checked={queryHasTakeMoney}
-              defaultChecked={queryHasTakeMoney}
-            />
-          </Stack>
+          {userRole !== 'moneyGiver' && (
+            <Stack spacing={5} direction="row">
+              <FormLabel fontStyle="italic">A Pris L'argent</FormLabel>
+              <Checkbox
+                name="queryHasTakeMoney"
+                onChange={handleInput}
+                colorScheme="green"
+                checked={queryHasTakeMoney}
+                defaultChecked={queryHasTakeMoney}
+              />
+            </Stack>
+          )}
 
           <Button
             w="100%"

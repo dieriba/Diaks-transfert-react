@@ -2,7 +2,7 @@ import { Flex, Icon, Menu, Link, MenuButton, Text } from '@chakra-ui/react';
 import { NavLink as ReachLink } from 'react-router-dom';
 import { useGlobalContext } from '../../context/context-provider/globalContext';
 
-const NavItem = ({ icon, title, path , color }) => {
+const NavItem = ({ icon, title, path, color }) => {
   const { toggleSidebar } = useGlobalContext();
 
   return (

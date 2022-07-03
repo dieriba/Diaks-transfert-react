@@ -7,7 +7,7 @@ export { default as AddAgent } from './adminPages/AddAgent';
 export { default as AddUser } from './adminPages/AddUser';
 export { default as ListAgent } from './adminPages/ListAgent';
 export { default as ListUser } from './adminPages/ListUser';
-export { default as SharedLayout } from './sharedPages/SharedLayout';
+export { default as SharedLayout } from './sharedPages/shared-layouts/SharedLayout';
 export { default as AddMoneyTaker } from './mediumAdmin/AddMoneyTaker';
 export { default as ListMoneyTakers } from './mediumAdmin/ListMoneyTakers';
 export { default as Rate } from './mediumAdmin/Rate';

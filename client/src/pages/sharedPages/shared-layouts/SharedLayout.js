@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
-import { Sidebar, Navbar } from '../../components';
+import { Sidebar, Navbar } from '../../../components';
 import { Box, Grid } from '@chakra-ui/react';
-import SmallSidebar from '../../components/sidebar/SmallSidebar';
+import SmallSidebar from '../../../components/sidebar/SmallSidebar';
 
 const SharedLayout = () => {
   return (

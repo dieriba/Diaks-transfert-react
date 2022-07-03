@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable quotes */
 import User from '../models/user.js';
-import { UnauthenticatedError, BadRequestError } from '../../errors/index.js';
+import { BadRequestError } from '../../errors/index.js';
 
 //LOGIN WHERE ALL USER WILL BE REDIRECT IF THEY DO NOT HAVE COOKIES YET, IF THEY HAVE THEY WILL BE REDIRECT TO THEIR MAIN DASHBOARD AND THEY Can't ACESS OTHERS DASHBOARD
 const auth = async (req, res, next) => {
@@ -27,7 +27,7 @@ const auth = async (req, res, next) => {
             userId: user._id,
             userAgentId: user.LinkedToAgentId?.toString() || null,
             moneyGiverCity: user.role === 'moneyGiver' ? user.username : null,
-            userRole : user.role
+            userRole: user.role,
         });
 
         res.status(200).json({ user, token, userRole });
