@@ -19,7 +19,7 @@ export const ConvertProvider = ({ children }) => {
   const [state, dispatch] = useReducer(convertReducer, convertInitialState);
   const { token, logoutUser } = useAuthContext();
   const authFetch = axios.create({
-    baseURL: 'http://localhost:1000',
+    baseURL: 'https://diaks-reacst.herokuapp.com',
   });
 
   authFetch.interceptors.request.use(

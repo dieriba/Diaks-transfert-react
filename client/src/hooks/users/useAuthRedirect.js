@@ -10,13 +10,13 @@ const useAuthRedirect = () => {
 
   useEffect(() => {
     if (user && userRole === 'highAdmin')
-      return navigate(from || '/admin/transferts', { replace: true });
+      return navigate('/admin/transferts', { replace: true });
     if (user && userRole === 'mediumAdmin')
-      return navigate(from || '/med-admin/transferts', { replace: true });
+      return navigate('/med-admin/transferts', { replace: true });
     if (user && userRole === 'agent')
-      return navigate(from || '/agent/transferts', { replace: true });
+      return navigate('/agent/transferts', { replace: true });
     if (user && userRole === 'moneyGiver')
-      return navigate(from || '/moneygiver/search-transfert', {
+      return navigate('/moneygiver/search-transfert', {
         replace: true,
       });
 

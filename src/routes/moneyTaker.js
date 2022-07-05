@@ -2,7 +2,7 @@
 import express from 'express';
 
 const router = express.Router();
-import { getAllTransferts } from '../controllers/transfert.js';
+import { getAllMediumAdminTransferts } from '../controllers/transfert.js';
 import { addMoneyTaker } from '../controllers/moneyTaker.js';
 import { rate } from '../controllers/converter.js';
 
@@ -10,7 +10,7 @@ import { rate } from '../controllers/converter.js';
 router.route('/new-rate').post(rate);
 
 //RENDER MEDIUM ADMIN PAGE
-router.route('/transferts').get(getAllTransferts);
+router.route('/transferts').get(getAllMediumAdminTransferts);
 
 //RENDER MED ADMIN PAGE TO RENDER MONEY TAKER CREATE FORM
 //POST NEW MONEY TAKER AND CREATE NEW ONE INTO DATABASE

@@ -7,8 +7,8 @@ import { Flex, VStack, Text, Box } from '@chakra-ui/react';
 import Pagination from '../../../components/pagination/Pagination';
 import CalculShow from '../../../components/transferts/CalculShow';
 import QueryFormShow from '../../../components/transferts/QueryFormShow';
-import useGetAgentsQuery from '../../../hooks/agents/useGetAgentsQuery';
 import { useAuthContext } from '../../../context/context-provider/authContext';
+import useGetToken from '../../../hooks/global/useGetToken';
 const Dashboard = () => {
   const { isOnMobile, useHandleResize } = useGlobalContext();
   const { userRole } = useAuthContext();
@@ -26,7 +26,6 @@ const Dashboard = () => {
     iterator,
     isLoading,
   } = useTransfertContext();
-
   useEffect(
     () => {
       getAllTransferts();
@@ -35,9 +34,6 @@ const Dashboard = () => {
     [currentPage]
   );
   useHandleResize();
-
-  useGetAgentsQuery();
-
   if (isOnMobile) {
     return (
       <VStack display="flex" w="100%" spacing={4} mt={4} mb={4}>
@@ -65,7 +61,6 @@ const Dashboard = () => {
             endingLink={endingLink}
             iterator={iterator}
             changePage={changePage}
-            collection="transfert"
           />
         )}
       </VStack>

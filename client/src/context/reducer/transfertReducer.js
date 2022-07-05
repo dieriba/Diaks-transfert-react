@@ -13,6 +13,7 @@ import {
   CLEAN_ERROR,
   DISPLAY_ERROR,
 } from '../action/transfertAction';
+import { transfertInitialState } from '../initialStates';
 const transfertReducer = (state, action) => {
   const { type } = action;
 
@@ -116,7 +117,6 @@ const transfertReducer = (state, action) => {
       isLoading: false,
     };
   }
-
   if (type === CHANGE_PAGE_TRANSFERT)
     return { ...state, currentPage: action.payload };
 

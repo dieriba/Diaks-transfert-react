@@ -3,12 +3,18 @@
 import dotenv from 'dotenv';
 dotenv.config({ path: './config/.env' });
 //MONGOOSE DB
-import connectDB from './db/connectDB.js';
+import mongoose from 'mongoose';
+const connectDB = (url) => {
+    return mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+};
 
 import adminDashboardRoutes from './src/routes/transfert.js';
 import adminUserManagmentRoutes from './src/routes/user.js';
 import adminAgentManagmentRoutes from './src/routes/agent.js';
-
+import path from 'path';
 import mediumAdminRoutes from './src/routes/moneyTaker.js';
 
 import agentsRoutes from './src/routes/userAgent.js';
@@ -20,7 +26,7 @@ import sharedRoutes from './src/routes/shared.js';
 import authRoutes from './src/routes/auth.js';
 
 import authenticateUser from './src/middleware/authMidlleware.js';
-
+import process from 'process';
 //SECURITY SETUP
 import helmet from 'helmet';
 import xss from 'xss-clean';
@@ -57,27 +63,25 @@ app.use(
         max: 400,
     })
 );
-app.use(
-    helmet({
-        contentSecurityPolicy: {
-            useDefaults: true,
-            directives: {
-                'script-src': [
-                    // eslint-disable-next-line quotes
-                    "'self'",
-                    'https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js',
-                ],
-                'img-src': [
-                    // eslint-disable-next-line quotes
-                    "'self'",
-                    'https://www.gstatic.com/images/branding/product/2x/translate_24dp.png',
-                ],
-            },
-        },
-    })
-);
+// app.use(
+//     helmet({
+//         contentSecurityPolicy: {
+//             useDefaults: true,
+//             directives: {
+//                 'script-src': [
+//                     // eslint-disable-next-line quotes
+//                     "'self'",
+//                 ],
+//                 'img-src': [
+//                     // eslint-disable-next-line quotes
+//                     "'self'",
+//                 ],
+//             },
+//         },
+//     })
+// );
 app.use(hpp());
-app.use(cors());
+app.use(cors('*'));
 app.use(xss());
 
 //PORT VARIABLES
@@ -91,7 +95,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(express.json({ limit: '1kb' }));
-
+app.use(express.static(path.resolve(process.cwd(), 'client/build')));
 //SET COOKIE PARSER, SESSIONS AND FLASH
 
 //SESSION STOREE
@@ -124,13 +128,17 @@ app.use('/shared', authenticateUser, sharedRoutes);
 //AUTH ROUTES
 app.use('/user', authRoutes);
 
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(process.cwd(), 'client/build', 'index.html'));
+});
+
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
 const start = async (req, res) => {
     try {
         connectDB(process.env.MONGO_LINK);
-        app.listen(port, () =>
+        app.listen(process.env.PORT || 1000, '0.0.0.0', () =>
             console.log(`Server is listening on port : ${port}`)
         );
     } catch (error) {

@@ -11,7 +11,7 @@ import {
   HANDLE_CHANGE,
   RESET_FORM,
 } from '../action/moneyTakerAction';
-
+import { moneyTakerInitialState } from '../initialStates';
 const moneyTakerReducer = (state, action) => {
   const { type } = action;
 
@@ -35,7 +35,6 @@ const moneyTakerReducer = (state, action) => {
       [name]: value,
     };
   }
-
   if (type === SET_EDIT_MONEYTAKER) {
     const moneyTaker = state.moneyTakers.find(
       moneyTaker => moneyTaker._id === action.payload

@@ -20,18 +20,22 @@ import axios from 'axios';
 import { useAuthContext } from './authContext';
 
 export const stateContext = createContext();
-
+const tokenApi = localStorage.getItem('token');
+const user = localStorage.getItem('user');
+const userRole = localStorage.getItem('userRole');
 export const TransfertProvider = ({ children }) => {
   const [state, dispatch] = useReducer(transfertReducer, transfertInitialState);
 
   const { token, logoutUser, userRole } = useAuthContext();
   const authFetch = axios.create({
-    baseURL: 'http://localhost:1000',
+    baseURL: 'https://diaks-reacst.herokuapp.com',
   });
 
   authFetch.interceptors.request.use(
     config => {
-      config.headers.common['Authorization'] = `Bearer ${token}`;
+      config.headers.common['Authorization'] = `Bearer ${
+        tokenApi ? tokenApi : token
+      }`;
       return config;
     },
     error => {
@@ -53,7 +57,6 @@ export const TransfertProvider = ({ children }) => {
 
   const displayError = alertText =>
     dispatch({ type: DISPLAY_ERROR, payload: { alertText } });
-
   const createTransfert = async () => {
     const {
       senderName,
@@ -95,21 +98,25 @@ export const TransfertProvider = ({ children }) => {
       queryMoneyTypes,
       querySenderName,
       currentPage,
+      hasTakeFilter,
     } = state;
 
     let url = '';
     if (userRole === 'agent') {
-      url = `/agent/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&city=${queryCity}&moneyTypes=${queryMoneyTypes}&hasTakeMoney=${queryHasTakeMoney}`;
+      url = `/agent/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&city=${queryCity}&moneyTypes=${queryMoneyTypes}&hasTakeMoney=${queryHasTakeMoney}&hasTakeFilter=${hasTakeFilter}`;
+      if (queryClientName) {
+        url = url + `&clientName=${queryClientName}`;
+      }
     }
     if (userRole === 'mediumAdmin') {
-      url = `/med-admin/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&senderName=${querySenderName}&city=${queryCity}&moneyTypes=${queryMoneyTypes}&hasTakeMoney=${queryHasTakeMoney}`;
+      url = `/med-admin/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&senderName=${querySenderName}&city=${queryCity}&moneyTypes=${queryMoneyTypes}&hasTakeMoney=${queryHasTakeMoney}&hasTakeFilter=${hasTakeFilter}`;
       if (queryClientName) {
         url = url + `&clientName=${queryClientName}`;
       }
     }
 
     if (userRole === 'highAdmin') {
-      url = `/admin/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&senderName=${querySenderName}&city=${queryCity}&moneyTypes=${queryMoneyTypes}&hasTakeMoney=${queryHasTakeMoney}`;
+      url = `/admin/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&senderName=${querySenderName}&city=${queryCity}&moneyTypes=${queryMoneyTypes}&hasTakeMoney=${queryHasTakeMoney}&hasTakeFilter=${hasTakeFilter}`;
       if (queryClientName) {
         url = url + `&clientName=${queryClientName}`;
       }

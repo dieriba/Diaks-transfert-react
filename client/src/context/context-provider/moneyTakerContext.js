@@ -29,7 +29,7 @@ export const MoneyTakerProvider = ({ children }) => {
   );
 
   const authFetch = axios.create({
-    baseURL: 'http://localhost:1000',
+    baseURL: 'https://diaks-reacst.herokuapp.com',
   });
 
   authFetch.interceptors.request.use(
@@ -53,7 +53,6 @@ export const MoneyTakerProvider = ({ children }) => {
       return Promise.reject(error);
     }
   );
-
   const displayError = alertText =>
     dispatch({ type: DISPLAY_ERROR, payload: { alertText } });
 

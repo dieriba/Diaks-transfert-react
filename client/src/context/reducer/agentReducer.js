@@ -12,6 +12,7 @@ import {
   HANDLE_CHANGE,
   RESET_FORM,
 } from '../action/agentAction';
+import { agentInitialState } from '../initialStates';
 
 const agentReducer = (state, action) => {
   const { type } = action;
@@ -32,6 +33,7 @@ const agentReducer = (state, action) => {
       alertText: action.payload,
       errorStatus: 'error',
     };
+
 
   if (type === DISPLAY_ERROR)
     return {

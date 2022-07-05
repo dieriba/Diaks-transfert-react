@@ -10,6 +10,7 @@ import {
   HANDLE_CHANGE,
   RESET_FORM,
 } from '../action/userAction';
+import { userInitialState } from '../initialStates';
 
 const userReducer = (state, action) => {
   const { type } = action;
@@ -48,7 +49,6 @@ const userReducer = (state, action) => {
       showAlert: true,
       errorStatus: 'error',
     };
-
   if (type === CLEAN_ERROR)
     return { ...state, showAlert: false, alertText: '' };
 

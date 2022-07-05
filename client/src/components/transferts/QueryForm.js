@@ -12,7 +12,7 @@ import {
 import useTransfertContext from '../../context/context-provider/transfertContext';
 import { useAgentContext } from '../../context/context-provider/agentContext';
 import { useAuthContext } from '../../context/context-provider/authContext';
-
+import useGetAgentsQuery from '../../hooks/agents/useGetAgentsQuery';
 const QueryFormMobile = () => {
   const {
     handleChange,
@@ -28,6 +28,7 @@ const QueryFormMobile = () => {
     queryMoneyTypes,
     getAllTransferts,
     resetQueryForm,
+    hasTakeFilter,
   } = useTransfertContext();
   const { agents } = useAgentContext();
   const { userRole } = useAuthContext();
@@ -38,6 +39,7 @@ const QueryFormMobile = () => {
     const checked = e.target.checked;
     handleChange({ name, value, type, checked });
   };
+  useGetAgentsQuery();
 
   const onSubmit = e => {
     e.preventDefault();
@@ -140,18 +142,34 @@ const QueryFormMobile = () => {
             onChange={handleInput}
             name="queryDateEnd"
           />
-          {userRole !== 'moneyGiver' && (
-            <Stack spacing={5} direction="row">
-              <FormLabel fontStyle="italic">A Pris L'argent</FormLabel>
-              <Checkbox
-                name="queryHasTakeMoney"
-                onChange={handleInput}
-                colorScheme="green"
-                checked={queryHasTakeMoney}
-                defaultChecked={queryHasTakeMoney}
-              />
-            </Stack>
-          )}
+          <Stack direction="column" spacing={5}>
+            {userRole !== 'moneyGiver' && (
+              <>
+                <Stack spacing={5} direction="row">
+                  <FormLabel fontStyle="italic">Payé</FormLabel>
+                  <Checkbox
+                    name="hasTakeFilter"
+                    onChange={handleInput}
+                    colorScheme="green"
+                    checked={hasTakeFilter}
+                    defaultChecked={hasTakeFilter}
+                  />
+                </Stack>
+                {hasTakeFilter && (
+                  <Stack spacing={5} direction="row">
+                    <FormLabel fontStyle="italic">A Pris L'argent</FormLabel>
+                    <Checkbox
+                      name="queryHasTakeMoney"
+                      onChange={handleInput}
+                      colorScheme="green"
+                      checked={queryHasTakeMoney}
+                      defaultChecked={queryHasTakeMoney}
+                    />
+                  </Stack>
+                )}
+              </>
+            )}
+          </Stack>
 
           <Button
             w="100%"

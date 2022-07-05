@@ -5,7 +5,10 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "start": "nodemon server.js ",
+        "build-client": "cd client && npm run build",
+        "install-client": "cd client && npm install",
+        "heroku-postbuild": "npm run install-client && npm run build-client",
+        "start": "node server.js ",
         "lint": "eslint .",
         "lint:fix": "eslint --fix ."
     },
@@ -24,12 +27,15 @@
         "jsonwebtoken": "^8.5.1",
         "moment": "^2.29.3",
         "mongoose": "^6.3.5",
-        "nodemon": "^2.0.16",
         "validator": "^13.7.0",
         "xss-clean": "^0.1.1"
     },
     "devDependencies": {
         "eslint-plugin-react": "^7.30.0",
-        "prettier": "^2.6.2"
+        "prettier": "^2.6.2",
+        "nodemon": "^2.0.16"
+    },
+    "engines": {
+        "node": "16.x"
     }
 }

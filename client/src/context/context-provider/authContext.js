@@ -12,13 +12,14 @@ import {
   LOGOUT_USER,
 } from '../action/authAction';
 import authReducer from '../reducer/authReducer';
+
 export const stateContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, authInitialState);
   const { token } = state;
   const authFetch = axios.create({
-    baseURL: 'http://localhost:1000',
+    baseURL: 'https://diaks-reacst.herokuapp.com',
   });
 
   authFetch.interceptors.request.use(
@@ -47,7 +48,7 @@ export const AuthProvider = ({ children }) => {
   const handleLogin = async ({ username, password }) => {
     dispatch({ type: SET_LOADING_BEGIN });
     try {
-      const { data } = await axios.post('http://localhost:1000/user/login', {
+      const { data } = await axios.post('https://diaks-reacst.herokuapp.com/user/login', {
         username,
         password,
       });
@@ -63,6 +64,17 @@ export const AuthProvider = ({ children }) => {
         payload: error.response.data.msg,
       });
     }
+  };
+
+  const getToken = async () => {
+    try {
+      const { data } = await authFetch('/shared/token');
+      const { token, user, userRole } = data;
+      dispatch({
+        type: SETUP_USER_SUCCESS,
+        payload: { token, user, userRole },
+      });
+    } catch (error) {}
   };
 
   const logoutUser = () => {
@@ -118,6 +130,7 @@ export const AuthProvider = ({ children }) => {
         handleChange,
         changePassword,
         logoutUser,
+        getToken
       }}
     >
       {children}

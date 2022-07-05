@@ -3,7 +3,7 @@ const transfertInitialState = {
   cityOptions: ['CONAKRY', 'KINDIA', 'BOKE', 'COLLAB'],
   moneyTypesOptions: ['LIQUIDE', 'ORANGE MONEY'],
   hasPaid: true,
-  hasFullyPaid : true,
+  hasFullyPaid: true,
   city: 'CONAKRY',
   moneyTypes: 'LIQUIDE',
   clientName: '',
@@ -35,12 +35,13 @@ const transfertInitialState = {
   queryHasTakeMoney: false,
   queryDateStart: '',
   queryDateEnd: '',
+  hasTakeFilter: false,
   isLoading: false,
   showAlert: false,
   alertText: '',
   alertType: '',
   errorStatus: '',
-  amountGiven : ''
+  amountGiven: '',
 };
 
 export { transfertInitialState };

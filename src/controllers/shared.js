@@ -64,21 +64,30 @@ const totalAmountTransfert = async (req, res, next) => {
         }
         let totalPages = Math.ceil(count / limit);
 
-        let iterator = page - 5 < 1 ? 1 : page - 5;
+        let iterator = page - 2 < 1 ? 1 : page - 2;
         let endingLink =
-            iterator + 9 <= totalPages
-                ? iterator + 9
+            iterator + 4 <= totalPages
+                ? iterator + 4
                 : page + (totalPages - page);
 
         res.status(200).json({
             transferts,
-            totalPages,
+            totalPages : 4,
             currentPage: page,
             iterator,
             endingLink,
             sum,
             agents,
         });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const getToken = async (req, res, next) => {
+    try {
+        const { token, userRole, user } = req.token;
+        res.status(200).json(req.token);
     } catch (error) {
         next(error);
     }
@@ -280,4 +289,5 @@ export {
     deleteTransfert,
     Convert,
     getAgentNames,
+    getToken
 };

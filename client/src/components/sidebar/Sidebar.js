@@ -55,7 +55,6 @@ const Sidebar = () => {
       >
         <Divider />
         <Flex mt={4} align="center">
-          <Avatar size="sm" />
           <Flex ml={4} justifyContent="space-between" w="170px">
             <Box>
               <Heading as="h3" size="sm">

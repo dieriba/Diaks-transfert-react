@@ -8,7 +8,7 @@ import {
   HANDLE_CHANGE,
   SEARCH_TRANSFERT_SUCCESS,
 } from '../action/moneyGiverAction';
-
+import moneyGiverInitialState from '../initialStates/moneyGiverInitialState';
 const moneyGiverReducer = (state, action) => {
   const { type } = action;
 

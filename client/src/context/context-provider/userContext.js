@@ -25,7 +25,7 @@ export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, userInitialState);
 
   const authFetch = axios.create({
-    baseURL: 'http://localhost:1000',
+    baseURL: 'https://diaks-reacst.herokuapp.com',
   });
 
   authFetch.interceptors.request.use(

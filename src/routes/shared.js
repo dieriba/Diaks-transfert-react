@@ -7,6 +7,7 @@ import {
     totalAmountTransfert,
     editPassword,
     getAgentNames,
+    getToken,
 } from '../controllers/shared.js';
 import {
     editMoneyTaker,
@@ -47,5 +48,5 @@ router.route('/delete-transfert/:id').delete(deleteTransfert);
 //GET EDIT FORM THAT WILL MODIFY TRANSFERT TO DATABASE
 router.route('/edit-transfert/:id').patch(editTransfert);
 router.route('/agents').get(getAgentNames);
-
+router.route('/token').get(getToken);
 export default router;

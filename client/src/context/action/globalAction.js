@@ -11,4 +11,4 @@ export const GET_RATE = 'GET_RATE';
 export const SUBMIT_NEW_RATE = 'SUBMIT_NEW_RATE';
 export const NEW_RATE_ADDED = 'NEW_RATE_ADDED';
 export const RESET_FORM = 'RESET_FORM';
-export const CONVERT_MONEY = 'CONVERT_MONEY'
+export const CONVERT_MONEY = 'CONVERT_MONEY';

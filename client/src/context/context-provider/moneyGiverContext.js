@@ -18,7 +18,7 @@ export const stateContext = createContext();
 export const MoneyGiverProvider = ({ children }) => {
   const { token, logoutUser } = useAuthContext();
   const authFetch = axios.create({
-    baseURL: 'http://localhost:1000',
+    baseURL: 'https://diaks-reacst.herokuapp.com',
   });
 
   authFetch.interceptors.request.use(
@@ -47,7 +47,6 @@ export const MoneyGiverProvider = ({ children }) => {
     moneyGiverReducer,
     moneyGiverInitialState
   );
-
   const cleanError = () => dispatch({ type: CLEAN_ERROR });
 
   const searchTransfert = async () => {

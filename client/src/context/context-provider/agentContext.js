@@ -27,7 +27,7 @@ export const AgentProvider = ({ children }) => {
   const { token, logoutUser } = useAuthContext();
 
   const authFetch = axios.create({
-    baseURL: 'http://localhost:1000',
+    baseURL: 'https://diaks-reacst.herokuapp.com',
   });
 
   authFetch.interceptors.request.use(
@@ -51,6 +51,7 @@ export const AgentProvider = ({ children }) => {
       return Promise.reject(error);
     }
   );
+
 
   const getAllAgents = async () => {
     const { userRole } = state;

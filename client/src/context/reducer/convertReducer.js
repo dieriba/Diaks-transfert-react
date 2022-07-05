@@ -7,6 +7,7 @@ import {
   CLEAN_ERROR,
   HANDLE_CHANGE,
 } from '../action/globalAction';
+import convertInitialState from '../initialStates/convertInitialState';
 
 const convertReducer = (state, action) => {
   const { type } = action;
@@ -20,6 +21,7 @@ const convertReducer = (state, action) => {
       isLoading: false,
     };
   }
+
   if (type === CLEAN_ERROR)
     return { ...state, showAlert: false, alertText: '' };
   if (type === HANDLE_CHANGE) {
