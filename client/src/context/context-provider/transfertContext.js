@@ -28,7 +28,7 @@ export const TransfertProvider = ({ children }) => {
 
   const { token, logoutUser, userRole } = useAuthContext();
   const authFetch = axios.create({
-    baseURL: 'https://diaks-reacst.herokuapp.com',
+    baseURL: 'https://diaks-app.herokuapp.com/',
   });
 
   authFetch.interceptors.request.use(

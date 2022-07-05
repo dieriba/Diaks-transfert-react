@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, authInitialState);
   const { token } = state;
   const authFetch = axios.create({
-    baseURL: 'https://diaks-reacst.herokuapp.com',
+    baseURL: 'https://diaks-app.herokuapp.com/',
   });
 
   authFetch.interceptors.request.use(
@@ -48,10 +48,13 @@ export const AuthProvider = ({ children }) => {
   const handleLogin = async ({ username, password }) => {
     dispatch({ type: SET_LOADING_BEGIN });
     try {
-      const { data } = await axios.post('https://diaks-reacst.herokuapp.com/user/login', {
-        username,
-        password,
-      });
+      const { data } = await axios.post(
+        'https://diaks-app.herokuapp.com//user/login',
+        {
+          username,
+          password,
+        }
+      );
       const { token, user, userRole } = data;
       dispatch({
         type: SETUP_USER_SUCCESS,

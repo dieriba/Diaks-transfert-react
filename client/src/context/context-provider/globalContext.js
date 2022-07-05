@@ -16,7 +16,7 @@ export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(globalReducer, globalInitialState);
   const { token, logoutUser } = useAuthContext();
   const authFetch = axios.create({
-    baseURL: 'https://diaks-reacst.herokuapp.com',
+    baseURL: 'https://diaks-app.herokuapp.com/',
   });
 
   authFetch.interceptors.request.use(
