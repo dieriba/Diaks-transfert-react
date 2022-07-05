@@ -81,13 +81,12 @@ app.use(
 //     })
 // );
 app.use(hpp());
-app.use(corsOptions);
+app.options('*', corsOptions);
+app.use(cors());
 app.use(xss());
 
 //PORT VARIABLES
 const port = process.env.PORT || 1000;
-
-
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
