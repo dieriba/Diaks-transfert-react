@@ -87,8 +87,7 @@ app.use(xss());
 //PORT VARIABLES
 const port = process.env.PORT || 1000;
 
-//SET STATIC FILE
-app.use(express.static('./public'));
+
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
