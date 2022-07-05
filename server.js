@@ -81,7 +81,7 @@ app.use(
 //     })
 // );
 app.use(hpp());
-app.use(cors('*'));
+app.use(cors(corsOptions));
 app.use(xss());
 
 //PORT VARIABLES

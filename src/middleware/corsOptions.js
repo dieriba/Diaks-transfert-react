@@ -1,7 +1,7 @@
 import cors from 'cors';
 
 const corsOptions = {
-    origin: 'localhost:1000',
+    origin: 'https://diaks-reacst.herokuapp.com',
 };
 
 export default cors(corsOptions);
