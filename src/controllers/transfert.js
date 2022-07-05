@@ -27,7 +27,7 @@ const getAllTransferts = async (req, res, next) => {
         }
         if (hasTakeFilter !== 'false') {
             if (hasTakeMoney) {
-                queryObj.hasTakeMoney = hasTakeMoney === 'true' ? false : true;
+                queryObj.hasTakeMoney = hasTakeMoney === 'true' ? true : false;
             }
         }
         if (clientName) {
