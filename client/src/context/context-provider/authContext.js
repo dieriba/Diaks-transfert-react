@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: SET_LOADING_BEGIN });
     try {
       const { data } = await axios.post(
-        'https://diaks-app.herokuapp.com//user/login',
+        'https://diaks-app.herokuapp.com/user/login',
         {
           username,
           password,
