@@ -162,6 +162,8 @@ const createTransfert = async (req, res, next) => {
         if (city === 'CONAKRY') moneygiverNumber = '622.34.17.25';
         if (city === 'KINDIA') moneygiverNumber = '624.72.07.08';
         if (city === 'BOKE') moneygiverNumber = '664.51.02.49';
+        if (city === 'COLLAB')
+            moneygiverNumber = '628.06.92.90 ou 06.83.73.61.19';
 
         res.status(201).json({
             transfert,
