@@ -154,7 +154,7 @@ const DetailsTransfert = () => {
             {payoutDay && (
               <Tr>
                 <ThRowMobile>Paiement Le</ThRowMobile>
-                <TdRowMobile>{payoutDay}</TdRowMobile>
+                <TdRowMobile>{moment(payoutDay).format('L')}</TdRowMobile>
               </Tr>
             )}
           </Tbody>
