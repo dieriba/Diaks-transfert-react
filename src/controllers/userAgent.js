@@ -86,7 +86,6 @@ const getUserAgentTransfert = async (req, res, next) => {
                 },
             },
         ]);
-        console.log(sum);
         if (sum[0] !== undefined) {
             sum = sum[0].sum;
         }
