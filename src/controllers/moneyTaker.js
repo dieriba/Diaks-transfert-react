@@ -47,10 +47,12 @@ const getAllMoneyTakers = async (req, res, next) => {
 //CREATE A NEW MONEY TAKER IN DATABASE
 const addMoneyTaker = async (req, res, next) => {
     try {
+        const { amountMoney } = req.body;
         const moneyTaker = await MoneyTaker.create(req.body);
+
         const { code } = moneyTaker;
         res.status(201).json({
-            message: `Nouveau Récupérateur crée avec le code : ${code}`,
+            message: `Code : ${code}, Montant : ${amountMoney.toLocaleString()} € , Contact : 06.41.47.89.23`,
             status: 'sucess',
         });
     } catch (error) {
