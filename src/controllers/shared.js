@@ -72,7 +72,7 @@ const totalAmountTransfert = async (req, res, next) => {
 
         res.status(200).json({
             transferts,
-            totalPages : 4,
+            totalPages: 4,
             currentPage: page,
             iterator,
             endingLink,
@@ -123,8 +123,13 @@ const Convert = async (req, res, next) => {
 const createTransfert = async (req, res, next) => {
     try {
         const { userAgentId, userRole } = req.user;
-        const { senderName, amountOfMoneyInEuro, amountGiven, hasFullyPaid } =
-            req.body;
+        const {
+            senderName,
+            amountOfMoneyInEuro,
+            amountGiven,
+            hasFullyPaid,
+            city,
+        } = req.body;
 
         if (!hasFullyPaid && amountGiven >= amountOfMoneyInEuro)
             return next(
@@ -151,9 +156,16 @@ const createTransfert = async (req, res, next) => {
         req.body.leftAmountToPay = amountOfMoneyInEuro - amountGiven;
         const transfert = await Transfert.create(req.body);
         const { code } = transfert;
+
+        let moneygiverNumber;
+
+        if (city === 'CONAKRY') moneygiverNumber = '622.34.17.25';
+        if (city === 'KINDIA') moneygiverNumber = '624.72.07.08';
+        if (city === 'BOKE') moneygiverNumber = '664.51.02.49';
+
         res.status(201).json({
             transfert,
-            message: `Transfert ajouté avec le code : ${code}`,
+            message: `Code : ${code}, Contactez :${moneygiverNumber}`,
             success: true,
         });
     } catch (error) {
@@ -289,5 +301,5 @@ export {
     deleteTransfert,
     Convert,
     getAgentNames,
-    getToken
+    getToken,
 };

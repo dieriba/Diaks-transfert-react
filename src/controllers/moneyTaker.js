@@ -53,7 +53,7 @@ const addMoneyTaker = async (req, res, next) => {
         const { code } = moneyTaker;
         res.status(201).json({
             message: `Code : ${code}, Montant : ${amountMoney.toLocaleString()} € , Contact : 06.41.47.89.23`,
-            status: 'sucess',
+            status: true,
         });
     } catch (error) {
         next(error);
