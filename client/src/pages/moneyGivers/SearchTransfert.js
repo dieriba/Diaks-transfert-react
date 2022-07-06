@@ -54,7 +54,7 @@ const SearchTransfert = () => {
             onChange={handleInput}
             placeholder="Contact"
             id="contact"
-            name="contact"
+            name="contactNumber"
             variant="filled"
           />
         </NumberInput>
