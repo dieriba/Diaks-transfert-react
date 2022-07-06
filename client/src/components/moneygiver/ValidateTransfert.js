@@ -23,6 +23,7 @@ const ValidateTransfert = ({
   errorStatus,
   alertText,
   cleanError,
+  contactNumber
 }) => {
   return (
     <Flex width="100%" alignItems="center" direction="column" mt="2rem">
@@ -79,7 +80,12 @@ const ValidateTransfert = ({
                 <TdRowMobile>{phoneNumber}</TdRowMobile>
               </Tr>
             )}
-
+            {contactNumber && (
+              <Tr>
+                <ThRowMobile>Numéro de contact</ThRowMobile>
+                <TdRowMobile>{contactNumber}</TdRowMobile>
+              </Tr>
+            )}
             {amountOfMoneyInEuro && (
               <Tr>
                 <ThRowMobile>Montant A Retiré</ThRowMobile>

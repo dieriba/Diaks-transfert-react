@@ -30,6 +30,7 @@ const DetailsTransfert = () => {
     rate,
     leftAmountToPay,
     hasFullyPaid,
+    contactNumber,
     amountGiven,
   } = useTransfertContext();
 
@@ -74,6 +75,12 @@ const DetailsTransfert = () => {
               <Tr>
                 <ThRowMobile>Numéro</ThRowMobile>
                 <TdRowMobile>{phoneNumber}</TdRowMobile>
+              </Tr>
+            )}
+            {contactNumber && (
+              <Tr>
+                <ThRowMobile>Numéro de contact</ThRowMobile>
+                <TdRowMobile>{contactNumber}</TdRowMobile>
               </Tr>
             )}
             {moneyTypes && (

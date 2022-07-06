@@ -14,6 +14,7 @@ const transfertInitialState = {
   payoutDay: '',
   date: '',
   updatedDate: '',
+  contactNumber: '',
   hasBeenModified: false,
   isEditingTransfert: false,
   isEditingAgent: false,
