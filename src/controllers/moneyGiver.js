@@ -155,18 +155,10 @@ const validateTransfert = async (req, res, next) => {
             );
         }
 
-        await Transfert.findOneAndUpdate(
-            { _id: id },
-            {
-                hasTakeMoney: true,
-                contactNumber: contactNumber,
-                payoutDay: new Date(),
-            },
-            {
-                new: true,
-                runValidators: true,
-            }
-        );
+        transfert.payoutDay = new Date();
+        transfert.contactNumber = contactNumber;
+
+        await transfert.save();
 
         res.status(200).json({
             message: 'Transfert validé !',
