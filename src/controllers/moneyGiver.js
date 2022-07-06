@@ -138,6 +138,10 @@ const validateTransfert = async (req, res, next) => {
 
         const transfert = await Transfert.findById(id);
         const { hasTakeMoney, payoutDay } = transfert;
+
+        if (!contactNumber)
+            return next(new BadRequestError('Numéro de contact obligatoire'));
+
         if (hasTakeMoney)
             return next(
                 new BadRequestError(
