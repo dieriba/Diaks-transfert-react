@@ -53,7 +53,7 @@ const SearchTransfert = () => {
           <NumberInputField
             onChange={handleInput}
             placeholder="Contact"
-            id="contact"
+            id="contactNumber"
             name="contactNumber"
             variant="filled"
           />
