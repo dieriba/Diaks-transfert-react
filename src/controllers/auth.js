@@ -13,7 +13,7 @@ const auth = async (req, res, next) => {
                 new BadRequestError('Veuillez remplir tous les champs')
             );
 
-        const user = await User.findOne({ username: username.toLowerCase() });
+        const user = await User.findOne({ username });
 
         if (!user) return next(new BadRequestError('Champs Incorrects'));
 
