@@ -11,7 +11,6 @@ const transfertInitialState = {
   senderName: '',
   hasTakeMoney: '',
   code: '',
-  contactNumber: '',
   payoutDay: '',
   date: '',
   updatedDate: '',

@@ -65,9 +65,11 @@ export const MoneyGiverProvider = ({ children }) => {
   const validateTransfert = async () => {
     dispatch({ type: SET_LOADING_BEGIN });
     try {
-      const { transfertFoundId } = state;
+      const { transfertFoundId, contactNumber } = state;
       const { data } = await authFetch.patch(
-        `/moneygiver/validate/${transfertFoundId}`
+        `/moneygiver/validate/${transfertFoundId}`, {
+          contactNumber : contactNumber
+        }
       );
       dispatch({ type: SET_LOADING_SUCCESS, payload: data.message });
     } catch (error) {
