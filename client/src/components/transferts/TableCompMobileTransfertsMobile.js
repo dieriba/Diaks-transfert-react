@@ -13,7 +13,7 @@ import AlertDialogPop from '../global/AlertDialog';
 import { Badge } from '@chakra-ui/react';
 import { Link as ReachLink } from 'react-router-dom';
 import { formatDate, formatHours } from '../../utils/formatDate';
-
+import { TdRowMobile, ThRowMobile } from '../styleComp/TableCompStyle';
 const TableCompTransfertsMobile = ({
   clientName,
   senderName,
