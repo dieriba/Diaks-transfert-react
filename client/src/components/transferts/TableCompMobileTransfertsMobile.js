@@ -93,7 +93,7 @@ const TableCompTransfertsMobile = ({
             </Td>
           </Tr>
           {payoutDay && (
-            <Tr>
+            <Tr color="teal">
               <Th>Date de paiement</Th>
               <Td>{formatDate(payoutDay)}</Td>
             </Tr>
