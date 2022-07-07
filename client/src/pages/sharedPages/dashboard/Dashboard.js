@@ -107,7 +107,6 @@ const Dashboard = () => {
         <QueryFormShow text="Formulaire Recherche" mt="0.6rem" ml="0.5rem" />
         <CalculShow mt="0.6rem" mb="0.6rem" ml="0.5rem" />
         <Button
-          w="90%"
           mt="0.6rem"
           mb="0.6rem"
           ml="0.5rem"
