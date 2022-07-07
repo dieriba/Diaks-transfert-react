@@ -40,7 +40,12 @@ const Dashboard = () => {
         <Flex direction="column" w="100%" alignItems="center">
           <QueryFormShow text="Formulaire Recherche" w="90%" />
           <CalculShow w="90%" mt="1rem" />
-          <Button w="90%" onClick={getAllTransferts}>
+          <Button
+            w="90%"
+            colorScheme="teal"
+            mt="1rem"
+            onClick={getAllTransferts}
+          >
             Rafraîchir
           </Button>
         </Flex>
@@ -89,7 +94,7 @@ const Dashboard = () => {
             mt="0.6rem"
             mb="0.6rem"
             ml="1rem"
-            colorScheme='teal'
+            colorScheme="teal"
             onClick={getAllTransferts}
           >
             Rafraîchir
