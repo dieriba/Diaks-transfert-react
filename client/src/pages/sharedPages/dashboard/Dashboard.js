@@ -89,16 +89,6 @@ const Dashboard = () => {
         <Flex alignSelf="flex-start" width="100%">
           <QueryFormShow text="Formulaire Recherche" mt="0.6rem" ml="1rem" />
           <CalculShow w="20%" mt="0.6rem" mb="0.6rem" ml="1rem" />
-          <Button
-            w="90%"
-            mt="0.6rem"
-            mb="0.6rem"
-            ml="1rem"
-            colorScheme="teal"
-            onClick={getAllTransferts}
-          >
-            Rafraîchir
-          </Button>
         </Flex>
         <Box justifySelf="center" w="100%">
           <Text>Aucun Transfert Trouvé....</Text>
@@ -116,6 +106,16 @@ const Dashboard = () => {
       <Flex width="100%">
         <QueryFormShow text="Formulaire Recherche" mt="0.6rem" ml="0.5rem" />
         <CalculShow mt="0.6rem" mb="0.6rem" ml="0.5rem" />
+        <Button
+          w="90%"
+          mt="0.6rem"
+          mb="0.6rem"
+          ml="0.5rem"
+          colorScheme="teal"
+          onClick={getAllTransferts}
+        >
+          Rafraîchir
+        </Button>
       </Flex>
 
       <TableComp
