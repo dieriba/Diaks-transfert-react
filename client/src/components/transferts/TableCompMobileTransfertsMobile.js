@@ -8,12 +8,12 @@ import {
   Button,
   Link,
 } from '@chakra-ui/react';
-import moment from 'moment';
-import 'moment/locale/fr';
 import { Loading } from '../index';
 import AlertDialogPop from '../global/AlertDialog';
 import { Badge } from '@chakra-ui/react';
 import { Link as ReachLink } from 'react-router-dom';
+import { formatDate, formatHours } from '../../utils/formatDate';
+
 const TableCompTransfertsMobile = ({
   clientName,
   senderName,
@@ -21,20 +21,20 @@ const TableCompTransfertsMobile = ({
   amountOfMoneyInEuro,
   date,
   _id,
+  payoutDay,
   hasTakeMoney,
   phoneNumber,
   moneyTypes,
   isLoading,
   setEditForm,
   userRole,
+  contactNumber,
   code,
   deleteFromDb,
 }) => {
   if (isLoading) {
     return <Loading />;
   }
-  const formatedDate = moment(date).format('L');
-  const hours = moment(date).format('LT');
 
   return (
     <TableContainer width="90%" boxShadow="lg" borderWidth={1} borderRadius={7}>
@@ -50,7 +50,7 @@ const TableCompTransfertsMobile = ({
           </Tr>
           <Tr>
             <Th color="teal">Ajouté le</Th>
-            <Td>{`${formatedDate} à ${hours}`}</Td>
+            <Td>{`${formatDate(date)} à ${formatHours(date)}`}</Td>
           </Tr>
           <Tr>
             <Th color="teal">Nom</Th>
@@ -63,8 +63,14 @@ const TableCompTransfertsMobile = ({
 
           {phoneNumber && (
             <Tr>
-              <Th color="teal">Contact</Th>
-              <Td>622.34.14.25</Td>
+              <Th color="teal">Orange Money Numéro</Th>
+              <Td>{phoneNumber}</Td>
+            </Tr>
+          )}
+          {contactNumber && (
+            <Tr>
+              <Th color="teal">Numéro Contact</Th>
+              <Td>{contactNumber}</Td>
             </Tr>
           )}
           <Tr>
@@ -86,6 +92,12 @@ const TableCompTransfertsMobile = ({
               )}
             </Td>
           </Tr>
+          {payoutDay && (
+            <Tr>
+              <Th>Date de paiement</Th>
+              <Td>{formatDate(payoutDay)}</Td>
+            </Tr>
+          )}
           {userRole !== 'mediumAdmin' && userRole !== 'moneyGiver' && (
             <Tr>
               <Th color="teal">Actions</Th>
