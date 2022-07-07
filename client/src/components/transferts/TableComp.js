@@ -11,8 +11,7 @@ import { Badge } from '@chakra-ui/react';
 import { Link as ReachLink } from 'react-router-dom';
 import AlertDialogPop from '../global/AlertDialog';
 import { TdRow, ThRow } from '../styleComp/TableCompStyle';
-import moment from 'moment';
-import 'moment/locale/fr';
+import { formatDate, formatHours } from '../../utils/formatDate';
 const TableComp = ({
   setEditForm,
   transferts,
@@ -54,8 +53,7 @@ const TableComp = ({
               moneyTypes,
               code,
             } = transfert;
-            const formatedDate = moment(date).format('L');
-            const hours = moment(date).format('LT');
+
             return (
               <Tr key={_id} fontSize="0.8rem">
                 <TdRow>{senderName}</TdRow>
@@ -65,7 +63,7 @@ const TableComp = ({
                 <TdRow>{moneyTypes}</TdRow>
                 <TdRow>{phoneNumber ? phoneNumber : ''}</TdRow>
                 <TdRow>{amountOfMoneyInEuro.toLocaleString()}</TdRow>
-                <TdRow>{`${formatedDate} à ${hours}`}</TdRow>
+                <TdRow>{`${formatDate(date)} à ${formatHours(date)}`}</TdRow>
                 <TdRow>
                   {hasTakeMoney ? (
                     <Badge colorScheme="green">Payé</Badge>

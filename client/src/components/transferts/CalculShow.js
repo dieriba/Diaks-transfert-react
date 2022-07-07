@@ -13,8 +13,7 @@ import {
   Tr,
   useDisclosure,
 } from '@chakra-ui/react';
-import moment from 'moment';
-import 'moment/locale/fr';
+import { formatDate } from '../../utils/formatDate';
 import { useRef } from 'react';
 import useTransfertContext from '../../context/context-provider/transfertContext';
 import { useGlobalContext } from '../../context/context-provider/globalContext';
@@ -90,17 +89,13 @@ const CalculShow = ({ ml, mt, mb, w }) => {
                   {queryDateStart && (
                     <Tr>
                       <ThRowMobile>Du</ThRowMobile>
-                      <TdRowMobile>
-                        {moment(queryDateStart).format('L')}
-                      </TdRowMobile>
+                      <TdRowMobile>{formatDate(queryDateStart)}</TdRowMobile>
                     </Tr>
                   )}
                   {queryDateEnd && (
                     <Tr>
                       <ThRowMobile>Au</ThRowMobile>
-                      <TdRowMobile>
-                        {moment(queryDateEnd).format('L')}
-                      </TdRowMobile>
+                      <TdRowMobile>{formatDate(queryDateEnd)}</TdRowMobile>
                     </Tr>
                   )}
                   {totalAmountTransfered && (

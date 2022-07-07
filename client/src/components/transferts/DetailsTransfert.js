@@ -9,8 +9,7 @@ import {
   Badge,
 } from '@chakra-ui/react';
 import { Link as ReachLink } from 'react-router-dom';
-import moment from 'moment';
-import 'moment/locale/fr';
+import { formatDate, formatHours } from '../../utils/formatDate';
 import { TdRowMobile, ThRowMobile } from '../styleComp/TableCompStyle';
 import useTransfertContext from '../../context/context-provider/transfertContext';
 import { useAuthContext } from '../../context/context-provider/authContext';
@@ -68,7 +67,7 @@ const DetailsTransfert = () => {
             {date && (
               <Tr>
                 <ThRowMobile>Date d'ajout </ThRowMobile>
-                <TdRowMobile>{moment(date).format('L')}</TdRowMobile>
+                <TdRowMobile>{formatDate(date)}</TdRowMobile>
               </Tr>
             )}
             {moneyTypes === 'ORANGE MONEY' && (
@@ -155,13 +154,13 @@ const DetailsTransfert = () => {
             {hasBeenModified && (
               <Tr>
                 <ThRowMobile>Modifié Le</ThRowMobile>
-                <TdRowMobile>{moment(updatedDate).format('L')}</TdRowMobile>
+                <TdRowMobile>{formatDate(updatedDate)}</TdRowMobile>
               </Tr>
             )}
             {payoutDay && (
               <Tr>
                 <ThRowMobile>Paiement Le</ThRowMobile>
-                <TdRowMobile>{moment(payoutDay).format('L')}</TdRowMobile>
+                <TdRowMobile>{formatDate(payoutDay)}</TdRowMobile>
               </Tr>
             )}
           </Tbody>
