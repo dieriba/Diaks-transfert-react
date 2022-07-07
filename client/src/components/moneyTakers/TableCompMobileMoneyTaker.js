@@ -55,14 +55,18 @@ const TableCompMobileMoneyTaker = ({
               )}
             </Td>
           </Tr>
-          <Tr>
-            <Th color="teal">Date de retrait</Th>
-            <Td width="10px">{payoutDay}</Td>
-          </Tr>
-          <Tr>
-            <Th color="teal">Info</Th>
-            <Td width="10px">{optionalInfo}</Td>
-          </Tr>
+          {payoutDay && (
+            <Tr>
+              <Th color="teal">Date de retrait</Th>
+              <Td width="10px">{payoutDay}</Td>
+            </Tr>
+          )}
+          {optionalInfo && (
+            <Tr>
+              <Th color="teal">Info</Th>
+              <Td width="10px">{optionalInfo}</Td>
+            </Tr>
+          )}
           <Tr>
             <Th color="teal">Actions</Th>
             <Td>
