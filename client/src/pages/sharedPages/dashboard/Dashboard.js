@@ -3,7 +3,7 @@ import { useGlobalContext } from '../../../context/context-provider/globalContex
 import useTransfertContext from '../../../context/context-provider/transfertContext';
 import { TableCompMobile, TableComp } from '../../../components';
 import { Loading } from '../../../components/index';
-import { Flex, VStack, Text, Box } from '@chakra-ui/react';
+import { Flex, VStack, Text, Box, Button } from '@chakra-ui/react';
 import Pagination from '../../../components/pagination/Pagination';
 import CalculShow from '../../../components/transferts/CalculShow';
 import QueryFormShow from '../../../components/transferts/QueryFormShow';
@@ -40,6 +40,9 @@ const Dashboard = () => {
         <Flex direction="column" w="100%" alignItems="center">
           <QueryFormShow text="Formulaire Recherche" w="90%" />
           <CalculShow w="90%" mt="1rem" />
+          <Button w="90%" onClick={getAllTransferts}>
+            Rafraîchir
+          </Button>
         </Flex>
         {transferts.map(transfert => {
           return (
@@ -81,6 +84,16 @@ const Dashboard = () => {
         <Flex alignSelf="flex-start" width="100%">
           <QueryFormShow text="Formulaire Recherche" mt="0.6rem" ml="1rem" />
           <CalculShow w="20%" mt="0.6rem" mb="0.6rem" ml="1rem" />
+          <Button
+            w="90%"
+            mt="0.6rem"
+            mb="0.6rem"
+            ml="1rem"
+            colorScheme='teal'
+            onClick={getAllTransferts}
+          >
+            Rafraîchir
+          </Button>
         </Flex>
         <Box justifySelf="center" w="100%">
           <Text>Aucun Transfert Trouvé....</Text>
