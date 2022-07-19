@@ -31,20 +31,16 @@ const checkIfMoneytakerHasTakeMoney = async (req, res, next) => {
 };
 
 const editCheck = async (req, res, next) => {
-    const user = req.session.user;
-
-    if (user.securityLevel == 'isHighAdmin' && user.username == 'dieriba') {
-        return next();
-    }
-
     const { id } = req.params;
     const transfert = await Transfert.findById(id);
     if (transfert.hasTakeMoney) {
-        return res.status(401).json({
-            message:
-                'Modification impossible le client a déjà récupérer largent',
-        });
+        next(
+            new UnauthorizedError(
+                "Modification/Supression impossible car le client a déjà récupéré l'argent"
+            )
+        );
     }
+    next();
 };
 
 export { checkIfHasTakeMoney, checkIfMoneytakerHasTakeMoney, editCheck };

@@ -20,6 +20,10 @@ import {
     editTransfert,
     Convert,
 } from '../controllers/shared.js';
+import {
+    checkIfHasTakeMoney,
+    editCheck,
+} from '../middleware/hasNotTakeMoney.js';
 import { getRate } from '../controllers/converter.js';
 
 //CREATE NEW TRANSFERT INTO DB
@@ -43,10 +47,12 @@ router.route('/calcul').get(totalAmountTransfert);
 router.route('/change-password').patch(editPassword);
 
 //TRANSFERT WILL ONLY BE DELETED IF MIDDLEARE CHECKIFHASTAKEMONEY HAS BEEN PASSED
-router.route('/delete-transfert/:id').delete(deleteTransfert);
+router
+    .route('/delete-transfert/:id')
+    .delete(checkIfHasTakeMoney, deleteTransfert);
 
 //GET EDIT FORM THAT WILL MODIFY TRANSFERT TO DATABASE
-router.route('/edit-transfert/:id').patch(editTransfert);
+router.route('/edit-transfert/:id').patch(editCheck, editTransfert);
 router.route('/agents').get(getAgentNames);
 router.route('/token').get(getToken);
 export default router;
