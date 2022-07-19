@@ -114,7 +114,6 @@ const Convert = async (req, res, next) => {
             fee,
         });
     } catch (error) {
-        console.log(error);
         next(error);
     }
 };

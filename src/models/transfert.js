@@ -30,6 +30,8 @@ const transfertSchema = new mongoose.Schema({
     },
     phoneNumber: {
         type: String,
+        minlength : 9,
+        maxlength: 9,
     },
     senderName: {
         type: String,
@@ -68,6 +70,7 @@ const transfertSchema = new mongoose.Schema({
     contactNumber: {
         type: String,
         minlength: 9,
+        maxlength: 9,
     },
     payoutDay: {
         type: Date,

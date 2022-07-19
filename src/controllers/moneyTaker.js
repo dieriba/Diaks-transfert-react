@@ -66,7 +66,6 @@ const addMoneyTaker = async (req, res, next) => {
 const editMoneyTaker = async (req, res, next) => {
     try {
         const { id } = req.params;
-        console.log(req.body);
         const moneyTaker = await MoneyTaker.findOneAndUpdate(
             { _id: id },
             req.body,

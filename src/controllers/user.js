@@ -115,7 +115,7 @@ const editUser = async (req, res, next) => {
                 new NotFoundError('Les mots de passes ne correspondent pas')
             );
         }
-        if (password.length < 8) {
+        if (password?.length < 8) {
             return next(
                 new NotFoundError(
                     'Le mot de passe doit au moins conternir 8 caractères'

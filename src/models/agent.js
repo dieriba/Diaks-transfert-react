@@ -10,7 +10,7 @@ const agentSchema = new mongoose.Schema({
     phoneNumber: {
         type: String,
         minlength: 10,
-        maxlength: 14,
+        maxlength: 10,
     },
     totalMoneyTransfered: {
         type: Number,
