@@ -54,7 +54,6 @@ const app = express();
 //BODY PARSER
 import bodyParser from 'body-parser';
 
-app.set('trust proxy', 1);
 
 // SECURITY MIDDLEWARE
 app.use(

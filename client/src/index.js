@@ -17,9 +17,7 @@ dotenv.config({path : '../.env'});
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
 
-if (process.env.NODE_ENV === 'production') {
-  disableReactDevTools();
-}
+disableReactDevTools();
 
 root.render(
   <AuthProvider>
