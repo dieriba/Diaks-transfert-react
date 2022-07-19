@@ -53,7 +53,6 @@ const getAllAgents = async (req, res, next) => {
 const createAgent = async (req, res, next) => {
     try {
         const { phoneNumber, senderName, senderCode } = req.body;
-        console.log(req.body);
         if (!senderName || !senderCode)
             return next(
                 new BadRequestError('Veuillez remplir tous les champs')
@@ -62,17 +61,9 @@ const createAgent = async (req, res, next) => {
         const code = await Agent.findOne({ senderCode });
         if (agent) return next(new BadRequestError("Nom d'agent déjà pris"));
         if (code) return next(new BadRequestError('Code agent déjà pris'));
-        let phone = '';
-        for (let i = 0; i < phoneNumber.length; i++) {
-            const number = phoneNumber[i];
-            if (i % 2 !== 0 && i !== 0 && i !== 9) {
-                phone += number + '.';
-                continue;
-            }
-            phone += number;
-        }
+        
 
-        await Agent.create({ ...req.body, phoneNumber: phone });
+        await Agent.create({ ...req.body });
         res.status(201).json({
             message: 'Nouveaul Agent crée',
             status: 'sucess',
@@ -112,16 +103,7 @@ const editAgent = async (req, res, next) => {
         const transferts = await Transfert.find({
             createdBy: id,
         });
-        let phone = '';
-
-        for (let i = 0; i < phoneNumber.length; i++) {
-            const number = phoneNumber[i];
-            if (i % 2 !== 0 && i !== 0 && i !== 9) {
-                phone += number + '.';
-                continue;
-            }
-            phone += number;
-        }
+        
 
         //CHECK IF AGENT EXIST
         if (!agent) {
@@ -147,7 +129,7 @@ const editAgent = async (req, res, next) => {
         //THEN UPDATE THE AGENT
         await Agent.updateOne(
             { _id: id },
-            { ...req.body, phoneNumber: phone },
+            { ...req.body },
             {
                 new: true,
                 runValidators: true,

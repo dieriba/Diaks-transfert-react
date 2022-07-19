@@ -43,20 +43,9 @@ const addUser = async (req, res, next) => {
         if (role === 'agent') {
             let phone = '';
 
-            if (phoneNumber) {
-                for (let i = 0; i < phoneNumber.length; i++) {
-                    const number = phoneNumber[i];
-                    if (i % 2 !== 0 && i !== 0 && i !== 9) {
-                        phone += number + '.';
-                        continue;
-                    }
-                    phone += number;
-                }
-            }
-
             const agent = await Agent.create({
                 senderName,
-                phoneNumber: phoneNumber ? phone : '',
+                phoneNumber: phoneNumber ? phoneNumber : '',
                 senderCode,
                 LinkedToUserId: user._id,
             });
