@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable linebreak-style */
 import dotenv from 'dotenv';
-dotenv.config({ path: './config/.env' });
+dotenv.config();
 //MONGOOSE DB
 import mongoose from 'mongoose';
 const connectDB = (url) => {
@@ -63,23 +63,17 @@ app.use(
         max: 400,
     })
 );
-// app.use(
-//     helmet({
-//         contentSecurityPolicy: {
-//             useDefaults: true,
-//             directives: {
-//                 'script-src': [
-//                     // eslint-disable-next-line quotes
-//                     "'self'",
-//                 ],
-//                 'img-src': [
-//                     // eslint-disable-next-line quotes
-//                     "'self'",
-//                 ],
-//             },
-//         },
-//     })
-// );
+app.use(helmet.hidePoweredBy());
+app.use(
+    helmet.contentSecurityPolicy({
+        useDefaults: false,
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'"],
+        },
+    })
+);
+app.use(helmet.crossOriginEmbedderPolicy());
 app.use(hpp());
 app.use(corsOptions);
 app.use(xss());

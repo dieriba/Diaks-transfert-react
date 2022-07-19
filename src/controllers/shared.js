@@ -103,7 +103,7 @@ const Convert = async (req, res, next) => {
 
         if (euro) gnf = Number(euro) * rate;
 
-        if (gnf != '') euro = Number(gnf) / rate;
+        if (gnf) euro = Number(gnf) / rate;
 
         const fee = calculFees(euro);
 
