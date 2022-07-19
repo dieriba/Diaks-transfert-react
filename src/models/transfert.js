@@ -30,7 +30,6 @@ const transfertSchema = new mongoose.Schema({
     },
     phoneNumber: {
         type: String,
-        minlength : 9,
         maxlength: 9,
     },
     senderName: {
