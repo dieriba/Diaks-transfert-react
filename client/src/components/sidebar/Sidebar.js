@@ -58,7 +58,7 @@ const Sidebar = () => {
           <Flex ml={4} justifyContent="space-between" w="170px">
             <Box>
               <Heading as="h3" size="sm">
-                {nameUser && nameUser}
+                {nameUser ? nameUser : ''}
               </Heading>
               <Text fontSize="1rem">{userRole}</Text>
             </Box>
