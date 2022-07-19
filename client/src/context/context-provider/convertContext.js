@@ -52,8 +52,8 @@ export const ConvertProvider = ({ children }) => {
         euro: amountEuro.toString(),
         gnf: amountGnf.toString(),
       });
-      const { euro, gnf, fee } = data;
-      dispatch({ type: CONVERT_MONEY, payload: { euro, gnf, fee } });
+      const { euro, gnf, fee , rate} = data;
+      dispatch({ type: CONVERT_MONEY, payload: { euro, gnf, fee , rate} });
     } catch (error) {
       dispatch({
         type: SET_LOADING_ERROR,

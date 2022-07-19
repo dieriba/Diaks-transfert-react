@@ -7,7 +7,6 @@ import {
   CLEAN_ERROR,
   HANDLE_CHANGE,
 } from '../action/globalAction';
-import convertInitialState from '../initialStates/convertInitialState';
 
 const convertReducer = (state, action) => {
   const { type } = action;
@@ -15,6 +14,7 @@ const convertReducer = (state, action) => {
   if (type === CONVERT_MONEY) {
     return {
       ...state,
+      rate : action.payload.rate,
       amountEuro: action.payload.euro,
       amountGnf: action.payload.gnf,
       fee: action.payload.fee,
