@@ -12,8 +12,6 @@ import {
   ConvertProvider,
   MoneyTakerProvider,
 } from './context/context-provider';
-import dotenv from 'dotenv';
-dotenv.config({path : '../.env'});
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
 
