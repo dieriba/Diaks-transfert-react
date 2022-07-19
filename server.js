@@ -63,15 +63,6 @@ app.use(
     })
 );
 app.use(helmet.hidePoweredBy());
-app.use(
-    helmet.contentSecurityPolicy({
-        useDefaults: false,
-        directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: ["'self'"],
-        },
-    })
-);
 app.use(helmet.crossOriginEmbedderPolicy());
 app.use(hpp());
 app.use(corsOptions);
