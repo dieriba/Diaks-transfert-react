@@ -88,7 +88,6 @@ const getAllTransferts = async (req, res, next) => {
 
         sum = sum[0] ? sum[0].sum : '';
 
-
         res.status(200).json({
             transferts,
             totalPages,
@@ -203,6 +202,16 @@ const getAllMediumAdminTransferts = async (req, res, next) => {
             agent,
             sum,
         });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const deleteTransfert = async (req, res, next) => {
+    try {
+        // const { senderName } = req.body;
+
+        await Transfert.deleteMany();
     } catch (error) {
         next(error);
     }

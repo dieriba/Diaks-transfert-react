@@ -259,7 +259,7 @@ const editTransfert = async (req, res, next) => {
 const deleteTransfert = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const transfert = await Transfert.findById(id);
+        const transfert = await Transfert.deleteMany();
 
         //CHECK IF A TRANSFERT IS LINKED TO THE GIVEN ID IF NOT AN ERROR IS RETURNED
         if (!transfert) {

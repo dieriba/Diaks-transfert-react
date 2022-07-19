@@ -61,7 +61,6 @@ const createAgent = async (req, res, next) => {
         const code = await Agent.findOne({ senderCode });
         if (agent) return next(new BadRequestError("Nom d'agent déjà pris"));
         if (code) return next(new BadRequestError('Code agent déjà pris'));
-        
 
         await Agent.create({ ...req.body });
         res.status(201).json({
@@ -103,7 +102,6 @@ const editAgent = async (req, res, next) => {
         const transferts = await Transfert.find({
             createdBy: id,
         });
-        
 
         //CHECK IF AGENT EXIST
         if (!agent) {
@@ -145,4 +143,18 @@ const editAgent = async (req, res, next) => {
     }
 };
 
-export { getAllAgents, createAgent, deleteAgent, editAgent };
+const resetTransfertCount = async (req, res, next) => {
+    try {
+        await Agent.updateMany(
+            {},
+            {
+                transfertCounts: 0,
+            },
+            { runValidators: true, new: true }
+        );
+    } catch (error) {
+        next(error);
+    }
+};
+
+export { getAllAgents, createAgent, deleteAgent, editAgent , resetTransfertCount};
