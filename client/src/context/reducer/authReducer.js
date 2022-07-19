@@ -9,7 +9,7 @@ import {
   CLEAN_ERROR,
   LOGOUT_USER,
 } from '../action/authAction';
-import { authInitialState } from '../initialStates';
+
 const authReducer = (state, action) => {
   const { type } = action;
 

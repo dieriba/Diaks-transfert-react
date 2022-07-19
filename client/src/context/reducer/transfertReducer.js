@@ -151,6 +151,7 @@ const transfertReducer = (state, action) => {
       queryDateStart: '',
       queryDateEnd: '',
       currentPage: 1,
+      date:''
     };
   }
 

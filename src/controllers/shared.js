@@ -128,6 +128,7 @@ const createTransfert = async (req, res, next) => {
             amountGiven,
             hasFullyPaid,
             city,
+            date,
         } = req.body;
 
         if (!hasFullyPaid && amountGiven >= amountOfMoneyInEuro)
@@ -153,6 +154,11 @@ const createTransfert = async (req, res, next) => {
         const { rate } = await Rate.findOne({ inUse: true });
         req.body.rate = rate;
         req.body.leftAmountToPay = amountOfMoneyInEuro - amountGiven;
+
+        if (!date) {
+            req.body.date = !date ? new Date() : new Date(date);
+        }
+
         const transfert = await Transfert.create(req.body);
         const { code } = transfert;
 

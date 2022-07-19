@@ -21,8 +21,6 @@ import { useAuthContext } from './authContext';
 
 export const stateContext = createContext();
 const tokenApi = localStorage.getItem('token');
-const user = localStorage.getItem('user');
-const userRole = localStorage.getItem('userRole');
 export const TransfertProvider = ({ children }) => {
   const [state, dispatch] = useReducer(transfertReducer, transfertInitialState);
 
@@ -68,6 +66,7 @@ export const TransfertProvider = ({ children }) => {
       amountOfMoneyInEuro,
       hasFullyPaid,
       amountGiven,
+      date
     } = state;
     dispatch({ type: SET_LOADING_BEGIN });
     try {
@@ -81,6 +80,7 @@ export const TransfertProvider = ({ children }) => {
         hasPaid,
         hasFullyPaid,
         amountGiven,
+        date : date ? date : ''
       });
       dispatch({ type: SET_LOADING_SUCCESS, payload: data.message });
     } catch (error) {

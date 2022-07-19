@@ -47,6 +47,7 @@ const TransfertForm = () => {
     createTransfert,
     displayError,
     amountGiven,
+    date
   } = useTransfertContext();
   const { userRole } = useAuthContext();
   const handleInput = e => {
@@ -195,6 +196,15 @@ const TransfertForm = () => {
                 variant="filled"
               />
             </NumberInput>
+
+            <Input
+              variant="filled"
+              type="date"
+              id="start"
+              value={date}
+              onChange={handleInput}
+              name="date"
+            />
 
             <Stack spacing={5} direction="row">
               <FormLabel fontStyle="italic">A Payé </FormLabel>
