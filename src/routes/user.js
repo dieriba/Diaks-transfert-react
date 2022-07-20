@@ -8,7 +8,6 @@ import {
     editUser,
     getAllUsers,
 } from '../controllers/user.js';
-
 //CREATE USER IN THE DATABASE
 router.route('/add-user').post(addUser);
 

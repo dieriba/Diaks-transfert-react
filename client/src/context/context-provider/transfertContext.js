@@ -115,7 +115,7 @@ export const TransfertProvider = ({ children }) => {
       }
     }
 
-    if (userRole === 'highAdmin') {
+    if (userRole === 'highAdmin' || userRole === 'admin') {
       url = `/admin/transferts?page=${currentPage}&start=${queryDateStart}&end=${queryDateEnd}&senderName=${querySenderName}&city=${queryCity}&moneyTypes=${queryMoneyTypes}&hasTakeMoney=${queryHasTakeMoney}&hasTakeFilter=${hasTakeFilter}`;
       if (queryClientName) {
         url = url + `&clientName=${queryClientName}`;

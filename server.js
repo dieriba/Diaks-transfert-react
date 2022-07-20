@@ -33,7 +33,6 @@ import xss from 'xss-clean';
 import rateLimit from 'express-rate-limit';
 import corsOptions from './src/middleware/corsOptions.js';
 import hpp from 'hpp';
-import cors from 'cors';
 
 //ACCESS MIDDLEWARE
 import {

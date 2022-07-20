@@ -1,9 +1,9 @@
 import { UnauthenticatedError } from '../../errors/index.js';
 
-const isAdmin = (req, res, next) => {
+const isHighAdmin = (req, res, next) => {
     const { userRole } = req.user;
     console.log(userRole);
-    if (userRole !== 'highAdmin' && userRole !== 'admin')
+    if (userRole !== 'highAdmin')
         return next(
             new UnauthenticatedError(
                 "Vous n'êtes pas autorisés à utiliser cette fonctionnalité"
@@ -12,4 +12,4 @@ const isAdmin = (req, res, next) => {
     next();
 };
 
-export default isAdmin;
+export default isHighAdmin;

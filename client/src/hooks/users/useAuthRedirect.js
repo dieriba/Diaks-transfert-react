@@ -4,12 +4,10 @@ import { useAuthContext } from '../../context/context-provider/authContext';
 
 const useAuthRedirect = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname;
   const { userRole, user, logoutUser } = useAuthContext();
 
   useEffect(() => {
-    if (user && userRole === 'highAdmin')
+    if (user && (userRole === 'highAdmin' || userRole === 'admin'))
       return navigate('/admin/transferts', { replace: true });
     if (user && userRole === 'mediumAdmin')
       return navigate('/med-admin/transferts', { replace: true });
