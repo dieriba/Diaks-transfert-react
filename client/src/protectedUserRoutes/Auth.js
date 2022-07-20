@@ -7,7 +7,7 @@ const Auth = ({ children, role }) => {
 
   if (role) {
     return user ? (
-      userRole === role ? (
+      role.includes(userRole) ? (
         children
       ) : (
         <Navigate to="/unauthorized" state={{ from: location }} replace />

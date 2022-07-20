@@ -30,7 +30,7 @@ function App() {
           <Route
             path="/admin"
             element={
-              <Auth role="highAdmin">
+              <Auth role={["highAdmin","admin"]}>
                 <SharedLayout />
               </Auth>
             }
