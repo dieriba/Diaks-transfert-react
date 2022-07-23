@@ -52,6 +52,7 @@ const app = express();
 
 //BODY PARSER
 import bodyParser from 'body-parser';
+import morgan from 'morgan';
 
 
 // SECURITY MIDDLEWARE
@@ -76,17 +77,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(express.json({ limit: '1kb' }));
 app.use(express.static(path.resolve(process.cwd(), 'client/build')));
-//SET COOKIE PARSER, SESSIONS AND FLASH
 
-//SESSION STOREE
-
-//RENDER ERROR LIMTED MESSAGE THEN REDIRECT
-
-//RENDER 404 ERROR NOT FOUND
-
-//VIEW ENGINES
-app.set('views', 'views');
-app.set('view engine', 'ejs');
 
 //ADMIN ROUTES
 app.use('/admin', authenticateUser, isAdmin, adminDashboardRoutes);

@@ -171,7 +171,6 @@ const createTransfert = async (req, res, next) => {
             moneygiverNumber = '628.06.92.90 ou 06.83.73.61.19';
 
         res.status(201).json({
-            transfert,
             message: `Code : ${code}, Contactez :${moneygiverNumber}`,
             success: true,
         });
@@ -253,8 +252,7 @@ const editTransfert = async (req, res, next) => {
         );
         res.status(200).json({
             message: 'Transfert modifié avec succès',
-            status: 'sucess',
-            newTransfert,
+            status: true,
         });
     } catch (error) {
         next(error);
@@ -278,7 +276,7 @@ const deleteTransfert = async (req, res, next) => {
 
         res.status(200).json({
             message: 'Transfert supprimé avec succès',
-            status: 'sucess',
+            status: true,
         });
     } catch (error) {
         next(error);

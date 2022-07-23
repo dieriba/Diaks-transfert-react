@@ -41,7 +41,6 @@ const addUser = async (req, res, next) => {
         });
 
         if (role === 'agent') {
-            let phone = '';
 
             const agent = await Agent.create({
                 senderName,
@@ -81,7 +80,7 @@ const deleteUser = async (req, res, next) => {
 
         res.status(200).json({
             message: 'Utilisateur supprimé avec succès',
-            status: 'sucess',
+            status: true,
         });
     } catch (error) {
         next(error);
@@ -159,7 +158,7 @@ const editUser = async (req, res, next) => {
 
         res.status(200).json({
             message: 'User modifié avec succès',
-            status: 'sucess',
+            status: true,
         });
     } catch (error) {
         next(error);

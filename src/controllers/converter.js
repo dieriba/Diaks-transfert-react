@@ -19,7 +19,6 @@ const rate = async (req, res, next) => {
         const newRate = await Rate.create(req.body);
         prevRate ? prevRate.save() : null;
 
-        // prevRate.save();
         newRate.save();
         res.status(200).json({
             message: 'Taux modifié avec succès',

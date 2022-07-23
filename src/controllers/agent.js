@@ -65,7 +65,7 @@ const createAgent = async (req, res, next) => {
         await Agent.create({ ...req.body });
         res.status(201).json({
             message: 'Nouveaul Agent crée',
-            status: 'sucess',
+            status: true,
         });
     } catch (error) {
         next(error);
@@ -86,7 +86,7 @@ const deleteAgent = async (req, res, next) => {
 
         res.status(200).json({
             message: 'Agent supprimé avec succès',
-            status: 'sucess',
+            status: true,
         });
     } catch (error) {
         next(error);
@@ -136,7 +136,7 @@ const editAgent = async (req, res, next) => {
 
         res.status(200).json({
             message: 'Agent modifié avec succès',
-            status: 'sucess',
+            status: true,
         });
     } catch (error) {
         next(error);

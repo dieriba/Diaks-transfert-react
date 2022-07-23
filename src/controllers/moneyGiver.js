@@ -155,15 +155,22 @@ const validateTransfert = async (req, res, next) => {
             );
         }
 
-        transfert.payoutDay = new Date();
-        transfert.contactNumber = contactNumber;
-
-        await transfert.save();
+        await Transfert.findByIdAndUpdate(
+            id,
+            {
+                payoutDay: new Date(),
+                contactNumber,
+                hasTakeMoney: true,
+            },
+            {
+                runValidators: true,
+                new: true,
+            }
+        );
 
         res.status(200).json({
             message: 'Transfert validé !',
             status: 'sucess',
-            transfert,
         });
     } catch (error) {
         next(error);

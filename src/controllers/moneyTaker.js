@@ -85,7 +85,7 @@ const editMoneyTaker = async (req, res, next) => {
 
         res.status(200).json({
             message: 'Récupérateur Modifié avec succès',
-            status: 'sucess',
+            status: true,
         });
     } catch (error) {
         next(error);
