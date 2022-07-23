@@ -133,7 +133,7 @@ export const AuthProvider = ({ children }) => {
         handleChange,
         changePassword,
         logoutUser,
-        getToken
+        getToken,
       }}
     >
       {children}

@@ -48,14 +48,16 @@ const getAllTransferts = async (req, res, next) => {
             end: new Date(endYear, endMonth, endDay, 25, 59, 59, 999),
         };
 
+        if (start) queryObj.date = { $gte: date.start };
+        if (end) queryObj.date = { $lte: date.end };
+
         if (start && end) {
             queryObj.date = {
                 $gte: date.start,
                 $lte: date.end,
             };
         }
-        if (start) queryObj.date = { $gte: date.start };
-        if (end) queryObj.date = { $lte: date.end };
+
         page = page ? Number(page) : 1;
         size = size ? Number(size) : 11;
 

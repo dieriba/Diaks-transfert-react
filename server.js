@@ -52,7 +52,6 @@ const app = express();
 
 //BODY PARSER
 import bodyParser from 'body-parser';
-import morgan from 'morgan';
 
 
 // SECURITY MIDDLEWARE

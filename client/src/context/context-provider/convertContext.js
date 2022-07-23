@@ -8,7 +8,7 @@ import {
   DISPLAY_ERROR,
   CLEAN_ERROR,
 } from '../action/convertAction';
-import axios from 'axios';
+import axios from '../../apiCall/axios';
 import { useAuthContext } from './authContext';
 import { createContext, useContext, useReducer } from 'react';
 import convertInitialState from '../initialStates/convertInitialState';
