@@ -102,7 +102,7 @@ const moneyTaken = async (req, res, next) => {
         }
 
         page = page ? Number(page) : 1;
-        size = size ? Number(size) : 12;
+        size = size ? Number(size) : 11;
         //TRANSFORM QUERY INTO URI ENCODE STRING TO BE ABLE TO QUERY NEXT PAGE WITHOUT GETTING RESET
         let sum = await Transfert.aggregate([
             {
