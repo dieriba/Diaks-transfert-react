@@ -63,7 +63,7 @@ const TableComp = ({
                 <TdRow>{moneyTypes}</TdRow>
                 <TdRow>{phoneNumber ? phoneNumber : ''}</TdRow>
                 <TdRow>{amountOfMoneyInEuro.toLocaleString()}</TdRow>
-                <TdRow>{`${formatDate(date)}`}</TdRow>
+                <TdRow>{formatDate(date)}</TdRow>
                 <TdRow>
                   {hasTakeMoney ? (
                     <Badge colorScheme="green">Payé</Badge>

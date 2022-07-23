@@ -8,8 +8,7 @@ import {
   AlertIcon,
   CloseButton,
 } from '@chakra-ui/react';
-import moment from 'moment';
-import 'moment/locale/fr';
+import { formatDate } from '../../utils/formatDate';
 import { TdRowMobile, ThRowMobile } from '../styleComp/TableCompStyle';
 
 const ValidateTransfert = ({
@@ -65,7 +64,7 @@ const ValidateTransfert = ({
             {date && (
               <Tr>
                 <ThRowMobile>Date d'ajout </ThRowMobile>
-                <TdRowMobile>{moment(date).format('L')}</TdRowMobile>
+                <TdRowMobile>{formatDate(date)}</TdRowMobile>
               </Tr>
             )}
             {moneyTypes && (

@@ -49,7 +49,7 @@ const TableCompTransfertsMobile = ({
           </Tr>
           <Tr>
             <Th color="teal">Ajouté le</Th>
-            <Td>{`${formatDate(date)}`}</Td>
+            <Td>{formatDate(date)}</Td>
           </Tr>
           <Tr>
             <Th color="teal">Nom</Th>
