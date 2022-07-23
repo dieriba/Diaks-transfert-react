@@ -2,7 +2,6 @@ import { UnauthenticatedError } from '../../errors/index.js';
 
 const isAdmin = (req, res, next) => {
     const { userRole } = req.user;
-    console.log(userRole);
     if (userRole !== 'highAdmin' && userRole !== 'admin')
         return next(
             new UnauthenticatedError(

@@ -1,4 +1,6 @@
 import Transfert from '../models/transfert.js';
+import moment from 'moment';
+import 'moment/locale/fr.js';
 import mongoose from 'mongoose';
 
 //RENDER ALL TRANSFERTS FOR A SPECIFIC LOGGED USER (EXEMPLE IF DIAKHOUMBA IS LOGGED IN IT WILL REDIRECT HER TO HER DASHBOARD WHICH WILL SHOW ALL OF HER TRANSFERT DONE SO FAR)
@@ -37,13 +39,37 @@ const getUserAgentTransfert = async (req, res, next) => {
         if (city && city !== 'Tous') {
             queryObj.city = city;
         }
-        const endYear = Number(end.split('-')[0]);
-        const endMonth = Number(end.split('-')[1]) - 1;
-        const endDay = Number(end.split('-')[2]);
-        const date = {
-            start: new Date(start),
-            end: new Date(endYear, endMonth, endDay, 25, 59, 59, 999),
-        };
+        const startOfMonth = new Date(
+            moment().startOf('month').format('YYYY-MM-DD')
+        );
+        let endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
+
+        const endCurrMonthY = Number(endOfMonth.split('-')[0]);
+        const endCurrMonthM = Number(endOfMonth.split('-')[1]) - 1;
+        const endCurrMonthD = Number(endOfMonth.split('-')[2]);
+
+        endOfMonth = new Date(
+            endCurrMonthY,
+            endCurrMonthM,
+            endCurrMonthD,
+            25,
+            59,
+            59,
+            999
+        );
+
+        const date = {};
+
+        if (start || end) {
+            const endYear = Number(end.split('-')[0]);
+            const endMonth = Number(end.split('-')[1]) - 1;
+            const endDay = Number(end.split('-')[2]);
+            date.start = new Date(start);
+            date.end = new Date(endYear, endMonth, endDay, 25, 59, 59, 999);
+        }
+
+        if (start) queryObj.date = { $gte: date.start };
+        if (end) queryObj.date = { $lte: date.end };
 
         if (start && end) {
             queryObj.date = {
@@ -51,23 +77,35 @@ const getUserAgentTransfert = async (req, res, next) => {
                 $lte: date.end,
             };
         }
-        if (start) queryObj.date = { $gte: date.start };
-        if (end) queryObj.date = { $lte: date.end };
-        queryObj.createdBy = mongoose.Types.ObjectId(userAgentId);
+
         page = page ? Number(page) : 1;
-        size = size ? Number(size) : 11;
+        size = size ? Number(size) : 10;
 
         //TRANSFORM QUERY INTO URI ENCODE STRING TO BE ABLE TO QUERY NEXT PAGE WITHOUT GETTING RESET
 
         const limit = size;
         const skip = (page - 1) * size;
         //FIND ONLY TRANSFERTS WHERE SENDERNAME IS EQUAL TO LOGGED USER
-        const transferts = await Transfert.find(queryObj)
+        const transferts = await Transfert.find({
+            date: {
+                $gte: startOfMonth,
+                $lte: endOfMonth,
+            },
+            ...queryObj,
+            createdBy: userAgentId,
+        })
             .sort({ date: -1 })
             .limit(limit)
             .skip(skip);
 
-        const count = await Transfert.count(queryObj);
+        const count = await Transfert.count({
+            date: {
+                $gte: startOfMonth,
+                $lte: endOfMonth,
+            },
+            ...queryObj,
+            createdBy: userAgentId,
+        });
         let totalPages = Math.ceil(count / limit);
         let iterator = page - 2 < 1 ? 1 : page - 2;
         let endingLink =
@@ -77,7 +115,14 @@ const getUserAgentTransfert = async (req, res, next) => {
 
         let sum = await Transfert.aggregate([
             {
-                $match: queryObj,
+                $match: {
+                    date: {
+                        $gte: startOfMonth,
+                        $lte: endOfMonth,
+                    },
+                    createdBy: mongoose.Types.ObjectId(userAgentId),
+                    ...queryObj,
+                },
             },
             {
                 $group: {
@@ -102,7 +147,5 @@ const getUserAgentTransfert = async (req, res, next) => {
         next(error);
     }
 };
-
-
 
 export { getUserAgentTransfert };

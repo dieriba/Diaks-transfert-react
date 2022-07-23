@@ -29,7 +29,8 @@ export const MoneyTakerProvider = ({ children }) => {
   );
 
   const authFetch = axios.create({
-    baseURL: 'https://diaks-app.herokuapp.com/',
+        baseURL: 'https://diaks-app.herokuapp.com/',
+
   });
 
   authFetch.interceptors.request.use(

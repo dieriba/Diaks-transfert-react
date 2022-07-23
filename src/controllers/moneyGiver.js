@@ -62,14 +62,39 @@ const moneyTaken = async (req, res, next) => {
             queryObj.moneyTypes = moneyTypes;
         }
 
-        if (start && end) {
+        const startOfMonth = new Date(
+            moment().startOf('month').format('YYYY-MM-DD')
+        );
+        let endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
+
+        const endCurrMonthY = Number(endOfMonth.split('-')[0]);
+        const endCurrMonthM = Number(endOfMonth.split('-')[1]) - 1;
+        const endCurrMonthD = Number(endOfMonth.split('-')[2]);
+
+        endOfMonth = new Date(
+            endCurrMonthY,
+            endCurrMonthM,
+            endCurrMonthD,
+            25,
+            59,
+            59,
+            999
+        );
+
+        const date = {};
+
+        if (start || end) {
             const endYear = Number(end.split('-')[0]);
             const endMonth = Number(end.split('-')[1]) - 1;
             const endDay = Number(end.split('-')[2]);
-            const date = {
-                start: new Date(start),
-                end: new Date(endYear, endMonth, endDay, 25, 59, 59, 999),
-            };
+            date.start = new Date(start);
+            date.end = new Date(endYear, endMonth, endDay, 25, 59, 59, 999);
+        }
+
+        if (start) queryObj.date = { $gte: date.start };
+        if (end) queryObj.date = { $lte: date.end };
+
+        if (start && end) {
             queryObj.date = {
                 $gte: date.start,
                 $lte: date.end,
@@ -78,11 +103,14 @@ const moneyTaken = async (req, res, next) => {
 
         page = page ? Number(page) : 1;
         size = size ? Number(size) : 12;
-
         //TRANSFORM QUERY INTO URI ENCODE STRING TO BE ABLE TO QUERY NEXT PAGE WITHOUT GETTING RESET
         let sum = await Transfert.aggregate([
             {
                 $match: {
+                    date: {
+                        $gte: startOfMonth,
+                        $lte: endOfMonth,
+                    },
                     ...queryObj,
                     city: moneyGiverCity,
                     hasTakeMoney: true,
@@ -97,6 +125,10 @@ const moneyTaken = async (req, res, next) => {
         const limit = size;
         const skip = (page - 1) * size;
         const transferts = await Transfert.find({
+            date: {
+                $gte: startOfMonth,
+                $lte: endOfMonth,
+            },
             ...queryObj,
             hasTakeMoney: true,
             city: moneyGiverCity,
@@ -105,6 +137,10 @@ const moneyTaken = async (req, res, next) => {
             .limit(limit)
             .skip(skip);
         const count = await Transfert.count({
+            date: {
+                $gte: startOfMonth,
+                $lte: endOfMonth,
+            },
             ...queryObj,
             city: moneyGiverCity,
             hasTakeMoney: true,
