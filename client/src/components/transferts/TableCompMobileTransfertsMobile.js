@@ -12,8 +12,7 @@ import { Loading } from '../index';
 import AlertDialogPop from '../global/AlertDialog';
 import { Badge } from '@chakra-ui/react';
 import { Link as ReachLink } from 'react-router-dom';
-import { formatDate, formatHours } from '../../utils/formatDate';
-import { TdRowMobile, ThRowMobile } from '../styleComp/TableCompStyle';
+import { formatDate} from '../../utils/formatDate';
 const TableCompTransfertsMobile = ({
   clientName,
   senderName,
@@ -50,7 +49,7 @@ const TableCompTransfertsMobile = ({
           </Tr>
           <Tr>
             <Th color="teal">Ajouté le</Th>
-            <Td>{`${formatDate(date)} à ${formatHours(date)}`}</Td>
+            <Td>{`${formatDate(date)}`}</Td>
           </Tr>
           <Tr>
             <Th color="teal">Nom</Th>
